@@ -1,0 +1,5 @@
+* Rudimentary shape-file viewer with color-wheel encoding (ubuntu)
+
+On 2016 october 13, added the zprReshape functionality from gift to the original 2012 snapshot
+
+On 2017 september 27, used this module to develop a shape-file viewer

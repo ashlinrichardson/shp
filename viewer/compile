@@ -1,0 +1,3 @@
+g++ -c -w  -O5  newzpr.cpp
+g++ -c -w  -O5 zprdemo.cpp
+g++ -O5 newzpr.o zprdemo.o  -o zpr.exe -lm -lGL -lGLU -lglut
