@@ -1,6 +1,5 @@
 # shp
-## Extract shape file data
-[data](https://github.com/ashlinrichardson/shp/tree/master/data)
+## [data](https://github.com/ashlinrichardson/shp/tree/master/data): Extract shape file data 
 cd data;
 
 python extract.py TA_PEP_SVW_polygon > parks.dat
