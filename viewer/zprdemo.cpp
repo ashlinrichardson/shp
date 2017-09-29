@@ -1,5 +1,15 @@
+#include <iostream>
+#include <deque>
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
+//#include <boost/geometry/domains/gis/io/wkt/wkt.hpp>
 #include <boost/version.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
+
+/* 
+http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
+*/
 
 
 #define STR_MAX 10000
