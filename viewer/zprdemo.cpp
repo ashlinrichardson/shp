@@ -227,11 +227,35 @@ void _pick(GLint name){
     cout << "PickSet:";
     std::set<GLint>::iterator it;
     for(it=myPickNames.begin(); it!=myPickNames.end(); it++){
-	cout << *it << "," ;
+	    int my_ind = *it;
+      if(my_class[my_ind] ==1){
+        my_ind -= n_fire;
+      }
+      cout << my_ind << "," ;
     }
-    cout << endl;
+    cout << " (check indexing method) " << endl;
    fflush(stdout);
 }
+/* 
+// point data from shape files
+vector< vector<vec3d> > my_vectors;
+vector< string > my_names;
+vector< int > my_id;
+vector< int > my_class;
+vector<int > n_my_class;
+vector<int> within_class_index;
+vector<int> urx;
+
+vector<vec3d> max_p;
+double max_f;
+
+int next_class;
+
+int cur_fire_ind;
+int cur_park_ind;
+int n_fire, n_park;
+*/
+
 
 void renderBitmapString(float x, float y, void *font, char *string){
   char *c;
