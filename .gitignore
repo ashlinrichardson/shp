@@ -1,0 +1,5 @@
+
+viewer/ind.txt
+viewer/mat.txt
+*.o
+viewer/zpr.exe
