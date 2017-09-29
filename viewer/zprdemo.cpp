@@ -8,6 +8,7 @@
 #include <boost/geometry/algorithms/intersection.hpp>
 
 /* 
+http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/append.html
 http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
 */
 
