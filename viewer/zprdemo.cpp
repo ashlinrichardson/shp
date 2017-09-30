@@ -241,29 +241,61 @@ int picki = -1;
     // Append a point (in this case the closing point
  //   append(poly, make_tuple(0, 0));
 
-        polygon f_poly;
+        polygon f_poly; float a, b, c, d; a=b=c=d=0.;
         int i = cur_fire_ind;  
         long int slen = my_vectors[i].size();
         vector<vec3d> * v = &my_vectors[i];
-        for(k=0; k< slen; k++){
+        for(k=0; k< slen; k++){ 
           vec3d x(v->at(k));
           append(f_poly, make_tuple(x.x, x.y));
+          if(k<10){
+            printf("%e %e\n", x.x, x.y);
+            if(k==0){ a = b = x.x; c = d = x.y;}
+          }
+          if(x.x < a) a = x.x; if(x.x > b) b = x.x;
+          if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
-        {
+        printf("i(%d) x(%f, %f) y(%f, %f)\n", i, a, b, c, d);
+        glColor3f(1., 0., 0.);
+        glBegin(GL_LINES);
+        glVertex3f(a,d,0); glVertex3f(b,d,0);
+        glVertex3f(b,d,0); glVertex3f(b,c,0);
+        glVertex3f(b,c,0); glVertex3f(a,c,0);
+        glVertex3f(a,c,0); glVertex3f(a,d,0);
+        glEnd();
+
+
+        if(false){
           vec3d x(v->at(0));
           append(f_poly, make_tuple(x.x, x.y));
         }
   // add the last point in????        //s[slen-1].x = s[0].x;          //s[slen-1].y = s[0].y;
 
         polygon p_poly;
-        int j = cur_park_ind + n_fire;
+        int j = cur_park_ind + n_fire; // this is the object index: remember, everything's lumped together in one array (fire centres, first)
         long int clen = my_vectors[j].size();
         v = &my_vectors[j];
         for(k=0; k< clen; k++){
           vec3d x(v->at(k));
           append(f_poly, make_tuple(x.x, x.y));
+          if(k<10){
+            printf("%e %e\n", x.x, x.y);
+            if(k==0){ a = b = x.x; c = d = x.y;}
+          }
+          if(x.x < a) a = x.x; if(x.x > b) b = x.x;
+          if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
-        {
+        printf("i(%d) x(%f, %f) y(%f, %f)\n", i, a, b, c, d);
+        glColor3f(0., 0., 1.);
+        glBegin(GL_LINES);
+        glVertex3f(a,d,0); glVertex3f(b,d,0);
+        glVertex3f(b,d,0); glVertex3f(b,c,0);
+        glVertex3f(b,c,0); glVertex3f(a,c,0);
+        glVertex3f(a,c,0); glVertex3f(a,d,0);
+        glEnd();
+
+
+        if(false){
           vec3d x(v->at(0));
           append(p_poly, make_tuple(x.x, x.y));
         }
@@ -271,20 +303,20 @@ int picki = -1;
         // http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
         std::deque<polygon> p_result;
         boost::geometry::intersection(f_poly, p_poly, p_result);
+        //cout << "park " << p_poly << endl;
 
         std::deque<polygon>::iterator it = p_result.begin();
 
-        float my_area = 0.;
+        double my_area = 0.;
         while (it != p_result.end()){
-          my_area += boost::geometry::area(*it);
+          my_area += (double)boost::geometry::area(*it);
         }
     
-          //std::cout << ' ' << *it++;
-      
+        //std::cout << ' ' < *it++;
         // calculate area of intersection (of e.g., fire centre poly, and park poly)
         //float a = boost::geometry::area(p);
-    
-        cout << "AREA OF INTERSECTION"<< my_area << endl;
+        printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n", my_area, p_result.size(), i, j);
+//        cout << "AREA OF INTERSECTION: "<< my_area << ((p_result.size()>0)?(p_result.size()):0) << endl;
 
     }
     
@@ -461,7 +493,6 @@ void keyboard(unsigned char key, int x, int y){
 		//printf( "Pressed key %c AKA %d at position %d % d\n",(char)key, key, x, y);
 		console_string[console_position++] = (char)key;
 		console_string[console_position]='\0';
-		printf("STRING: %s\n", &console_string[0]);
 		display();
 		break;
 	}
