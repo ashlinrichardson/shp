@@ -1,5 +1,6 @@
-
+viewer/boost_1_65_1.tar.gz
 viewer/ind.txt
 viewer/mat.txt
 *.o
 viewer/zpr.exe
+viewer/boost_1_65_1/*
