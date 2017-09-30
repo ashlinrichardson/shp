@@ -269,13 +269,22 @@ int picki = -1;
         }
 
         // http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
-        polygon p_result;
+        std::deque<polygon> p_result;
         boost::geometry::intersection(f_poly, p_poly, p_result);
+
+        std::deque<polygon>::iterator it = p_result.begin();
+
+        float my_area = 0.;
+        while (it != p_result.end()){
+          my_area += boost::geometry::area(*it);
+        }
+    
+          //std::cout << ' ' << *it++;
       
         // calculate area of intersection (of e.g., fire centre poly, and park poly)
-        float a = boost::geometry::area(p);
+        //float a = boost::geometry::area(p);
     
-        cout << "AREA OF INTERSECTION"<< a << endl;
+        cout << "AREA OF INTERSECTION"<< my_area << endl;
 
     }
     
