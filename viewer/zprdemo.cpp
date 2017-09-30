@@ -229,27 +229,39 @@ int picki = -1;
         glPopName();
     }
     if(cur_fire_ind>=0 && cur_fire_ind < n_fire && cur_park_ind>=0 && cur_park_ind < n_park){
+      int k;
 
-    using boost::assign::tuple_list_of;
-    using boost::make_tuple;
-    using boost::geometry::append;
-    typedef boost::geometry::model::polygon<boost::tuple<float, float> > polygon;
+      using boost::assign::tuple_list_of;
+      using boost::make_tuple;
+      using boost::geometry::append;
+      typedef boost::geometry::model::polygon<boost::tuple<float, float> > polygon;
 
+// Append a range
+  ///  append(poly, tuple_list_of(0, 0)(0, 10)(11, 11)(10, 0));
+    // Append a point (in this case the closing point
+ //   append(poly, make_tuple(0, 0));
 
-        int k; int i = cur_fire_ind;  
+        polygon f_poly;
+        int i = cur_fire_ind;  
         long int slen = my_vectors[i].size();
         vector<vec3d> * v = &my_vectors[i];
         for(k=0; k< slen; k++){
           vec3d x(v->at(k));
+          append(f_poly, make_tuple(x.x, x.y));
         }
-
+        {
+          vec3d x(v->at(0));
+          append(f_poly, make_tuple(x.x, x.y));
+        }
   // add the last point in????        //s[slen-1].x = s[0].x;          //s[slen-1].y = s[0].y;
 
+        polygon p_poly;
         int j = cur_park_ind + n_fire;
         long int clen = my_vectors[j].size();
         v = &my_vectors[j];
         for(k=0; k< clen; k++){
           vec3d x(v->at(k));
+          append(f_poly, make_tuple(x.x, x.y));
         }
 
 
@@ -376,8 +388,6 @@ void keyboard(unsigned char key, int x, int y){
 		if(console_position>0){
 			console_position --;
 			console_string[console_position]='\0';
-			printf("STRING: %s\n", &console_string[0]);
-			//printf( "%d Pressed Backspace\n",(char)key);
 			display();
 		}
 		break;
