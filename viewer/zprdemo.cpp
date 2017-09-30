@@ -1,11 +1,17 @@
 #include <iostream>
 #include <deque>
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
-//#include <boost/geometry/domains/gis/io/wkt/wkt.hpp>
+
+#include <boost/assign.hpp>
 #include <boost/version.hpp>
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/polygon.hpp> //#include <boost/geometry/domains/gis/io/wkt/wkt.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+#include <boost/geometry/geometries/linestring.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
+#include <boost/geometry/geometries/adapted/boost_tuple.hpp>
+#include <boost/geometry/geometries/adapted/boost_range/filtered.hpp>
+
+BOOST_GEOMETRY_REGISTER_BOOST_TUPLE_CS(cs::cartesian)
 
 /* 
 http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/append.html
@@ -223,92 +229,30 @@ int picki = -1;
         glPopName();
     }
     if(cur_fire_ind>=0 && cur_fire_ind < n_fire && cur_park_ind>=0 && cur_park_ind < n_park){
-          //  int k;
-           // int i = cur_fire_ind;
-        //for(i=0; i< nc0; i++){ // iterate over all the fire centres
-            //vec_t s[] = {{50,150},{200,50},...} 
-           // long int slen = my_vectors[i].size();
-            //vec_t * s = (vec_t *)(void *)malloc(sizeof(vec_t) * slen);
-            //vector<vec3d> * v = &my_vectors[i];
-            //vec3d c1(0., 0., 0.);
-            //cout << "ff{";
-            //for(k=0; k< slen; k++){
-              //  vec3d x(v->at(k));
-               // s[k].x = x.x; s[k].y = x.y;
-               // c1 += x;
-               // if(k%2222 ==0)
-               // cout << "{" << x.x <<","<<x.y<<"},";
-            //}
-            //s[slen-1].x = s[0].x;
-            //s[slen-1].y = s[0].y;
 
-           // cout <<"}\n";
-           // float sf1 = (float)(1./((float)slen));
-            //c1.x *= sf1;
-            //c1.y *= sf1;
-            //poly_t subject = {slen, 0, s};
-             //   int j = cur_park_ind + n_fire;
-            //for(j=nc0; j< nc0+nc1; j+){ // iterate over all the parks
-                //fprintf(fff, "i %d/%d j %d/%d\n", i+1, nc0, j-nc0+1, nc1);
-               // long int clen = my_vectors[j].size();
-                //vec_t * c = (vec_t *)(void *)malloc(sizeof(vec_t) * clen);
-                //v = &my_vectors[j];
-               // vec3d c2(0., 0., 0.);
-               // cout << "pp{";
-                //for(k=0; k< clen; k++){
-                  //  vec3d x(v->at(k));
-                  //  c[k].x = x.x;  c[k].y = x.y;
-                 //   //cout << x.x <<","<<x.y<<",";
-                //    c2 += x;
-                  //  if(k%2222 ==0)
-                 //   cout << "{" << x.x <<","<<x.y<<"},";
-              //  }//cout << "\n";
-              //  cout << "}\n";
-                //c[clen-1].x = c[0].x;
-                //c[clen-1].y = c[0].y;
+    using boost::assign::tuple_list_of;
+    using boost::make_tuple;
+    using boost::geometry::append;
+    typedef boost::geometry::model::polygon<boost::tuple<float, float> > polygon;
 
-               // float sf2 = (float)(1./((float)clen));
-              //  c2.x *= sf2;
-              //  c2.y *= sf2;
 
-  //              poly_t clipper = {clen, 0, c};
-                // the polygon calculation
-                {
-                        //printf("%e AREA of subject\n", area(&subject));
-                        //printf("%e AREA of clipper\n", area(&clipper));
-                        //poly res = poly_clip(&clipper, &subject);//&subject, &clipper); //subject, &clipper);
-                        //for (k = 0; k < res->len; k++)
-                        //printf("%g %g\n", res->v[k].x, res->v[k].y);
-                        //double ar = area(res);
-                        //if(a>0.){
-                            //printf("len(res) %d firei %d parki %d %e AREA of Intersection\n", res->len, i, j-n_fire, ar);
-                            //fprintf(ggg, "%d,%d,%e\n", i+1, j-nc0+1, ar);  
-    
-                        //if(ar > max_f){
-                          // max_f = ar;
-                           //max_p.clear();
-/*
-                            glColor3f(1,0,1);
-                            int kk;
-                            glBegin(GL_POLYGON);
-                            for (kk = 0; kk < res->len; kk++){
-                                vec3d(res->v[k].x, res->v[k].y, 0.).vertex();
-                            }
-                            glEnd();
-*/
-                        //}                    
-                      //}//area(res));
-                }
-    //            free(c);
-             //} // iterate over all the parks
+        int k; int i = cur_fire_ind;  
+        long int slen = my_vectors[i].size();
+        vector<vec3d> * v = &my_vectors[i];
+        for(k=0; k< slen; k++){
+          vec3d x(v->at(k));
+        }
 
-      //      free(s);
-       //     glColor3f(1.,1.,1.);
-        //    glBegin(GL_LINES);
-        //    c1.vertex();
-        //    c2.vertex();
-         //   glEnd();
-        //}// iterate over all the fire centres
+  // add the last point in????        //s[slen-1].x = s[0].x;          //s[slen-1].y = s[0].y;
+
+        int j = cur_park_ind + n_fire;
+        long int clen = my_vectors[j].size();
+        v = &my_vectors[j];
+        for(k=0; k< clen; k++){
+          vec3d x(v->at(k));
+        }
+
+
     }
     
 glPopMatrix();
