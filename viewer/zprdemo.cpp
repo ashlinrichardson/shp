@@ -271,6 +271,11 @@ int picki = -1;
         // http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
         polygon p_result;
         boost::geometry::intersection(f_poly, p_poly, p_result);
+      
+        // calculate area of intersection (of e.g., fire centre poly, and park poly)
+        float a = boost::geometry::area(p);
+    
+        cout << "AREA OF INTERSECTION"<< a << endl;
 
     }
     
