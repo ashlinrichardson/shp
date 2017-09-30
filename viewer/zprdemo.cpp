@@ -277,7 +277,7 @@ int picki = -1;
         v = &my_vectors[j];
         for(k=0; k< clen; k++){
           vec3d x(v->at(k));
-          append(f_poly, make_tuple(x.x, x.y));
+          append(p_poly, make_tuple(x.x, x.y));
           if(k<10){
             printf("%e %e\n", x.x, x.y);
             if(k==0){ a = b = x.x; c = d = x.y;}
@@ -600,6 +600,12 @@ int parse(string fn){
 
 
 int main(int argc, char *argv[]){
+
+cout << "BOOST_VERSION\t\t" << BOOST_VERSION<< endl;
+cout << "BOOST_PATCH_LEVEL\t\t" << BOOST_VERSION % 100 << endl;
+cout << "BOOST_MINOR_VERSION\t\t" << BOOST_VERSION / 100 << endl;
+cout << "BOOST_MAJOR_VERSION\t\t" << BOOST_VERSION / 100000 << endl;
+cout << "Boost version:\t\t" << BOOST_LIB_VERSION << endl;
 
 //vector<vec3d> max_p;
 //double max_f;
