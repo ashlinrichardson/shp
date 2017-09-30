@@ -263,7 +263,14 @@ int picki = -1;
           vec3d x(v->at(k));
           append(f_poly, make_tuple(x.x, x.y));
         }
+        {
+          vec3d x(v->at(0));
+          append(p_poly, make_tuple(x.x, x.y));
+        }
 
+        // http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
+        polygon p_result;
+        boost::geometry::intersection(f_poly, p_poly, p_result);
 
     }
     
