@@ -1,3 +1,4 @@
+#include"ansicolor.h"
 #include <iostream>
 #include <deque>
 
@@ -234,13 +235,14 @@ int picki = -1;
       using boost::assign::tuple_list_of;
       using boost::make_tuple;
       using boost::geometry::append;
-      typedef boost::geometry::model::polygon<boost::tuple<float, float> > polygon;
+      typedef boost::geometry::model::polygon<boost::tuple<float, float> ,false> polygon;
 
 // Append a range
   ///  append(poly, tuple_list_of(0, 0)(0, 10)(11, 11)(10, 0));
     // Append a point (in this case the closing point
  //   append(poly, make_tuple(0, 0));
 
+        
         polygon f_poly; float a, b, c, d; a=b=c=d=0.;
         int i = cur_fire_ind;  
         long int slen = my_vectors[i].size();
@@ -255,7 +257,7 @@ int picki = -1;
           if(x.x < a) a = x.x; if(x.x > b) b = x.x;
           if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
-        printf("i(%d) x(%f, %f) y(%f, %f)\n", i, a, b, c, d);
+        printf("%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
         glColor3f(1., 0., 0.);
         glBegin(GL_LINES);
         glVertex3f(a,d,0); glVertex3f(b,d,0);
@@ -263,12 +265,11 @@ int picki = -1;
         glVertex3f(b,c,0); glVertex3f(a,c,0);
         glVertex3f(a,c,0); glVertex3f(a,d,0);
         glEnd();
-
-
-        if(false){
+        if(true){
           vec3d x(v->at(0));
           append(f_poly, make_tuple(x.x, x.y));
         }
+        boost::geometry::correct(f_poly);
   // add the last point in????        //s[slen-1].x = s[0].x;          //s[slen-1].y = s[0].y;
 
         polygon p_poly;
@@ -285,7 +286,7 @@ int picki = -1;
           if(x.x < a) a = x.x; if(x.x > b) b = x.x;
           if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
-        printf("i(%d) x(%f, %f) y(%f, %f)\n", i, a, b, c, d);
+        printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
         glColor3f(0., 0., 1.);
         glBegin(GL_LINES);
         glVertex3f(a,d,0); glVertex3f(b,d,0);
@@ -293,12 +294,12 @@ int picki = -1;
         glVertex3f(b,c,0); glVertex3f(a,c,0);
         glVertex3f(a,c,0); glVertex3f(a,d,0);
         glEnd();
-
-
-        if(false){
+        if(true){
           vec3d x(v->at(0));
           append(p_poly, make_tuple(x.x, x.y));
         }
+        boost::geometry::correct(p_poly);
+
 
         // http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
         std::deque<polygon> p_result;
