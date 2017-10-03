@@ -1,7 +1,6 @@
 #include"ansicolor.h"
 #include <iostream>
 #include <deque>
-
 #include <boost/assign.hpp>
 #include <boost/version.hpp>
 #include <boost/geometry.hpp>
@@ -18,7 +17,6 @@ BOOST_GEOMETRY_REGISTER_BOOST_TUPLE_CS(cs::cartesian)
 http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/append.html
 http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
 */
-
 
 #define STR_MAX 10000
 #include "hsv.h"
@@ -159,6 +157,16 @@ class point{
   
 };
 
+/*convert float to string.. from gift meta4/gift/*/
+string ftos( float i){
+  std::string number("");
+  std::stringstream strstream;
+  strstream << i;
+  strstream >> number;
+  return number;
+}
+
+
 void drawAxes(void){
 
 // need to calculate the area of intersection of the park with the fire centre, 
@@ -235,7 +243,8 @@ int picki = -1;
       using boost::assign::tuple_list_of;
       using boost::make_tuple;
       using boost::geometry::append;
-      typedef boost::geometry::model::polygon<boost::tuple<float, float> ,false> polygon;
+      //typedef boost::geometry::model::polygon<boost::tuple<float, float> ,false> polygon;
+      typedef boost::geometry::model::polygon<boost::geometry::model::d2::point_xy<double> > polygon;
 
 // Append a range
   ///  append(poly, tuple_list_of(0, 0)(0, 10)(11, 11)(10, 0));
@@ -247,9 +256,17 @@ int picki = -1;
         int i = cur_fire_ind;  
         long int slen = my_vectors[i].size();
         vector<vec3d> * v = &my_vectors[i];
-        for(k=0; k< slen; k++){ 
+        string wkt_f("POLYGON((");
+        for(k=0; k< slen; k++){
+          if(k>0){
+            wkt_f += ",";
+          }
           vec3d x(v->at(k));
-          append(f_poly, make_tuple(x.x, x.y));
+          wkt_f += ftos(x.x);
+          wkt_f += " ";
+          wkt_f += ftos(x.y);
+          //append(f_poly, make_tuple(x.x, x.y));
+          //append wktstring command
           if(k<10){
             printf("%e %e\n", x.x, x.y);
             if(k==0){ a = b = x.x; c = d = x.y;}
@@ -257,6 +274,7 @@ int picki = -1;
           if(x.x < a) a = x.x; if(x.x > b) b = x.x;
           if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
+         wkt_f+= "))";
         printf("%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
         glColor3f(1., 0., 0.);
         glBegin(GL_LINES);
@@ -265,10 +283,10 @@ int picki = -1;
         glVertex3f(b,c,0); glVertex3f(a,c,0);
         glVertex3f(a,c,0); glVertex3f(a,d,0);
         glEnd();
-        if(true){
-          vec3d x(v->at(0));
-          append(f_poly, make_tuple(x.x, x.y));
-        }
+        //if(true){
+        //  vec3d x(v->at(0));
+        //  append(f_poly, make_tuple(x.x, x.y));
+        ////
         boost::geometry::correct(f_poly);
   // add the last point in????        //s[slen-1].x = s[0].x;          //s[slen-1].y = s[0].y;
 
@@ -276,9 +294,17 @@ int picki = -1;
         int j = cur_park_ind + n_fire; // this is the object index: remember, everything's lumped together in one array (fire centres, first)
         long int clen = my_vectors[j].size();
         v = &my_vectors[j];
+        string wkt_f("POLYGON((");
         for(k=0; k< clen; k++){
+          if(k>0){
+            wkt_f += ",";
+          }
           vec3d x(v->at(k));
-          append(p_poly, make_tuple(x.x, x.y));
+          wkt_f += ftos(x.x);
+          wkt_f += " ";
+          wkt_f += ftos(x.y);
+          //append(p_poly, make_tuple(x.x, x.y));
+           //append wktstring command
           if(k<10){
             printf("%e %e\n", x.x, x.y);
             if(k==0){ a = b = x.x; c = d = x.y;}
@@ -286,6 +312,7 @@ int picki = -1;
           if(x.x < a) a = x.x; if(x.x > b) b = x.x;
           if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
+        wkt_f+= "))";     
         printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
         glColor3f(0., 0., 1.);
         glBegin(GL_LINES);
@@ -294,10 +321,10 @@ int picki = -1;
         glVertex3f(b,c,0); glVertex3f(a,c,0);
         glVertex3f(a,c,0); glVertex3f(a,d,0);
         glEnd();
-        if(true){
-          vec3d x(v->at(0));
-          append(p_poly, make_tuple(x.x, x.y));
-        }
+        //if(true){
+        //  vec3d x(v->at(0));
+        //  append(p_poly, make_tuple(x.x, x.y));
+        //}
         boost::geometry::correct(p_poly);
 
 
