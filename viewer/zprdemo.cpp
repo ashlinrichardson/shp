@@ -260,25 +260,25 @@ int picki = -1;
         string wkt_f("POLYGON((");
         int add_s = 0;
         for(k=0; k< slen; k++){
+          vec3d x(v->at(k));
+
           if(k % sskip == 0){
             add_s +=1;
             if(k>0){
               wkt_f += ",";
             }
-            vec3d x(v->at(k));
             wkt_f += ftos(x.x);
             wkt_f += " ";
             wkt_f += ftos(x.y);
             //append(f_poly, make_tuple(x.x, x.y));
             //append wktstring command
-          
-            if(k<10){
-              printf("%e %e\n", x.x, x.y);
-              if(k==0){ a = b = x.x; c = d = x.y;}
-            }
-            if(x.x < a) a = x.x; if(x.x > b) b = x.x;
-            if(x.y < c) c = x.y; if(x.y > d) d = x.x;
+          }         
+          if(k<10){
+            printf("%e %e\n", x.x, x.y);
+            if(k==0){ a = b = x.x; c = d = x.y;}
           }
+          if(x.x < a) a = x.x; if(x.x > b) b = x.x;
+          if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
         wkt_f+= "))";
         if(wkt_f.length() < 999){
@@ -312,25 +312,25 @@ int picki = -1;
         string wkt_p("POLYGON((");
         int add_c = 0;
         for(k=0; k< clen; k++){
+          vec3d x(v->at(k));
+
           if(k % cskip == 0){
             add_c += 1;
             if(k>0){
               wkt_p += ",";
             }
-            vec3d x(v->at(k));
             wkt_p += ftos(x.x);
             wkt_p += " ";
             wkt_p += ftos(x.y);
             //append(p_poly, make_tuple(x.x, x.y));
             //append wktstring command
-             
-            //if(k<10){
-              //printf("%e %e\n", x.x, x.y);
-             ///if(k==0){ a = b = x.x; c = d = x.y;}
-            //}
-            if(x.x < a) a = x.x; if(x.x > b) b = x.x;
-            if(x.y < c) c = x.y; if(x.y > d) d = x.x;
+          } 
+          if(k<10){
+            printf("%e %e\n", x.x, x.y);
+            if(k==0){ a = b = x.x; c = d = x.y;}
           }
+          if(x.x < a) a = x.x; if(x.x > b) b = x.x;
+          if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
         wkt_p+= "))";     
         if(wkt_p.length() < 999){
@@ -363,10 +363,13 @@ int picki = -1;
         boost::geometry::intersection(f_poly, p_poly, p_result);
        //cout << "park " << p_poly << endl;
         printf("%sintersection%s(%ld)%s\n", KYEL, KBLU, p_result.size(), KNRM);
-        std::deque<polygon>::iterator it = p_result.begin();
+        std::deque<polygon>::iterator it;
+        // = p_result.begin();
         printf("%sarea%s()%s\n", KYEL, KBLU, KNRM);
         double my_area = 0.;
-        while(it != p_result.end()){
+        int ci=0;
+        for(it = p_result.begin(); it != p_result.end(); it++){
+          printf("poly(i=%d)\n", ci++);
           float f = (double)boost::geometry::area(*it);
           my_area += f;
           printf("\t%sarea_i%s(%f)%s\n", KYEL, KBLU, KNRM);
