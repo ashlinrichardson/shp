@@ -254,32 +254,37 @@ int picki = -1;
         
         polygon f_poly; float a, b, c, d; a=b=c=d=0.;
         int i = cur_fire_ind;  
-        long int slen = my_vectors[i].size(); long int sskip = slen / 4096;
+        long int slen = my_vectors[i].size(); long int sskip = slen / 256;
         vector<vec3d> * v = &my_vectors[i];
+        printf("sskip %ld\n", sskip);
         string wkt_f("POLYGON((");
+        int add_s = 0;
         for(k=0; k< slen; k++){
-          if((slen > 8096) && (k % sskip != 0)) continue;
-          if(k>0){
-            wkt_f += ",";
+          if(k % sskip == 0){
+            add_s +=1;
+            if(k>0){
+              wkt_f += ",";
+            }
+            vec3d x(v->at(k));
+            wkt_f += ftos(x.x);
+            wkt_f += " ";
+            wkt_f += ftos(x.y);
+            //append(f_poly, make_tuple(x.x, x.y));
+            //append wktstring command
+          
+            if(k<10){
+              printf("%e %e\n", x.x, x.y);
+              if(k==0){ a = b = x.x; c = d = x.y;}
+            }
+            if(x.x < a) a = x.x; if(x.x > b) b = x.x;
+            if(x.y < c) c = x.y; if(x.y > d) d = x.x;
           }
-          vec3d x(v->at(k));
-          wkt_f += ftos(x.x);
-          wkt_f += " ";
-          wkt_f += ftos(x.y);
-          //append(f_poly, make_tuple(x.x, x.y));
-          //append wktstring command
-          if(k<10){
-            printf("%e %e\n", x.x, x.y);
-            if(k==0){ a = b = x.x; c = d = x.y;}
-          }
-          if(x.x < a) a = x.x; if(x.x > b) b = x.x;
-          if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
         wkt_f+= "))";
         if(wkt_f.length() < 999){
           cout << wkt_f << endl;
         }
-        printf("%sread_wkt%s()%s n%s=%s(%s%d%s)%s\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, wkt_f.length(), KRED, KNRM);
+        printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
         boost::geometry::read_wkt(wkt_f, f_poly);
         printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM); 
         boost::geometry::correct(f_poly);
@@ -301,32 +306,37 @@ int picki = -1;
 
         polygon p_poly;
         int j = cur_park_ind + n_fire; // this is the object index: remember, everything's lumped together in one array (fire centres, first)
-        long int clen = my_vectors[j].size(); long int cskip = clen / 4096;
+        long int clen = my_vectors[j].size(); long int cskip = clen / 256;
         v = &my_vectors[j];
+        printf("cskip %ld\n", cskip);
         string wkt_p("POLYGON((");
+        int add_c = 0;
         for(k=0; k< clen; k++){
-          if((slen > 8096) && (k % cskip != 0)) continue;
-          if(k>0){
-            wkt_p += ",";
+          if(k % cskip == 0){
+            add_c += 1;
+            if(k>0){
+              wkt_p += ",";
+            }
+            vec3d x(v->at(k));
+            wkt_p += ftos(x.x);
+            wkt_p += " ";
+            wkt_p += ftos(x.y);
+            //append(p_poly, make_tuple(x.x, x.y));
+            //append wktstring command
+             
+            //if(k<10){
+              //printf("%e %e\n", x.x, x.y);
+             ///if(k==0){ a = b = x.x; c = d = x.y;}
+            //}
+            if(x.x < a) a = x.x; if(x.x > b) b = x.x;
+            if(x.y < c) c = x.y; if(x.y > d) d = x.x;
           }
-          vec3d x(v->at(k));
-          wkt_p += ftos(x.x);
-          wkt_p += " ";
-          wkt_p += ftos(x.y);
-          //append(p_poly, make_tuple(x.x, x.y));
-           //append wktstring command
-          if(k<10){
-            printf("%e %e\n", x.x, x.y);
-            if(k==0){ a = b = x.x; c = d = x.y;}
-          }
-          if(x.x < a) a = x.x; if(x.x > b) b = x.x;
-          if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
         wkt_p+= "))";     
         if(wkt_p.length() < 999){
           cout << wkt_p << endl;
         }
-        printf("%sread_wkt%s()%s n%s=%s(%s%d%s)%s\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, wkt_p.length(), KRED, KNRM);
+        printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen );
         boost::geometry::read_wkt(wkt_p, p_poly);
         printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
         boost::geometry::correct(p_poly);
@@ -344,19 +354,22 @@ int picki = -1;
         //  vec3d x(v->at(0));
         //  append(p_poly, make_tuple(x.x, x.y));
         //}
-        boost::geometry::correct(p_poly);
 
 
         // http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
         std::deque<polygon> p_result;
+
+        printf("%sintersection%s()%s\n", KYEL, KBLU, KNRM);
         boost::geometry::intersection(f_poly, p_poly, p_result);
-        //cout << "park " << p_poly << endl;
-
+       //cout << "park " << p_poly << endl;
+        printf("%sintersection%s(%ld)%s\n", KYEL, KBLU, p_result.size(), KNRM);
         std::deque<polygon>::iterator it = p_result.begin();
-
+        printf("%sarea%s()%s\n", KYEL, KBLU, KNRM);
         double my_area = 0.;
-        while (it != p_result.end()){
-          my_area += (double)boost::geometry::area(*it);
+        while(it != p_result.end()){
+          float f = (double)boost::geometry::area(*it);
+          my_area += f;
+          printf("\t%sarea_i%s(%f)%s\n", KYEL, KBLU, KNRM);
         }
     
         //std::cout << ' ' < *it++;
@@ -364,7 +377,7 @@ int picki = -1;
         //float a = boost::geometry::area(p);
         printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n", my_area, p_result.size(), i, j);
 //        cout << "AREA OF INTERSECTION: "<< my_area << ((p_result.size()>0)?(p_result.size()):0) << endl;
-
+      
     }
     
 glPopMatrix();
