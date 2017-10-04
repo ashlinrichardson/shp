@@ -304,7 +304,7 @@ int picki = -1;
         ////
   // add the last point in????        //s[slen-1].x = s[0].x;          //s[slen-1].y = s[0].y;
 
-        polygon p_poly;
+        polygon p_poly; a = b = c = d = 0.;
         int j = cur_park_ind + n_fire; // this is the object index: remember, everything's lumped together in one array (fire centres, first)
         long int clen = my_vectors[j].size(); long int cskip = clen / 256;
         v = &my_vectors[j];
@@ -378,7 +378,8 @@ int picki = -1;
         //std::cout << ' ' < *it++;
         // calculate area of intersection (of e.g., fire centre poly, and park poly)
         //float a = boost::geometry::area(p);
-        printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n", my_area, p_result.size(), i, j);
+        printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n\t%s%s%s\n", 
+          my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000?"NO INTERSECTION":"").c_str(), KNRM);
 //        cout << "AREA OF INTERSECTION: "<< my_area << ((p_result.size()>0)?(p_result.size()):0) << endl;
       
     }
