@@ -379,7 +379,7 @@ int picki = -1;
         // calculate area of intersection (of e.g., fire centre poly, and park poly)
         //float a = boost::geometry::area(p);
         printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n\t%s%s%s\n", 
-          my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000?"NO INTERSECTION":"").c_str(), KNRM);
+          my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000001?"NO INTERSECTION":"").c_str(), KNRM);
 //        cout << "AREA OF INTERSECTION: "<< my_area << ((p_result.size()>0)?(p_result.size()):0) << endl;
       
     }
