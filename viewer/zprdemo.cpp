@@ -459,7 +459,7 @@ void quitme(){
 
 }
 
-
+/* python style split function (from meta4)*/
 vector<string> split(const char *str, char c = ' '){
     vector<string> result;
     do{
@@ -522,14 +522,14 @@ void keyboard(unsigned char key, int x, int y){
       cout << "good "<<endl;
       if(words[0][0]=='f'){
         int iii = atoi(words[1].c_str());
-        if(iii >=0 && iii < n_fire){
-          cur_fire_ind = iii; 
+        if(iii >=1 && iii < n_fire+1){
+          cur_fire_ind = iii-1; 
         }
       }
       if(words[0][0]=='p'){
          int iii=atoi(words[1].c_str());
-        if(iii>=0 && iii< n_park){
-          cur_park_ind = iii;
+        if(iii>=1 && iii< n_park+1){
+          cur_park_ind = iii-1;
         } 
       }
       cout <<"cur_fire_ind " << cur_fire_ind<< " cur_park_ind " << cur_park_ind <<endl; 
