@@ -274,8 +274,11 @@ int picki = -1;
           if(x.x < a) a = x.x; if(x.x > b) b = x.x;
           if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
-         wkt_f+= "))";
+        wkt_f+= "))";
         printf("%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+        if(wkt_f.length() < 999){
+          cout << wkt_f << endl;
+        }
         glColor3f(1., 0., 0.);
         glBegin(GL_LINES);
         glVertex3f(a,d,0); glVertex3f(b,d,0);
@@ -294,15 +297,15 @@ int picki = -1;
         int j = cur_park_ind + n_fire; // this is the object index: remember, everything's lumped together in one array (fire centres, first)
         long int clen = my_vectors[j].size();
         v = &my_vectors[j];
-        string wkt_f("POLYGON((");
+        string wkt_p("POLYGON((");
         for(k=0; k< clen; k++){
           if(k>0){
-            wkt_f += ",";
+            wkt_p += ",";
           }
           vec3d x(v->at(k));
-          wkt_f += ftos(x.x);
-          wkt_f += " ";
-          wkt_f += ftos(x.y);
+          wkt_p += ftos(x.x);
+          wkt_p += " ";
+          wkt_p += ftos(x.y);
           //append(p_poly, make_tuple(x.x, x.y));
            //append wktstring command
           if(k<10){
@@ -312,8 +315,11 @@ int picki = -1;
           if(x.x < a) a = x.x; if(x.x > b) b = x.x;
           if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
-        wkt_f+= "))";     
+        wkt_p+= "))";     
         printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+        if(wkt_p.length() < 999){
+          cout << wkt_p << endl;
+        }
         glColor3f(0., 0., 1.);
         glBegin(GL_LINES);
         glVertex3f(a,d,0); glVertex3f(b,d,0);
