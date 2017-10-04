@@ -258,6 +258,7 @@ int picki = -1;
         vector<vec3d> * v = &my_vectors[i];
         string wkt_f("POLYGON((");
         for(k=0; k< slen; k++){
+          if((slen > 8096) && (k % sskip != 0)) continue;
           if(k>0){
             wkt_f += ",";
           }
@@ -300,10 +301,11 @@ int picki = -1;
 
         polygon p_poly;
         int j = cur_park_ind + n_fire; // this is the object index: remember, everything's lumped together in one array (fire centres, first)
-        long int clen = my_vectors[j].size();
+        long int clen = my_vectors[j].size(); long int cskip = clen / 4096;
         v = &my_vectors[j];
         string wkt_p("POLYGON((");
         for(k=0; k< clen; k++){
+          if((slen > 8096) && (k % cskip != 0)) continue;
           if(k>0){
             wkt_p += ",";
           }
