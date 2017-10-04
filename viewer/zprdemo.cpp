@@ -278,7 +278,7 @@ int picki = -1;
             if(k==0){ a = b = x.x; c = d = x.y;}
           }
           if(x.x < a) a = x.x; if(x.x > b) b = x.x;
-          if(x.y < c) c = x.y; if(x.y > d) d = x.x;
+          if(x.y < c) c = x.y; if(x.y > d) d = x.y;
         }
         wkt_f+= "))";
         if(wkt_f.length() < 999){
@@ -330,7 +330,7 @@ int picki = -1;
             if(k==0){ a = b = x.x; c = d = x.y;}
           }
           if(x.x < a) a = x.x; if(x.x > b) b = x.x;
-          if(x.y < c) c = x.y; if(x.y > d) d = x.x;
+          if(x.y < c) c = x.y; if(x.y > d) d = x.y;
         }
         wkt_p+= "))";     
         if(wkt_p.length() < 999){
