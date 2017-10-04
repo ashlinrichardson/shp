@@ -254,7 +254,7 @@ int picki = -1;
         
         polygon f_poly; float a, b, c, d; a=b=c=d=0.;
         int i = cur_fire_ind;  
-        long int slen = my_vectors[i].size();
+        long int slen = my_vectors[i].size(); long int sskip = slen / 4096;
         vector<vec3d> * v = &my_vectors[i];
         string wkt_f("POLYGON((");
         for(k=0; k< slen; k++){
@@ -275,10 +275,16 @@ int picki = -1;
           if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
         wkt_f+= "))";
-        printf("%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
         if(wkt_f.length() < 999){
           cout << wkt_f << endl;
         }
+        printf("%sread_wkt%s()%s n%s=%s(%s%d%s)%s\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, wkt_f.length(), KRED, KNRM);
+        boost::geometry::read_wkt(wkt_f, f_poly);
+        printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM); 
+        boost::geometry::correct(f_poly);
+        printf("%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+        //add first point to end?
+        
         glColor3f(1., 0., 0.);
         glBegin(GL_LINES);
         glVertex3f(a,d,0); glVertex3f(b,d,0);
@@ -290,7 +296,6 @@ int picki = -1;
         //  vec3d x(v->at(0));
         //  append(f_poly, make_tuple(x.x, x.y));
         ////
-        boost::geometry::correct(f_poly);
   // add the last point in????        //s[slen-1].x = s[0].x;          //s[slen-1].y = s[0].y;
 
         polygon p_poly;
@@ -316,10 +321,16 @@ int picki = -1;
           if(x.y < c) c = x.y; if(x.y > d) d = x.x;
         }
         wkt_p+= "))";     
-        printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
         if(wkt_p.length() < 999){
           cout << wkt_p << endl;
         }
+        printf("%sread_wkt%s()%s n%s=%s(%s%d%s)%s\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, wkt_p.length(), KRED, KNRM);
+        boost::geometry::read_wkt(wkt_p, p_poly);
+        printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+        boost::geometry::correct(p_poly);
+        printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+        //add first point to the end
+
         glColor3f(0., 0., 1.);
         glBegin(GL_LINES);
         glVertex3f(a,d,0); glVertex3f(b,d,0);
