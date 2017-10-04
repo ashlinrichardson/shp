@@ -4,7 +4,8 @@
 #include <boost/assign.hpp>
 #include <boost/version.hpp>
 #include <boost/geometry.hpp>
-#include <boost/geometry/geometries/polygon.hpp> //#include <boost/geometry/domains/gis/io/wkt/wkt.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
+//#include <boost/geometry/domains/gis/io/wkt/wkt.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/linestring.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
@@ -13,22 +14,19 @@
 
 BOOST_GEOMETRY_REGISTER_BOOST_TUPLE_CS(cs::cartesian)
 
-/* 
-http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/append.html
-http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
-*/
-
+/* http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/append.html
+http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html */
 #define STR_MAX 10000
 #include "hsv.h"
 #include "newzpr.h"
 #include "pthread.h"
-#include"memory.h"
+#include "memory.h"
 #include "time.h"
 #include "vec3d.h"
 #define MYFONT  GLUT_BITMAP_HELVETICA_12
 #include <stdio.h>
 #include <stdlib.h>
-#include<vector>
+#include <vector>
 
 // point data from shape files
 vector< vector<vec3d> > my_vectors;
@@ -44,8 +42,7 @@ double max_f;
 
 int next_class;
 
-int cur_fire_ind;
-int cur_park_ind;
+int cur_fire_ind, cur_park_ind;
 int n_fire, n_park;
 
 /* Macro for checking OpenGL error state */
@@ -82,26 +79,6 @@ void _pick(GLint name){
     cout << " (check indexing method) " << endl;
    fflush(stdout);
 }
-/* 
-// point data from shape files
-vector< vector<vec3d> > my_vectors;
-vector< string > my_names;
-vector< int > my_id;
-vector< int > my_class;
-vector<int > n_my_class;
-vector<int> within_class_index;
-vector<int> urx;
-
-vector<vec3d> max_p;
-double max_f;
-
-int next_class;
-
-int cur_fire_ind;
-int cur_park_ind;
-int n_fire, n_park;
-*/
-
 
 void renderBitmapString(float x, float y, void *font, char *string){
   char *c;
@@ -473,6 +450,71 @@ vector<string> split(const char *str, char c = ' '){
     return result;
 }
 
+/* Keyboard functions */
+void special(int key, int x, int y){
+  switch(key){
+/*
+  int cur_fire_ind, cur_park_ind;
+  int n_fire, n_park; 
+*/
+
+/*
+    case GLUT_KEY_UP:
+      {
+        if(cur_park_ind >=0){
+          cur_park_ind ++;
+          if(cur_park_ind >= n_park){
+            cur_park_ind = 0;
+          }
+        }else{
+          cur_park_ind = 0;
+        }
+      }
+    break;  
+    case GLUT_KEY_DOWN:
+       {
+        if(cur_park_ind >=0){
+          cur_park_ind --;
+          if(cur_park_ind <0){
+            cur_park_ind = n_park-1;
+          }
+        }else{
+          cur_park_ind = 0;
+        }
+      }
+    break;
+*/
+    case GLUT_KEY_LEFT:
+      {
+        if(cur_fire_ind >=0){
+          cur_fire_ind --;
+          if(cur_fire_ind < 0){
+            cur_fire_ind = n_fire - 1;
+          }
+        }
+        else{
+          cur_fire_ind = 0;
+        }
+      }
+
+    break;
+    case GLUT_KEY_RIGHT:
+      {
+        if(cur_fire_ind >=0){
+          cur_fire_ind ++;
+          if(cur_fire_ind >= n_fire){
+            cur_fire_ind = 0;
+          }
+        }else{
+          cur_fire_ind = 0;
+        }
+      }
+    break;
+    default: break;   
+  }
+  display();
+
+}
 
 /* Keyboard functions */
 void keyboard(unsigned char key, int x, int y){
@@ -522,15 +564,19 @@ void keyboard(unsigned char key, int x, int y){
       cout << "good "<<endl;
       if(words[0][0]=='f'){
         int iii = atoi(words[1].c_str());
-        if(iii >=1 && iii < n_fire+1){
-          cur_fire_ind = iii-1; 
+        if(iii >=0 && iii < n_fire){
+          cur_fire_ind = iii; 
+        }else{
+          cur_fire_ind = -1;
         }
       }
       if(words[0][0]=='p'){
          int iii=atoi(words[1].c_str());
-        if(iii>=1 && iii< n_park+1){
-          cur_park_ind = iii-1;
-        } 
+        if(iii>=0 && iii< n_park){
+          cur_park_ind = iii;
+        }else{
+          cur_park_ind = -1;
+        }
       }
       cout <<"cur_fire_ind " << cur_fire_ind<< " cur_park_ind " << cur_park_ind <<endl; 
     }
@@ -671,8 +717,6 @@ cout << "BOOST_MINOR_VERSION\t\t" << BOOST_VERSION / 100 << endl;
 cout << "BOOST_MAJOR_VERSION\t\t" << BOOST_VERSION / 100000 << endl;
 cout << "Boost version:\t\t" << BOOST_LIB_VERSION << endl;
 
-//vector<vec3d> max_p;
-//double max_f;
 max_f = 0.;
  cur_fire_ind = -1;
  cur_park_ind = -1;
@@ -815,8 +859,9 @@ max_f = 0.;
     /* Configure GLUT callback functions */
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
+    glutSpecialFunc(special);
    // glutKeyboardUpFunc(keyboardup);
-	glutIdleFunc(idle);
+	  glutIdleFunc(idle);
     glScalef(0.25,0.25,0.25);
 
     /* Configure ZPR module */
