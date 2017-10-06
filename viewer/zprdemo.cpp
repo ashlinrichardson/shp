@@ -5,7 +5,6 @@
 #include <boost/version.hpp>
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
-//#include <boost/geometry/domains/gis/io/wkt/wkt.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/linestring.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
@@ -103,12 +102,10 @@ void setOrthographicProjection() {
 }
 
 void resetPerspectiveProjection() {
-   
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
 }
-
 
 void drawText(){
     glColor3f(0.0f,1.0f,0.0f);
@@ -735,61 +732,6 @@ max_f = 0.;
     n_park = nc1;
     cout << "number of fire centres " << nc0 <<endl;
     cout << "number of parks        " << nc1 <<endl;
-
-    if(false){ // intersection calculation
-        int i, j, k;
-        // vector< vector<vec3d> > my_vectors; 
-        int npts = my_vectors.size();
-
-        for(i=0; i< nc0; i++){ // iterate over all the fire centres
-            //vec_t s[] = {{50,150},{200,50},...} 
-            long int slen = my_vectors[i].size();
-            //vec_t * s = (vec_t *)(void *)malloc(sizeof(vec_t) * slen);
-            //vector<vec3d> * v = &my_vectors[i];
-            //for(k=0; k< v->size(); k++){
-                //vec3d x(v->at(k));
-                //s[k].x = x.x; s[k].y = x.y;
-            //}
-            //poly_t subject = {slen, 0, s};
-            for(j=nc0; j< nc0+nc1; j++){ // iterate over all the parks
-                ///fprintf(fff, "i %d/%d j %d/%d\n", i+1, nc0, j-nc0+1, nc1);
-                //long int clen = my_vectors[j].size();
-                //vec_t * c = (vec_t *)(void *)malloc(sizeof(vec_t) * clen);
-                //v = &my_vectors[j];
-                //for(k=0; k< clen; k++){
-                  //  vec3d x(v->at(k));
-                   // c[k].x = x.x;  c[k].y = x.y;
-                //}
-                //poly_t clipper = {clen, 0, c};
-                // the polygon calculation
-                {
-                        //printf("%e AREA of subject\n", area(&subject));
-                        //printf("%e AREA of clipper\n", area(&clipper));
-                        //poly res = poly_clip(&subject, &clipper); //subject, &clipper);
-                        //for (k = 0; k < res->len; k++)
-                        //printf("%g %g\n", res->v[k].x, res->v[k].y);
-                        //double ar = area(res);
-                        //if(a>0.){
-                            //printf("i %d j %d %e AREA of Intersection\n", i+1, j-nc0+1, ar);
-                            //fprintf(ggg, "%d,%d,%e\n", i+1, j-nc0+1, ar);  
-    
-                        /*if(ar > max_f){
-                           max_f = ar;
-                           max_p.clear();
-                            int kk;
-                            for (kk = 0; kk < res->len; kk++){
-                              max_p.push_back( vec3d(res->v[k].x, res->v[k].y, 0.));
-                            }
-                        }        */
-            
-                      //}//area(res));
-                }
-                //free(c);
-             } // iterate over all the parks
-
-            //free(s);
-        }// iterate over all the fire centres
-    }
     fclose(fff);
     fclose(ggg);
 
