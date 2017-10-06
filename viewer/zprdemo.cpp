@@ -633,8 +633,6 @@ max_f = 0.;
 	renderflag = false;
 	a1 = a2 = a3 = 1;
 	console_position = 0;
-	//Py_Initialize();
-	//printf("Py_init()\n");
 	fullscreen=0;
 
     /* Initialise olLUT and create a window */
@@ -642,7 +640,7 @@ max_f = 0.;
   	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
    	glutInitWindowSize(STARTX,STARTY);
    	glutCreateWindow("");
-	zprInit();
+	  zprInit();
 
 	
     /* Configure GLUT callback functions */
@@ -654,16 +652,10 @@ max_f = 0.;
     glScalef(0.25,0.25,0.25);
 
     /* Configure ZPR module */
-	   // zprInit();
     zprSelectionFunc(drawAxes);     /* Selection mode draw function */
     zprPickFunc(pick);              /* Pick event client callback   */
-
-     /* Initialise OpenGL */
 
     /* Enter GLUT event loop */
     glutMainLoop();
     return 0;
 }
-
-
-
