@@ -1,10 +1,11 @@
 #!/usr/bin/env python
+'''write C++ code to map orc to park-name 2017106'''
 import sys
 from xml.dom import minidom
 xmldoc = minidom.parse('parkInfo.xml')
 itemlist = xmldoc.getElementsByTagName('park')
-print("number of park entries " + str(len(itemlist)))
 
+# print("number of park entries " + str(len(itemlist)))
 d = {}
 for i in range(0, len(itemlist)):
     park =  itemlist[i]
@@ -29,4 +30,17 @@ for i in range(0, len(itemlist)):
     # use ascii encoding
     d[orc] = nam.encode('ascii', 'ignore')
 
-print d
+keys = sorted(d.iterkeys())
+mk = 0 # max index?
+for k in keys:
+  #print k, d[k]
+  k = int(k)
+  if k > mk:
+    mk = k 
+
+print "long int mk = " + str(mk + 1) + ";"
+print "long int nb = sizeof(std::string *) * (mk + 1);"
+print "std::string * orc_to_name = (std::string *)(void *)malloc(nb);"
+print "memset(orc_to_name, '\\0', nb);"
+for k in keys:
+  print "orc_to_name["+str(k)+'] = std::string("' + str(d[k]) + '");'
