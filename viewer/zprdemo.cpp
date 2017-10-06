@@ -282,7 +282,8 @@ void drawAxes(void){
     if(wkt_p.length() < 999){
       cout << wkt_p << endl;
     }
-    printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
+    printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED,
+                                                            KMAG, add_c, KRED, KNRM, clen);
     boost::geometry::read_wkt(wkt_p, p_poly);
     printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
     boost::geometry::correct(p_poly);
