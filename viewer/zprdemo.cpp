@@ -464,6 +464,7 @@ void idle(){
 }
 
 int parse(string fn){
+  cout << KYEL << "parse(" << KMAG << fn << KYEL << ")" << endl;
   ifstream in(fn.c_str());
   if (!in.is_open()){
     printf("error\n"); exit(1);
@@ -471,7 +472,7 @@ int parse(string fn){
   string line;
 
   getline(in, line);
-  cout << line << endl;
+  cout << KGRN << "\t" << line << KNRM << endl;
   int nclass = 0;
   int di = -1;
   while(getline(in, line)){
@@ -508,12 +509,12 @@ int main(int argc, char *argv[]){
   orc_to_name = NULL;
 
   setup();
-
-  cout << "BOOST_VERSION\t\t" << BOOST_VERSION<< endl;
-  cout << "BOOST_PATCH_LEVEL\t\t" << BOOST_VERSION % 100 << endl;
-  cout << "BOOST_MINOR_VERSION\t\t" << BOOST_VERSION / 100 << endl;
-  cout << "BOOST_MAJOR_VERSION\t\t" << BOOST_VERSION / 100000 << endl;
-  cout << "Boost version:\t\t" << BOOST_LIB_VERSION << endl;
+  cout << KYEL << "BOOST INFO"<<endl;
+  cout << KGRN << "\tBOOST_VERSION       " << KMAG << BOOST_VERSION << endl;
+  cout << KGRN << "\tBOOST_PATCH_LEVEL   " << KMAG << BOOST_VERSION % 100 << endl;
+  cout << KGRN << "\tBOOST_MINOR_VERSION " << KMAG << BOOST_VERSION / 100 << endl;
+  cout << KGRN << "\tBOOST_MAJOR_VERSION " << KMAG << BOOST_VERSION / 100000 << endl;
+  cout << KGRN << "\tBOOST_LIB_VERSION   " << KMAG << BOOST_LIB_VERSION << KNRM << endl;
 
   max_f = 0.;
   cur_fire_ind = -1;
@@ -529,8 +530,8 @@ int main(int argc, char *argv[]){
   int nc1 = parse(string("parks.dat"));
   n_fire = nc0;
   n_park = nc1;
-  cout << "number of fire centres " << nc0 <<endl;
-  cout << "number of parks " << nc1 <<endl;
+  cout << KGRN << "number of park shp entries        " << KRED << nc1 << endl;
+  cout << KGRN << "number of fire centre shp entries " << KRED << nc0 << endl << KNRM;
   fclose(fff);
   fclose(ggg);
 
