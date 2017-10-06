@@ -13,8 +13,11 @@
 
 BOOST_GEOMETRY_REGISTER_BOOST_TUPLE_CS(cs::cartesian)
 
-/* http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/append.html
-http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html */
+/*
+http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/append.html
+http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html 
+http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
+*/
 #define STR_MAX 10000
 #include "hsv.h"
 #include "newzpr.h"
@@ -123,12 +126,10 @@ void drawText(){
 
 float a1, a2, a3;
 
-
 class point{
   public:
     point(){
     }
-  
 };
 
 /*convert float to string.. from gift meta4/gift/*/
@@ -207,7 +208,7 @@ int picki = -1;
               glVertex3f((*it).x, (*it).y, (*it).z);
             }
             ci ++;
-        } // for(it=j->begin()
+        } 
         glEnd();
         glPopName();
     }
@@ -217,14 +218,7 @@ int picki = -1;
       using boost::assign::tuple_list_of;
       using boost::make_tuple;
       using boost::geometry::append;
-      //typedef boost::geometry::model::polygon<boost::tuple<float, float> ,false> polygon;
       typedef boost::geometry::model::polygon<boost::geometry::model::d2::point_xy<double> > polygon;
-
-// Append a range
-  ///  append(poly, tuple_list_of(0, 0)(0, 10)(11, 11)(10, 0));
-    // Append a point (in this case the closing point
- //   append(poly, make_tuple(0, 0));
-
         
         polygon f_poly; float a, b, c, d; a=b=c=d=0.;
         int i = cur_fire_ind;  
@@ -272,11 +266,6 @@ int picki = -1;
         glVertex3f(b,c,0); glVertex3f(a,c,0);
         glVertex3f(a,c,0); glVertex3f(a,d,0);
         glEnd();
-        //if(true){
-        //  vec3d x(v->at(0));
-        //  append(f_poly, make_tuple(x.x, x.y));
-        ////
-  // add the last point in????        //s[slen-1].x = s[0].x;          //s[slen-1].y = s[0].y;
 
         polygon p_poly; a = b = c = d = 0.;
         int j = cur_park_ind + n_fire; // this is the object index: remember, everything's lumped together in one array (fire centres, first)
@@ -324,13 +313,8 @@ int picki = -1;
         glVertex3f(b,c,0); glVertex3f(a,c,0);
         glVertex3f(a,c,0); glVertex3f(a,d,0);
         glEnd();
-        //if(true){
-        //  vec3d x(v->at(0));
-        //  append(p_poly, make_tuple(x.x, x.y));
-        //}
 
 
-        // http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
         std::deque<polygon> p_result;
 
         printf("%sintersection%s()%s\n", KYEL, KBLU, KNRM);
@@ -349,88 +333,30 @@ int picki = -1;
           printf("\t%sarea_i%s(%f)%s\n", KYEL, KBLU, KNRM);
         }
     
-        //std::cout << ' ' < *it++;
         // calculate area of intersection (of e.g., fire centre poly, and park poly)
-        //float a = boost::geometry::area(p);
         printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n\t%s%s%s\n", 
           my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000001?"NO INTERSECTION":"").c_str(), KNRM);
-//        cout << "AREA OF INTERSECTION: "<< my_area << ((p_result.size()>0)?(p_result.size()):0) << endl;
-      
+
     }
     
 glPopMatrix();
-/*
-	glPushMatrix();
-	glPushName(0);
-	glTranslatef( a1, a2, a3);
-	glColor3f(1,0,0);
-	if(myPickNames.count(0)){ glColor3f(0,1,1);}
-	glutSolidSphere(0.5, 8,8  );
-	glPopName();
-	glPopMatrix();
-
-	glPushMatrix();
-	glPushName(4);
-	glColor3f(1,0,0);    
-	if(myPickNames.count(4)){ glColor3f( 0,1,1);}// 1- 0.3*a1,1-0.3*a2,1-1);}//;}
- 	glutSolidSphere(0.7, 20, 20);
-	glPopName();
-	glPopMatrix();
-
-	glPushMatrix();
-  glPushName(1);      
-  glColor3f(0,0,1);
-	if(myPickNames.count(1)){ glColor3f(1,1,0);}
-        glRotatef(90.*a1,0,1,0);
-        glutSolidCone(0.6, 4.0, 20, 20);
-      	glPopName();
-      	glPopMatrix();
-
-      	glPushMatrix ();
-      	glPushName(2);  
-       	glColor3f(0,0,1);
-	if(myPickNames.count(2)){ glColor3f(1,1,0);}
-        glRotatef(-90.*a1,1,0,0);
-        glutSolidCone(0.6, 4.0, 20, 20);
-      	glPopName();
-      	glPopMatrix();
-
-	glPushMatrix();
-      	glColor3f(0,0,1);  
-	if(myPickNames.count(3)){ glColor3f(1,1,0);}
-      	glPushName(3);
-        glutSolidCone(0.6, 4.0, 20, 20);
-      	glPopName();
-   	glPopMatrix();
-
-*/
 }
 
 /* Callback function for drawing */
-void display(void)
-{
+void display(void){
    GLERROR;
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    drawAxes();
-   //glutSwapBuffers();//Flush();
    drawText();
-   //glutPostRedisplay();
-   //glFlush();
    glutSwapBuffers();
-
    GLERROR;
 	renderflag = false;
 }
 
 /* Callback function for pick-event handling from ZPR */
 
-
-
-
-
 void quitme(){
 	exit(0);
-
 }
 
 /* python style split function (from meta4)*/
@@ -516,29 +442,7 @@ void special(int key, int x, int y){
 /* Keyboard functions */
 void keyboard(unsigned char key, int x, int y){
   switch(key){
-	// Backspace
 
-	/*case GLUT_F1:
-		//if( stop_time > clock())
-		//	break;
-		if(!fullscreen){
-			fullscreen=1;
-			glutFullScreen();
-
-		}else{
-			fullscreen=0;
-			glutReshapeWindow(STARTX, STARTY);
-			glutPositionWindow(0, 0);
-
-		}
-		glutPostRedisplay();
-		//display();
-  		//start_time = clock();
-		//stop_time = start_time + CLOCKS_PER_SEC;
-		//while(clock() < stop_time){}
-
-		break;
-	*/
 	case 8 :
 	case 127:
 		if(console_position>0){
@@ -588,14 +492,8 @@ void keyboard(unsigned char key, int x, int y){
 	case 27 :
 		quitme();
 		exit(0);
-		//printf( "%d Pressed Esc\n",(char)key);
 		break;
 
-	// Delete
-/*	case 127 :
-		printf( "%d Pressed Del\n",(char)key);
-		break;
-*/
 	default: 
 		//printf( "Pressed key %c AKA %d at position %d % d\n",(char)key, key, x, y);
 		console_string[console_position++] = (char)key;
@@ -615,31 +513,6 @@ static GLfloat mat_diffuse[]    = { 0.8, 0.8, 0.8, 1.0 };
 static GLfloat mat_specular[]   = { 1.0, 1.0, 1.0, 1.0 };
 static GLfloat high_shininess[] = { 100.0 };
 
-/* Entry point */
-
-//https://computing.llnl.gov/tutorials/pthreads/
-/*void * threadfun(void *arg){
-
-	while(true){
-		printf("Sleeping...\n");
-
-		usleep(200000);
-		a1 = a1+0.5;
-		a2 = a2-0.5;
-		a3 = a3*1.5;
-		renderflag = true;
-		printf("Sleeping\n");
-
-		usleep(200000);
-		a1 = a1-0.5;
-                a2 = a2+0.5;
-                a3 = a3/1.5;
-		renderflag = true;
-
-	}
-
-}
-*/
 
 void idle(){
     if(renderflag){
@@ -647,21 +520,6 @@ void idle(){
         glutPostRedisplay();
 	}	
 }
-/* 
-vector<string> split(const char *str, char c = ' '){
-    vector<string> result;
-    do{
-        const char *begin = str;
-
-        while(*str != c && *str)
-            str++;
-
-        result.push_back(string(begin, str));
-    }while (0 != *str++);
-    return result;
-}
-*/
-
 
 int parse(string fn){
     ifstream in(fn.c_str());
@@ -704,8 +562,6 @@ int parse(string fn){
     return nclass; // number of points in this file (associate a class with each file)
 }
 
-
-
 int main(int argc, char *argv[]){
 
 cout << "BOOST_VERSION\t\t" << BOOST_VERSION<< endl;
@@ -743,10 +599,12 @@ max_f = 0.;
     for(i=0; i< my_vectors.size(); i++){
         vector<vec3d> * j = &my_vectors[i];
         vector<vec3d>::iterator it;
-        for(it=j->begin(); it!=j->end(); it++){
+        for(it = j->begin(); it != j->end(); it++){
             float x = (*it).x;  float y = (*it).y;
-            if (x>maxx) maxx=x; if (x<minx) minx=x;
-            if (y>maxy) maxy=y; if (y<miny) miny=y;
+            if(x > maxx) maxx=x;
+            if(x < minx) minx=x;
+            if(y > maxy) maxy=y;
+            if(y < miny) miny=y;
         }
       }
 
@@ -765,7 +623,8 @@ max_f = 0.;
         vector<vec3d> * j = &my_vectors[i];
         vector<vec3d>::iterator it;
         for(it=j->begin(); it!=j->end(); it++){
-            xa += (*it).x;  ya += (*it).y;
+            xa += (*it).x;
+            ya += (*it).y;
             c += 1.;
         }    
       }
@@ -776,15 +635,17 @@ max_f = 0.;
         vector<vec3d> * j = &my_vectors[i];
         vector<vec3d>::iterator it;
         for(it=j->begin(); it!=j->end(); it++){
-            (*it).x -= xa; (*it).y -= ya;
-            (*it).x *= 5.; (*it).y *= 5.;
+            (*it).x -= xa;
+            (*it).y -= ya;
+            (*it).x *= 5.;
+            (*it).y *= 5.;
         }
       }
     }
 
-    pick = _pick;
+  pick = _pick;
 	renderflag = false;
-	a1=a2=a3=1;
+	a1 = a2 = a3 = 1;
 	console_position = 0;
 	//Py_Initialize();
 	//printf("Py_init()\n");
