@@ -265,8 +265,6 @@ void drawAxes(void){
         wkt_p += ftos(x.x);
         wkt_p += " ";
         wkt_p += ftos(x.y);
-        //append(p_poly, make_tuple(x.x, x.y));
-        //append wktstring command
       }
       if(k<10){
         printf("%e %e\n", x.x, x.y);
@@ -289,7 +287,7 @@ void drawAxes(void){
     printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
     boost::geometry::correct(p_poly);
     printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
-    //add first point to the end
+    //add first point to the end?
 
     glColor3f(0., 0., 1.);
     glBegin(GL_LINES);
@@ -303,13 +301,11 @@ void drawAxes(void){
 
     printf("%sintersection%s()%s\n", KYEL, KBLU, KNRM);
     boost::geometry::intersection(f_poly, p_poly, p_result);
-    //cout << "park " << p_poly << endl;
     printf("%sintersection%s(%ld)%s\n", KYEL, KBLU, p_result.size(), KNRM);
     std::deque<polygon>::iterator it;
-    // = p_result.begin();
     printf("%sarea%s()%s\n", KYEL, KBLU, KNRM);
     double my_area = 0.;
-    int ci=0;
+    int ci = 0;
     for(it = p_result.begin(); it != p_result.end(); it++){
       printf("poly(i=%d)\n", ci++);
       float f = (double)boost::geometry::area(*it);
@@ -320,7 +316,6 @@ void drawAxes(void){
     // calculate area of intersection (of e.g., fire centre poly, and park poly)
     printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n\t%s%s%s\n",
     my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000001?"NO INTERSECTION":"").c_str(), KNRM);
-
   }
 
   glPopMatrix();
@@ -453,38 +448,6 @@ void keyboard(unsigned char key, int x, int y){
     break;
   }
 }
-
-static GLfloat light_ambient[] = {
-  0.0, 0.0, 0.0, 1.0
-};
-
-static GLfloat light_diffuse[] = {
-  1.0, 1.0, 1.0, 1.0
-};
-
-static GLfloat light_specular[] = {
-  1.0, 1.0, 1.0, 1.0
-};
-
-static GLfloat light_position[] = {
-  1.0, 1.0, 1.0, 0.0
-};
-
-static GLfloat mat_ambient[] = {
-  0.7, 0.7, 0.7, 1.0
-};
-
-static GLfloat mat_diffuse[] = {
-  0.8, 0.8, 0.8, 1.0
-};
-
-static GLfloat mat_specular[] = {
-  1.0, 1.0, 1.0, 1.0
-};
-
-static GLfloat high_shininess[] = {
-  100.0
-};
 
 void idle(){
   if(renderflag){
