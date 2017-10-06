@@ -144,20 +144,6 @@ string ftos( float i){
 
 void drawAxes(void){
 
-// need to calculate the area of intersection of the park with the fire centre, 
-//   divided by the area of the park
-
-
-    /* Name-stack manipulation for the purpose of
-       selection hit processing when mouse button
-       is pressed.  Names are ignored in normal
-       OpenGL rendering mode.                    */
-
-//   vector< vector<vec3d> > my_vectors;
-
-//hsv2rgb( float *r, float *g, float *b, float h, float s, float v)
-
-
 glPushMatrix();
 float r, g, b;
 r =0.; g = b = 1.;
