@@ -8,3 +8,5 @@ viewer/run
 viewer/.DS_Store
 .DS_Store
 viewer/boost_wkt
+viewer/orc.txt
+*.swp
