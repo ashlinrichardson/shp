@@ -66,9 +66,9 @@ void _pick(GLint name){
     if(my_class[my_ind] ==1){
       my_ind -= n_fire;
     }
-    cout << my_ind << "," ;
+    cout << endl << KYEL << my_names[my_ind] << KMAG << "--> " << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << "," ;
   }
-  cout << " (check indexing method) " << endl;
+  cout << " (check indexing method) " << KNRM << endl;
   fflush(stdout);
 }
 
@@ -232,7 +232,10 @@ void drawAxes(void){
     if(wkt_f.length() < 999){
       cout << wkt_f << endl;
     }
-    printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
+
+    printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
+           KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
+
     boost::geometry::read_wkt(wkt_f, f_poly);
     printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
     boost::geometry::correct(f_poly);
@@ -282,8 +285,10 @@ void drawAxes(void){
     if(wkt_p.length() < 999){
       cout << wkt_p << endl;
     }
-    printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED,
-                                                            KMAG, add_c, KRED, KNRM, clen);
+
+    printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
+           KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
+
     boost::geometry::read_wkt(wkt_p, p_poly);
     printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
     boost::geometry::correct(p_poly);
