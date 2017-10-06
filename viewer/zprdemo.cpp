@@ -114,13 +114,6 @@ void drawText(){
   resetPerspectiveProjection();
 }
 
-float a1, a2, a3;
-
-class point{
-  public:
-  point(){
-  }
-};
 
 /* convert float to string.. from gift meta4::gift */
 string ftos( float i){
@@ -131,8 +124,9 @@ string ftos( float i){
   return number;
 }
 
-void drawAxes(void){
+float a1, a2, a3;
 
+void drawAxes(void){
   glPushMatrix();
   float r, g, b;
   r =0.; g = b = 1.;
