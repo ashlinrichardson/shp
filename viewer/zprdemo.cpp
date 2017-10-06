@@ -33,9 +33,9 @@ http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/a
 // point data from shape files
 vector< vector<vec3d> > my_vectors;
 vector< string > my_names;
-vector< int > my_id;
-vector< int > my_class;
-vector<int > n_my_class;
+vector<int> my_id;
+vector<int> my_class;
+vector<int> n_my_class;
 vector<int> within_class_index;
 vector<int> urx;
 
@@ -61,6 +61,9 @@ int console_position;
 int renderflag;
 
 void _pick(GLint name){
+  if(myPickNames.size() < 1){
+    return;
+  }
   cout << "PickSet:";
   std::set<GLint>::iterator it;
   for(it=myPickNames.begin(); it!=myPickNames.end(); it++){
@@ -70,7 +73,7 @@ void _pick(GLint name){
     }
     cout << endl << KYEL << my_names[my_ind] << KMAG << "--> " << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << "," ;
   }
-  cout << " (check indexing method) " << KNRM << endl;
+  cout << KNRM << endl;
   fflush(stdout);
 }
 
