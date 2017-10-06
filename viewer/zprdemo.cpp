@@ -64,14 +64,14 @@ void _pick(GLint name){
   if(myPickNames.size() < 1){
     return;
   }
-  cout << "PickSet:";
+  cout << "PickSet:" << endl;
   std::set<GLint>::iterator it;
   for(it=myPickNames.begin(); it!=myPickNames.end(); it++){
     int my_ind = *it;
     if(my_class[my_ind] ==1){
       my_ind -= n_fire;
     }
-    cout << endl << KYEL << my_names[my_ind] << KMAG << "--> " << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << "," ;
+    cout << KYEL << "\t" << my_names[my_ind] << KMAG << "--> " << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << "," << endl ;
   }
   cout << KNRM << endl;
   fflush(stdout);
