@@ -71,7 +71,12 @@ void _pick(GLint name){
     if(my_class[my_ind] ==1){
       my_ind -= n_fire;
     }
-    cout << KYEL << "\t" << my_names[my_ind] << KMAG << "--> " << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << "," << endl ;
+    cout << KYEL << "\t" << my_names[my_ind] << KMAG << "--> " << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << ",";
+
+    if(my_class[my_ind] == 1){
+      cout << endl << "\t\t" <<  my_names[my_ind] << " my_id:" << my_id[my_ind] << endl;
+    }
+    cout << endl;
   }
   cout << KNRM << endl;
   fflush(stdout);
