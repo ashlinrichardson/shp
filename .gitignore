@@ -10,3 +10,10 @@ viewer/.DS_Store
 viewer/boost_wkt
 viewer/orc.txt
 *.swp
+20171006data.tar.gz
+viewer/parks.dat
+viewer/bak/parks.dat
+data/rob/TA_PEP_SVW_polygon.dbf
+data/rob/TA_PEP_SVW_polygon.prj
+data/rob/TA_PEP_SVW_polygon.shp
+data/rob/TA_PEP_SVW_polygon.shx
