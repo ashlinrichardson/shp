@@ -79,7 +79,7 @@ int main(int argc, char ** argv){
       const Value& a = itr->value;
       int c = 0;
       for (Value::ConstValueIterator itr2 = a.Begin(); itr2 != a.End(); ++itr2){
-        printf("%ld %s\n", c++, itr2->IsObject()?"true":"false");
+        printf("%ld %s\n", (long int)(c++), itr2->IsObject()?"true":"false");
         itr2->MemberBegin();
 
         // for all the members in iter2
@@ -93,16 +93,15 @@ int main(int argc, char ** argv){
           kTypeNames[itr3->value.GetType()],
           KGRN
           );
-          if(true){  //!strncmp("Array\0", kTypeNames[itr->value.GetType()],5)){
-          //printf("\t\t%s\n", (itr3)["type"].GetString());
+          if(strncmp("Array\0", kTypeNames[itr->value.GetType()],5)){
+            //printf("\t\t%s\n", 
+            (itr3->value)["type"]; //  .GetString());
 
+          }
         }
       }
     }
-    else{
-    }
-  }
-
-  printf("done\n");
-  return 0;
 }
+    printf("done\n");
+    return 0;
+  }
