@@ -4,9 +4,9 @@
 #include<stdio.h>
 #include<string>
 #include"ansicolor.h"
-using namespace std;
-
 #include "rapidjson/document.h"
+
+using namespace std;
 using namespace rapidjson;
 
 long int getFileSize(std::string fn){
@@ -40,8 +40,7 @@ int main(int argc, char ** argv){
       f2 -= 1;
     }
   }
-  cout << fs << endl;
-  cout << f2 << endl;
+  cout << fs << endl << f2 << endl;
 
   char * fd2 = (char *)(void *)malloc(f2);
   memset(fd2, '\0', f2);
@@ -65,7 +64,7 @@ int main(int argc, char ** argv){
 
   for(Value::ConstMemberIterator itr = document.MemberBegin(); itr != document.MemberEnd(); ++itr){
     printf("%sType of member %s%s%s: %s%s%s\n", KGRN, KRED, itr->name.GetString(),
-    KGRN, KYEL, kTypeNames[itr->value.GetType()], KGRN);
+           KGRN, KYEL, kTypeNames[itr->value.GetType()], KGRN);
 
     printf("here\n");
     if(!strncmp("Array\0", kTypeNames[itr->value.GetType()], 5)){
@@ -81,7 +80,7 @@ int main(int argc, char ** argv){
         // for all the members in iter2
         for (Value::ConstMemberIterator itr3 = itr2->MemberBegin(); itr3 != itr2->MemberEnd(); ++itr3){
           printf("\t%sType of member %s%s%s: %s%s%s\n", KGRN, KRED, itr3->name.GetString(),
-          KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
+                 KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
 
           if(!strncmp("String\0", kTypeNames[itr3->value.GetType()], 5)){
             printf("\t\t\t%s\n", itr3->value.GetString());
