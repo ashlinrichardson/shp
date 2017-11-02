@@ -111,6 +111,11 @@ int main(int argc, char ** argv){
 
                 printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
                 KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
+
+                if(!strncmp("ORC_PRIMRY\0", itr4->name.GetString(), 10)){
+                    printf("\t\t\tORC_PRIMRY=%s\n", itr4->value.GetString());
+                }
+                
               }
 
             }
