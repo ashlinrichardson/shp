@@ -144,7 +144,7 @@ int main(int argc, char ** argv){
               ++itr4){
 
                 printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
-                KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
+                KGRN, KYEL, kTypeNames[itr4->value.GetType()], KGRN);
 
                 /* Type of member "type": Object */
                 /* Type of member "coordinates": Object */
@@ -158,6 +158,16 @@ int main(int argc, char ** argv){
                     printf("\t\t\tcoordinates=%s\n", itr4->name.GetString());
                     printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
                     KGRN, KYEL, kTypeNames[itr4->value.GetType()], KGRN);
+
+                    for (Value::ConstValueIterator itr5 = itr4->value.Begin();
+                    itr5 != itr4->value.End();
+                    ++itr5){
+                      //printf("%d ", itr->GetInt());
+                      //printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr5->name.GetString(),
+                      //KGRN, KYEL, kTypeNames[itr5->value.GetType()], KGRN);
+
+                    }
+
                   }
                 }
               }
