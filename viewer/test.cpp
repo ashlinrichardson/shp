@@ -22,9 +22,9 @@ long int getFileSize(std::string fn){
 }
 
 int main(int argc, char ** argv){
-  vector<string> data_PORC; /* primary ORC */
-  vector<string> data_PNAM; /* park name */
-  vector<string> data_COOR; /* GIS coordinate string (WKT format) */
+  vector<string> ORC_PRIMRY; /* primary ORC */
+  vector<string> PROT_NAME; /* park name */
+  vector<string> COORDS; /* GIS coordinate string (WKT format) */
 
 
   std::string fn("TA_PEP_SVW_polygon.json");
@@ -109,15 +109,30 @@ int main(int argc, char ** argv){
               itr4 != itr3->value.MemberEnd();
               ++itr4){
 
+                /* sample from top of Parks Geo-JSON file
+                   "features": [
+                   { "type": "Feature", "properties":
+                   { "SRV_GEN_PL": "3TU1901", "ADMIN_AREA": 626.0, "F_CODE": "FA02550271",
+                   "ORC_SCNDRY": "00", "ORC_PRIMRY": "0237", "PROT_CODE": "PP",
+                   "PARK_CLASS": "Class A", "OBJECTID": 389.0, "PROT_DESG": "PROVINCIAL PARK",
+                   "PROT_NAME": "DISCOVERY ISLAND MARINE PARK"
+                */
+
                 printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
                 KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
 
+                /* vector<string> ORC_PRIMRY;
+                   vector<string> PROT_NAME; 
+                */
+
                 if(!strncmp("ORC_PRIMRY\0", itr4->name.GetString(), 10)){
                     printf("\t\t\tORC_PRIMRY=%s\n", itr4->value.GetString());
+                    ORC_PRIMRY.push_back(itr4->value.GetString());
                 }
 
                 if(!strncmp("PROT_NAME\0", itr4->name.GetString(), 9)){
                     printf("\t\t\tPROT_NAME=%s\n", itr4->value.GetString());
+                    PROT_NAME.push_back(itr4->value.GetString());
                 }
               }
 
@@ -136,13 +151,10 @@ int main(int argc, char ** argv){
 
                 /* Next step: open these two objects */
 
-                /* "features": [
-                { "type": "Feature", "properties":
-                { "SRV_GEN_PL": "3TU1901", "ADMIN_AREA": 626.0, "F_CODE": "FA02550271",
-                "ORC_SCNDRY": "00", "ORC_PRIMRY": "0237", "PROT_CODE": "PP",
-                "PARK_CLASS": "Class A", "OBJECTID": 389.0, "PROT_DESG": "PROVINCIAL PARK",
-                "PROT_NAME": "DISCOVERY ISLAND MARINE PARK"
-                */
+                /* vector<string> COORDS; */
+
+
+
               }
             }
           }
