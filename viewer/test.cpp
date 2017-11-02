@@ -62,23 +62,34 @@ int main(int argc, char ** argv){
     "Null", "False", "True", "Object", "Array", "String", "Number"
   };
 
-  for(Value::ConstMemberIterator itr = document.MemberBegin(); itr != document.MemberEnd(); ++itr){
+  /* for all doc members */
+  for(Value::ConstMemberIterator itr = document.MemberBegin();
+      itr != document.MemberEnd();
+      ++itr){
+
     printf("%sType of member %s%s%s: %s%s%s\n", KGRN, KRED, itr->name.GetString(),
            KGRN, KYEL, kTypeNames[itr->value.GetType()], KGRN);
 
-    printf("here\n");
+    /* assert(itr->IsArray()); */
     if(!strncmp("Array\0", kTypeNames[itr->value.GetType()], 5)){
 
-      //assert(itr->IsArray());
       printf("\tisArray=true\n");
       const Value& a = itr->value;
       int c = 0;
-      for (Value::ConstValueIterator itr2 = a.Begin(); itr2 != a.End(); ++itr2){
+
+      /* for all members in a */
+      for(Value::ConstValueIterator itr2 = a.Begin();
+          itr2 != a.End();
+          ++itr2){
+
         printf("%ld %s\n", (long int)(c++), itr2->IsObject()?"true":"false");
         itr2->MemberBegin();
 
-        // for all the members in iter2
-        for (Value::ConstMemberIterator itr3 = itr2->MemberBegin(); itr3 != itr2->MemberEnd(); ++itr3){
+        /* for all the members in iter2 */
+        for(Value::ConstMemberIterator itr3 = itr2->MemberBegin();
+             itr3 != itr2->MemberEnd();
+             ++itr3){
+
           printf("\t%sType of member %s%s%s: %s%s%s\n", KGRN, KRED, itr3->name.GetString(),
                  KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
 
@@ -87,8 +98,15 @@ int main(int argc, char ** argv){
           }
 
           if(!strncmp("Object\0", kTypeNames[itr3->value.GetType()], 5)){
-            if(!strncmp("geometry", itr3->name.GetString(), 8)){
+            if(!strncmp("geometry\0", itr3->name.GetString(), 8)){
               printf("\t\t%s\n", itr3->name.GetString());
+
+                for(Value::ConstMemberIterator itr4 = itr3->value.MemberBegin();
+                    itr4 != itr3->value.MemberEnd();
+                    ++itr4){
+                    /* print out WKT here */
+                }
+
 
             }
           }
