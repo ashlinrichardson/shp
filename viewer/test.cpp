@@ -155,10 +155,7 @@ int main(int argc, char ** argv){
                   /* assert(itr->IsArray()); */
                   if(!strncmp("Array\0", kTypeNames[itr4->value.GetType()], 5)){
 
-                    printf("\t\t\tcoordinates=%s\n", itr4->name.GetString());
-                    printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
-                    KGRN, KYEL, kTypeNames[itr4->value.GetType()], KGRN);
-
+                    /* iterate the coordinate array */
                     for (Value::ConstValueIterator itr5 = itr4->value.Begin();
                     itr5 != itr4->value.End();
                     ++itr5){
