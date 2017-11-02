@@ -115,7 +115,10 @@ int main(int argc, char ** argv){
                 if(!strncmp("ORC_PRIMRY\0", itr4->name.GetString(), 10)){
                     printf("\t\t\tORC_PRIMRY=%s\n", itr4->value.GetString());
                 }
-                
+
+                if(!strncmp("PROT_NAME\0", itr4->name.GetString(), 9)){
+                    printf("\t\t\tPROT_NAME=%s\n", itr4->value.GetString());
+                }
               }
 
             }
