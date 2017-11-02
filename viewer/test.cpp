@@ -1,11 +1,11 @@
+#include<string>
+#include<vector>
+#include<stdio.h>
 #include<fstream>
 #include<iostream>
 #include<stdlib.h>
-#include<stdio.h>
-#include<string>
 #include"ansicolor.h"
-#include "rapidjson/document.h"
-
+#include"rapidjson/document.h"
 using namespace std;
 using namespace rapidjson;
 
@@ -22,6 +22,11 @@ long int getFileSize(std::string fn){
 }
 
 int main(int argc, char ** argv){
+  vector<string> data_PORC; /* primary ORC */
+  vector<string> data_PNAM; /* park name */
+  vector<string> data_COOR; /* GIS coordinate string (WKT format) */
+
+
   std::string fn("TA_PEP_SVW_polygon.json");
   long int fs = getFileSize(fn);
   char * fd = (char *)(void *)malloc(fs);
