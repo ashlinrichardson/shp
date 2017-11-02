@@ -85,13 +85,13 @@ int main(int argc, char ** argv){
         // for all the members in iter2
         for (Value::ConstMemberIterator itr3 = itr2->MemberBegin(); itr3 != itr2->MemberEnd(); ++itr3){
           printf("\t%sType of member %s%s%s is %s%s%s\n",
-          KGRN,
-          KRED,
-          itr3->name.GetString(), //iter3 is reference to a member
-          KGRN,
-          KYEL,
-          kTypeNames[itr3->value.GetType()],
-          KGRN
+                 KGRN,
+                 KRED,
+                 itr3->name.GetString(), //iter3 is reference to a member
+                 KGRN,
+                 KYEL,
+                 kTypeNames[itr3->value.GetType()],
+                 KGRN
           );
       
           if(!strncmp("String\0", kTypeNames[itr3->value.GetType()],5)){
@@ -101,26 +101,11 @@ int main(int argc, char ** argv){
           if(!strncmp("Object\0", kTypeNames[itr3->value.GetType()],5)){
             if(!strncmp("geometry", itr3->name.GetString(), 8)){
               printf("\t\t%s\n", itr3->name.GetString());
+
+              
               
             };
-            //printf("\t\t\t%s\n", "Object");
-            
-            //(itr3->value)["type"]; //  .GetString());
-           /* 
-             (itr3->value)["properties"];
-            (itr3->value)["geometry"].GetType();
 
-            printf("\t\t%s(*) Type of member %s%s%s is %s%s%s\n",
-              KGRN,
-              KRED,
-              (itr3->value)["type"].GetString(), //iter3 is reference to a member
-              KGRN,
-              KYEL,
-              kTypeNames[ (itr3->value)["type"].GetType() ],
-              KGRN
-            );
-
-            */
 
           }
         }
