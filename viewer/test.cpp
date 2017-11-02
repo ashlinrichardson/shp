@@ -92,6 +92,7 @@ int main(int argc, char ** argv){
 
           printf("\t%sType of member %s%s%s: %s%s%s\n", KGRN, KRED, itr3->name.GetString(),
                  KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
+          /* Type of member geometry: Object */
 
           if(!strncmp("String\0", kTypeNames[itr3->value.GetType()], 5)){
             printf("\t\t\t%s\n", itr3->value.GetString());
@@ -99,12 +100,19 @@ int main(int argc, char ** argv){
 
           if(!strncmp("Object\0", kTypeNames[itr3->value.GetType()], 5)){
             if(!strncmp("geometry\0", itr3->name.GetString(), 8)){
-              printf("\t\t%s\n", itr3->name.GetString());
-
+              /* printf("\t\t%s\n", itr3->name.GetString()); */
                 for(Value::ConstMemberIterator itr4 = itr3->value.MemberBegin();
                     itr4 != itr3->value.MemberEnd();
                     ++itr4){
-                    /* print out WKT here */
+
+                    printf("\t\t%sType of member %s%s%s: %s%s%s\n", KGRN, KRED, itr4->name.GetString(),
+                           KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
+
+                    /* Type of member type: Object */
+		                /* Type of member coordinates: Object */
+
+                    /* Next step: open these two objects */
+
                 }
 
 
