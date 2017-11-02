@@ -152,15 +152,21 @@ int main(int argc, char ** argv){
 
                 /* vector<string> COORDS; */
                 if(!strncmp("coordinates\0", itr4->name.GetString(), 10)){
+
+                  /* assert(itr->IsArray()); */
+                  if(!strncmp("Array\0", kTypeNames[itr->value.GetType()], 5)){
+  
+
                     printf("\t\t\tcoordinates=%s\n", itr4->name.GetString());
                     printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
-                    KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
+                    KGRN, KYEL, kTypeNames[itr4->value.GetType()], KGRN);
 
                     //COORDS.push_back(itr4->value.GetString());
-                  for(Value::ConstMemberIterator itr5 = itr4->value.MemberBegin();
-                    itr5 != itr4->value.MemberEnd();
-                    ++itr5){
-                  }
+                    for(Value::ConstMemberIterator itr5 = itr4->value.MemberBegin();
+                        itr5 != itr4->value.MemberEnd();
+                        ++itr5){
+                      }
+                    }
 
                   /* 
                     if(!strncmp("properties\0", itr3->name.GetString(), 10)){
