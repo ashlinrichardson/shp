@@ -64,11 +64,11 @@ int main(int argc, char ** argv){
 
   /* for all doc members */
   for(Value::ConstMemberIterator itr = document.MemberBegin();
-      itr != document.MemberEnd();
-      ++itr){
+  itr != document.MemberEnd();
+  ++itr){
 
-    printf("%sType of member %s%s%s: %s%s%s\n", KGRN, KRED, itr->name.GetString(),
-           KGRN, KYEL, kTypeNames[itr->value.GetType()], KGRN);
+    printf("%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr->name.GetString(),
+    KGRN, KYEL, kTypeNames[itr->value.GetType()], KGRN);
 
     /* assert(itr->IsArray()); */
     if(!strncmp("Array\0", kTypeNames[itr->value.GetType()], 5)){
@@ -79,19 +79,19 @@ int main(int argc, char ** argv){
 
       /* for all members in a */
       for(Value::ConstValueIterator itr2 = a.Begin();
-          itr2 != a.End();
-          ++itr2){
+      itr2 != a.End();
+      ++itr2){
 
         printf("%ld %s\n", (long int)(c++), itr2->IsObject()?"true":"false");
         itr2->MemberBegin();
 
         /* for all the members in iter2 */
         for(Value::ConstMemberIterator itr3 = itr2->MemberBegin();
-             itr3 != itr2->MemberEnd();
-             ++itr3){
+        itr3 != itr2->MemberEnd();
+        ++itr3){
 
-          printf("\t%sType of member %s%s%s: %s%s%s\n", KGRN, KRED, itr3->name.GetString(),
-                 KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
+          printf("\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr3->name.GetString(),
+          KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
           /* Type of member geometry: Object */
 
           if(!strncmp("String\0", kTypeNames[itr3->value.GetType()], 5)){
@@ -99,23 +99,38 @@ int main(int argc, char ** argv){
           }
 
           if(!strncmp("Object\0", kTypeNames[itr3->value.GetType()], 5)){
+            if(!strncmp("properties\0", itr3->name.GetString(), 10)){
+              for(Value::ConstMemberIterator itr4 = itr3->value.MemberBegin();
+              itr4 != itr3->value.MemberEnd();
+              ++itr4){
+
+                printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
+                KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
+              }
+
+            }
             if(!strncmp("geometry\0", itr3->name.GetString(), 8)){
               /* printf("\t\t%s\n", itr3->name.GetString()); */
-                for(Value::ConstMemberIterator itr4 = itr3->value.MemberBegin();
-                    itr4 != itr3->value.MemberEnd();
-                    ++itr4){
+              for(Value::ConstMemberIterator itr4 = itr3->value.MemberBegin();
+              itr4 != itr3->value.MemberEnd();
+              ++itr4){
 
-                    printf("\t\t%sType of member %s%s%s: %s%s%s\n", KGRN, KRED, itr4->name.GetString(),
-                           KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
+                printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
+                KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
 
-                    /* Type of member type: Object */
-		                /* Type of member coordinates: Object */
+                /* Type of member "type": Object */
+                /* Type of member "coordinates": Object */
 
-                    /* Next step: open these two objects */
+                /* Next step: open these two objects */
 
-                }
-
-
+                /* "features": [
+                { "type": "Feature", "properties":
+                { "SRV_GEN_PL": "3TU1901", "ADMIN_AREA": 626.0, "F_CODE": "FA02550271",
+                "ORC_SCNDRY": "00", "ORC_PRIMRY": "0237", "PROT_CODE": "PP",
+                "PARK_CLASS": "Class A", "OBJECTID": 389.0, "PROT_DESG": "PROVINCIAL PARK",
+                "PROT_NAME": "DISCOVERY ISLAND MARINE PARK"
+                */
+              }
             }
           }
         }
