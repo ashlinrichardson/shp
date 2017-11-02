@@ -149,10 +149,32 @@ int main(int argc, char ** argv){
                 /* Type of member "type": Object */
                 /* Type of member "coordinates": Object */
 
-                /* Next step: open these two objects */
 
                 /* vector<string> COORDS; */
+                if(!strncmp("coordinates\0", itr4->name.GetString(), 10)){
+                    printf("\t\t\tcoordinates=%s\n", itr4->name.GetString());
+                    printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
+                    KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
 
+                    //COORDS.push_back(itr4->value.GetString());
+                  for(Value::ConstMemberIterator itr5 = itr4->value.MemberBegin();
+                    itr5 != itr4->value.MemberEnd();
+                    ++itr5){
+                  }
+
+                  /* 
+                    if(!strncmp("properties\0", itr3->name.GetString(), 10)){
+                    for(Value::ConstMemberIterator itr4 = itr3->value.MemberBegin();
+                    itr4 != itr3->value.MemberEnd();
+                    ++itr4){
+                   */
+
+
+                }
+
+
+
+                
 
 
               }
