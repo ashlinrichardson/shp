@@ -1,4 +1,17 @@
-/* rm a.out; g++ -O3 test.cpp; ./a.out */
+/* rm a.out; g++ -O3 test.cpp; ./a.out
+
+sample from top of Parks Geo-JSON file
+
+"features": [
+{ "type": "Feature", "properties":
+{ "SRV_GEN_PL": "3TU1901", "ADMIN_AREA": 626.0, "F_CODE": "FA02550271",
+"ORC_SCNDRY": "00", "ORC_PRIMRY": "0237", "PROT_CODE": "PP",
+"PARK_CLASS": "Class A", "OBJECTID": 389.0, "PROT_DESG": "PROVINCIAL PARK",
+"PROT_NAME": "DISCOVERY ISLAND MARINE PARK"
+...
+...
+*/
+
 #include<string>
 #include<vector>
 #include<stdio.h>
@@ -109,15 +122,6 @@ int main(int argc, char ** argv){
               itr4 != itr3->value.MemberEnd();
               ++itr4){
 
-                /* sample from top of Parks Geo-JSON file
-                "features": [
-                { "type": "Feature", "properties":
-                { "SRV_GEN_PL": "3TU1901", "ADMIN_AREA": 626.0, "F_CODE": "FA02550271",
-                "ORC_SCNDRY": "00", "ORC_PRIMRY": "0237", "PROT_CODE": "PP",
-                "PARK_CLASS": "Class A", "OBJECTID": 389.0, "PROT_DESG": "PROVINCIAL PARK",
-                "PROT_NAME": "DISCOVERY ISLAND MARINE PARK"
-                */
-
                 printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
                 KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
 
@@ -161,41 +165,41 @@ int main(int argc, char ** argv){
                     itr5 != itr4->value.End();
                     ++itr5){
                       itr5->GetType();
-                      printf("%d %s\n", i++,  kTypeNames[itr5->GetType()]);
+                      printf("%d %s\n", i++, kTypeNames[itr5->GetType()]);
 
                       if(!strncmp("Array\0", kTypeNames[itr5->GetType()], 5)){
 
                         for(Value::ConstValueIterator itr6 = itr5->Begin();
-                          itr6 != itr5->End();
-                          ++itr6){
-                            //itr6->GetType();
-                            //printf("\t%d %s\n", i++,  kTypeNames[itr6->GetType()]);
-                           if(!strncmp("Array\0", kTypeNames[itr6->GetType()], 5)){
-                              
-                              long int number_index = 0;
-                              for(Value::ConstValueIterator itr7 = itr6->Begin();
-                                itr7 != itr6->End();
-                                ++itr7){
-                                  ++number_index;
-                                  itr7->GetType();
-                                  if(!itr7->IsDouble()){
-                                    printf("%sError: !IsDouble()\n", KGRN);
-                                    exit(1);
-                                  }
-                                  if(number_index %3 != 0){
-                                  printf("%s%d %s %s%e%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN );
-                                } 
+                        itr6 != itr5->End();
+                        ++itr6){
+                          //itr6->GetType();
+                          //printf("\t%d %s\n", i++, kTypeNames[itr6->GetType()]);
+                          if(!strncmp("Array\0", kTypeNames[itr6->GetType()], 5)){
+
+                            long int number_index = 0;
+                            for(Value::ConstValueIterator itr7 = itr6->Begin();
+                            itr7 != itr6->End();
+                            ++itr7){
+                              ++number_index;
+                              itr7->GetType();
+                              if(!itr7->IsDouble()){
+                                printf("%sError: !IsDouble()\n", KGRN);
+                                exit(1);
                               }
-                            }   
+                              if(number_index %3 != 0){
+                                printf("%s%d %s %s%e%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN);
+                              }
+                            }
                           }
+                        }
 
                       }
                     }
                   }
                 }
               }
-exit(1);
-            }    
+              exit(1);
+            }
           }
         }
       }
