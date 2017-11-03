@@ -25,9 +25,10 @@ using namespace std;
 using namespace rapidjson;
 
 /*convert double to string*/
-string dtos( double i){
+string dtos(double i){
   std::string number("");
   std::stringstream strstream;
+  strstream.precision(12);
   strstream << i;
   strstream >> number;
   return number;
@@ -200,7 +201,7 @@ int main(int argc, char ** argv){
                                 exit(1);
                               }
                               if(number_index %3 != 0){
-                                printf("%s%d %s %s%e%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN);
+                                printf("%s%d %s %s%s%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, dtos(itr7->GetDouble()).c_str(), KGRN);
                               }
                             }
                           }
