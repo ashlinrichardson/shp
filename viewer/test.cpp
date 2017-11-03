@@ -125,10 +125,6 @@ int main(int argc, char ** argv){
                 printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
                 KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
 
-                /* vector<string> ORC_PRIMRY;
-                vector<string> PROT_NAME;
-                */
-
                 if(!strncmp("ORC_PRIMRY\0", itr4->name.GetString(), 10)){
                   printf("\t\t\tORC_PRIMRY=%s\n", itr4->value.GetString());
                   ORC_PRIMRY.push_back(itr4->value.GetString());
@@ -142,7 +138,7 @@ int main(int argc, char ** argv){
 
             }
             if(!strncmp("geometry\0", itr3->name.GetString(), 8)){
-              /* printf("\t\t%s\n", itr3->name.GetString()); */
+
               for(Value::ConstMemberIterator itr4 = itr3->value.MemberBegin();
               itr4 != itr3->value.MemberEnd();
               ++itr4){
@@ -153,7 +149,6 @@ int main(int argc, char ** argv){
                 /* Type of member "type": Object */
                 /* Type of member "coordinates": Object */
 
-                /* vector<string> COORDS; */
                 if(!strncmp("coordinates\0", itr4->name.GetString(), 10)){
 
                   /* assert(itr->IsArray()); */
@@ -188,7 +183,7 @@ int main(int argc, char ** argv){
                                 exit(1);
                               }
                               if(number_index %3 != 0){
-                                printf("%s%d %s %s%e%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN);
+                                if (false) printf("%s%d %s %s%e%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN);
                               }
                             }
                           }
