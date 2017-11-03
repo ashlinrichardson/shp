@@ -1,4 +1,9 @@
-/* rm a.out; g++ -O3 test.cpp; ./a.out
+/*
+test.cpp
+
+test program for reading "wkt" format polygon data from JSON
+
+rm a.out; g++ -O3 test.cpp; ./a.out
 
 sample from top of Parks Geo-JSON file
 
