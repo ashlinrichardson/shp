@@ -16,12 +16,22 @@ sample from top of Parks Geo-JSON file
 #include<vector>
 #include<stdio.h>
 #include<fstream>
+#include<sstream>
 #include<iostream>
 #include<stdlib.h>
 #include"ansicolor.h"
 #include"rapidjson/document.h"
 using namespace std;
 using namespace rapidjson;
+
+/*convert double to string*/
+string dtos( double i){
+  std::string number("");
+  std::stringstream strstream;
+  strstream << i;
+  strstream >> number;
+  return number;
+}
 
 long int getFileSize(std::string fn){
   ifstream i;
@@ -91,7 +101,6 @@ int main(int argc, char ** argv){
     /* assert(itr->IsArray()); */
     if(!strncmp("Array\0", kTypeNames[itr->value.GetType()], 5)){
 
-      printf("\tisArray=true\n");
       const Value& a = itr->value;
       int c = 0;
 
@@ -100,7 +109,14 @@ int main(int argc, char ** argv){
       itr2 != a.End();
       ++itr2){
 
-        printf("%ld %s\n", (long int)(c++), itr2->IsObject()?"true":"false");
+        /* temporary: only show first 2 parks */
+        if(c>1) exit(1);
+
+        /* to hold the coordinates */
+        std::string my_coord("POLYGON((");
+
+        /* feature(poly) counter */
+        printf("feature(%ld) %s\n", (long int)(c++), itr2->IsObject()?"true":"false");
         itr2->MemberBegin();
 
         /* for all the members in iter2 */
@@ -122,7 +138,8 @@ int main(int argc, char ** argv){
               itr4 != itr3->value.MemberEnd();
               ++itr4){
 
-                printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
+                /* don't show unused fields */
+                if(false) printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
                 KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
 
                 if(!strncmp("ORC_PRIMRY\0", itr4->name.GetString(), 10)){
@@ -183,7 +200,7 @@ int main(int argc, char ** argv){
                                 exit(1);
                               }
                               if(number_index %3 != 0){
-                                if (false) printf("%s%d %s %s%e%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN);
+                                printf("%s%d %s %s%e%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN);
                               }
                             }
                           }
@@ -193,10 +210,11 @@ int main(int argc, char ** argv){
                   }
                 }
               }
-              exit(1);
-            }
-          }
+            }//geometry
+          } //object
         }
+        my_coord += std::string("))");
+        cout << KMAG << "\t\t" << my_coord << KGRN << endl;
       }
     }
   }
