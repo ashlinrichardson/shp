@@ -172,14 +172,15 @@ int main(int argc, char ** argv){
                         for(Value::ConstValueIterator itr6 = itr5->Begin();
                         itr6 != itr5->End();
                         ++itr6){
-                          //itr6->GetType();
-                          //printf("\t%d %s\n", i++, kTypeNames[itr6->GetType()]);
+
                           if(!strncmp("Array\0", kTypeNames[itr6->GetType()], 5)){
 
                             long int number_index = 0;
+
                             for(Value::ConstValueIterator itr7 = itr6->Begin();
                             itr7 != itr6->End();
                             ++itr7){
+
                               ++number_index;
                               itr7->GetType();
                               if(!itr7->IsDouble()){
@@ -192,7 +193,6 @@ int main(int argc, char ** argv){
                             }
                           }
                         }
-
                       }
                     }
                   }
