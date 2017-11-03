@@ -47,6 +47,8 @@ long int getFileSize(std::string fn){
 }
 
 int main(int argc, char ** argv){
+  bool DEBUG = false;
+
   vector<string> ORC_PRIMRY; /* primary ORC */
   vector<string> PROT_NAME; /* park name */
   vector<string> COORDS; /* GIS coordinate string (WKT format) */
@@ -55,7 +57,7 @@ int main(int argc, char ** argv){
   long int fs = getFileSize(fn);
   char * fd = (char *)(void *)malloc(fs);
   memset(fd, '\0', fs);
-  printf("load file\n");
+  if(DEBUG) printf("load file\n");
   FILE * f = fopen(fn.c_str(), "rb");
   long int br = fread(fd, 1, fs, f);
   if(br != fs){
@@ -69,12 +71,12 @@ int main(int argc, char ** argv){
       f2 -= 1;
     }
   }
-  cout << fs << endl << f2 << endl;
+  if(DEBUG)  cout << fs << endl << f2 << endl;
 
   char * fd2 = (char *)(void *)malloc(f2);
   memset(fd2, '\0', f2);
 
-  printf("remove newline\n");
+  if(DEBUG) printf("remove newline\n");
   long int ci = 0;
   for(i = 0; i < fs; i++){
     if(fd[i] != '\n'){
@@ -82,7 +84,7 @@ int main(int argc, char ** argv){
     }
   }
 
-  printf("parsing json...\n");
+  if(DEBUG) printf("parsing json...\n");
   Document document;
   document.Parse((const char *)(void *)fd2);
   assert(document.IsObject());
@@ -96,7 +98,7 @@ int main(int argc, char ** argv){
   itr != document.MemberEnd();
   ++itr){
 
-    printf("%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr->name.GetString(),
+    if(DEBUG) printf("%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr->name.GetString(),
     KGRN, KYEL, kTypeNames[itr->value.GetType()], KGRN);
 
     /* assert(itr->IsArray()); */
@@ -111,13 +113,26 @@ int main(int argc, char ** argv){
       ++itr2){
 
         /* temporary: only show first 2 parks */
-        if(c>1) exit(1);
+        if(c>1){
+          if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() !=  COORDS.size()){
+            printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
+          }else{
+            printf("done\n");
+          }
+          // printf("done\nlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
+          exit(1);
+        }
+
+        long int i = 0;
 
         /* to hold the coordinates */
         std::string my_coord("POLYGON((");
 
         /* feature(poly) counter */
-        printf("feature(%ld) %s\n", (long int)(c++), itr2->IsObject()?"true":"false");
+        if(DEBUG){
+           printf("feature(%ld) %s\n", (long int)c, itr2->IsObject()?"true":"false");
+        }
+        c++;
         itr2->MemberBegin();
 
         /* for all the members in iter2 */
@@ -125,12 +140,12 @@ int main(int argc, char ** argv){
         itr3 != itr2->MemberEnd();
         ++itr3){
 
-          printf("\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr3->name.GetString(),
+          if(DEBUG)  printf("\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr3->name.GetString(),
           KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
           /* Type of member geometry: Object */
 
           if(!strncmp("String\0", kTypeNames[itr3->value.GetType()], 5)){
-            printf("\t\t\t%s\n", itr3->value.GetString());
+            if(DEBUG) printf("\t\t\t%s\n", itr3->value.GetString());
           }
 
           if(!strncmp("Object\0", kTypeNames[itr3->value.GetType()], 5)){
@@ -144,12 +159,12 @@ int main(int argc, char ** argv){
                 KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
 
                 if(!strncmp("ORC_PRIMRY\0", itr4->name.GetString(), 10)){
-                  printf("\t\t\tORC_PRIMRY=%s\n", itr4->value.GetString());
+                  if(DEBUG) printf("\t\t\tORC_PRIMRY=%s\n", itr4->value.GetString());
                   ORC_PRIMRY.push_back(itr4->value.GetString());
                 }
 
                 if(!strncmp("PROT_NAME\0", itr4->name.GetString(), 9)){
-                  printf("\t\t\tPROT_NAME=%s\n", itr4->value.GetString());
+                  if(DEBUG) printf("\t\t\tPROT_NAME=%s\n", itr4->value.GetString());
                   PROT_NAME.push_back(itr4->value.GetString());
                 }
               }
@@ -157,11 +172,12 @@ int main(int argc, char ** argv){
             }
             if(!strncmp("geometry\0", itr3->name.GetString(), 8)){
 
+
               for(Value::ConstMemberIterator itr4 = itr3->value.MemberBegin();
               itr4 != itr3->value.MemberEnd();
               ++itr4){
 
-                printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
+                if(DEBUG) printf("\t\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr4->name.GetString(),
                 KGRN, KYEL, kTypeNames[itr4->value.GetType()], KGRN);
 
                 /* Type of member "type": Object */
@@ -172,13 +188,14 @@ int main(int argc, char ** argv){
                   /* assert(itr->IsArray()); */
                   if(!strncmp("Array\0", kTypeNames[itr4->value.GetType()], 5)){
 
-                    int i = 0;
+                    
                     /* iterate the coordinate array */
                     for (Value::ConstValueIterator itr5 = itr4->value.Begin();
                     itr5 != itr4->value.End();
                     ++itr5){
                       itr5->GetType();
-                      printf("%d %s\n", i++, kTypeNames[itr5->GetType()]);
+                      //i++;
+                      //printf("x %ld %s\n", i-1, kTypeNames[itr5->GetType()]);
 
                       if(!strncmp("Array\0", kTypeNames[itr5->GetType()], 5)){
 
@@ -193,6 +210,7 @@ int main(int argc, char ** argv){
                             for(Value::ConstValueIterator itr7 = itr6->Begin();
                             itr7 != itr6->End();
                             ++itr7){
+                              i++;
 
                               ++number_index;
                               itr7->GetType();
@@ -200,8 +218,16 @@ int main(int argc, char ** argv){
                                 printf("%sError: !IsDouble()\n", KGRN);
                                 exit(1);
                               }
+                              // cout << KYEL << " " << i  << KMAG << " ";
                               if(number_index %3 != 0){
-                                printf("%s%d %s %s%s%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, dtos(itr7->GetDouble()).c_str(), KGRN);
+                                // printf("%s%d %s %s%s%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, dtos(itr7->GetDouble()).c_str(), KGRN);
+                                if((number_index % 3 == 1) && (i > 3)){
+                                  my_coord += std::string(",");
+                                }
+                                if(number_index % 3 == 2){
+                                  my_coord += std::string(" ");
+                                }
+                                my_coord += dtos(itr7->GetDouble());
                               }
                             }
                           }
@@ -215,10 +241,15 @@ int main(int argc, char ** argv){
           } //object
         }
         my_coord += std::string("))");
-        cout << KMAG << "\t\t" << my_coord << KGRN << endl;
+        if(DEBUG) cout << KMAG << "\t\t" << my_coord << KGRN << endl;
+        COORDS.push_back(my_coord);
       }
     }
   }
-  printf("done\n");
+  if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() !=  COORDS.size()){
+    printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
+  }else{
+    printf("done\n");
+  }
   return 0;
 }
