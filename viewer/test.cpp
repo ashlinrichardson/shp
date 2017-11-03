@@ -161,19 +161,33 @@ int main(int argc, char ** argv){
                     itr5 != itr4->value.End();
                     ++itr5){
                       itr5->GetType();
-                      
                       printf("%d %s\n", i++,  kTypeNames[itr5->GetType()]);
 
                       if(!strncmp("Array\0", kTypeNames[itr5->GetType()], 5)){
+
+                        for(Value::ConstValueIterator itr6 = itr5->Begin();
+                          itr6 != itr5->End();
+                          ++itr6){
+                            //itr6->GetType();
+                            //printf("\t%d %s\n", i++,  kTypeNames[itr6->GetType()]);
+                           if(!strncmp("Array\0", kTypeNames[itr6->GetType()], 5)){
+
+                              for(Value::ConstValueIterator itr7 = itr6->Begin();
+                                itr7 != itr6->End();
+                                ++itr7){
+                                  itr7->GetType();
+                                  printf("%s%d %s %s%e%s\n", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN );
+                                }  
+                            }   
+                          }
+
                       }
-
-
                     }
-
                   }
                 }
               }
-            }
+exit(1);
+            }    
           }
         }
       }
