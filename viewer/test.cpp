@@ -176,6 +176,10 @@ int main(int argc, char ** argv){
                                 itr7 != itr6->End();
                                 ++itr7){
                                   itr7->GetType();
+                                  if(!itr7->IsDouble()){
+                                    printf("%sError: !IsDouble()\n", KGRN);
+                                    exit(1);
+                                  }
                                   printf("%s%d %s %s%e%s\n", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN );
                                 }  
                             }   
