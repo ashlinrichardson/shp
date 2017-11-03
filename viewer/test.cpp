@@ -171,17 +171,21 @@ int main(int argc, char ** argv){
                             //itr6->GetType();
                             //printf("\t%d %s\n", i++,  kTypeNames[itr6->GetType()]);
                            if(!strncmp("Array\0", kTypeNames[itr6->GetType()], 5)){
-
+                              
+                              long int number_index = 0;
                               for(Value::ConstValueIterator itr7 = itr6->Begin();
                                 itr7 != itr6->End();
                                 ++itr7){
+                                  ++number_index;
                                   itr7->GetType();
                                   if(!itr7->IsDouble()){
                                     printf("%sError: !IsDouble()\n", KGRN);
                                     exit(1);
                                   }
-                                  printf("%s%d %s %s%e%s\n", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN );
-                                }  
+                                  if(number_index %3 != 0){
+                                  printf("%s%d %s %s%e%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, itr7->GetDouble(), KGRN );
+                                } 
+                              }
                             }   
                           }
 
