@@ -173,24 +173,24 @@ void drawAxes(void){
   glColor3f(r,g,b);
   glPointSize(1.);
   int picki = -1;
-  if( myPickNames.size() ==1){
-    picki =*( myPickNames.begin());
+  if(myPickNames.size() == 1){<F3>
+    picki =* myPickNames.begin();
     cout << picki << "," << my_names[picki] << ",myclass= " << my_class[picki] << "n_my_class" << n_my_class[picki] << endl;
-    cout << "within_class_index" << within_class_index[picki]<<endl;
+    cout << "within_class_index" << within_class_index[picki] << endl;
   }
   int i;
   int ci=0;
   int n_labels = my_vectors.size();
   for(i=0; i< n_labels; i++){
-    if(my_class[i] ==0){
-      if(cur_fire_ind>=0 && cur_fire_ind < n_fire){
+    if(my_class[i] == 0){
+      if(cur_fire_ind >= 0 && cur_fire_ind < n_fire){
         if(cur_fire_ind != within_class_index[i]){
           continue;
         }
       }
     }
-    if(my_class[i] ==1){
-      if(cur_park_ind>=0 && cur_park_ind < n_park){
+    if(my_class[i] == 1){
+      if(cur_park_ind >= 0 && cur_park_ind < n_park){
         if(cur_park_ind != within_class_index[i]){
           continue;
         }
@@ -211,8 +211,7 @@ void drawAxes(void){
     glBegin(GL_POLYGON);
     for(it=j->begin(); it!=j->end(); it+=1){
       if(true){
-        //ci % 2 ==0 ?
-        if(picki==i && ci==0){
+        if(picki == i && ci == 0){
           zprReferencePoint[0] =(*it).x;
           zprReferencePoint[1] =(*it).y;
         }
@@ -223,7 +222,8 @@ void drawAxes(void){
     glEnd();
     glPopName();
   }
-  if(cur_fire_ind>=0 && cur_fire_ind < n_fire && cur_park_ind>=0 && cur_park_ind < n_park){
+
+  if(cur_fire_ind >= 0 && cur_fire_ind < n_fire && cur_park_ind >= 0 && cur_park_ind < n_park){
     int k;
 
     using boost::assign::tuple_list_of;
@@ -287,7 +287,7 @@ void drawAxes(void){
     glEnd();
 
     polygon p_poly; a = b = c = d = 0.;
-    int j = cur_park_ind + n_fire; // this is the object index: remember, everything's lumped together in one array (fire centres, first)
+    int j = cur_park_ind + n_fire; // the object index: remember, everything's lumped together in one array (fire centres, first)
     long int clen = my_vectors[j].size(); long int cskip = clen / 256;
     v = &my_vectors[j];
     printf("cskip %ld\n", cskip);
@@ -343,11 +343,15 @@ void drawAxes(void){
 
     printf("%sintersection%s()%s\n", KYEL, KBLU, KNRM);
     boost::geometry::intersection(f_poly, p_poly, p_result);
+
     printf("%sintersection%s(%ld)%s\n", KYEL, KBLU, p_result.size(), KNRM);
     std::deque<polygon>::iterator it;
+
     printf("%sarea%s()%s\n", KYEL, KBLU, KNRM);
+
     double my_area = 0.;
     int ci = 0;
+
     for(it = p_result.begin(); it != p_result.end(); it++){
       printf("poly(i=%d)\n", ci++);
       float f = (double)boost::geometry::area(*it);
@@ -542,6 +546,9 @@ int parse(string fn){
   return nclass; // number of points in this file (associate a class with each file)
 }
 
+int parse_JSON(string fn);
+
+
 void loadJSON(vector<string> & ORC_PRIMRY, vector<string> & PROT_NAME, vector<string> & COORDS){
 
 }
@@ -672,6 +679,8 @@ void setup(){
   orc_to_name = (std::string *)(void *)malloc(nb);
   memset(orc_to_name, '\0', nb);
 }
+
+
 
 int setup2(int argc, char ** argv){
   bool DEBUG = false;
@@ -819,8 +828,6 @@ int setup2(int argc, char ** argv){
                     itr5 != itr4->value.End();
                     ++itr5){
                       itr5->GetType();
-                      //i++;
-                      //printf("x %ld %s\n", i-1, kTypeNames[itr5->GetType()]);
 
                       if(!strncmp("Array\0", kTypeNames[itr5->GetType()], 5)){
 
@@ -843,16 +850,19 @@ int setup2(int argc, char ** argv){
                                 printf("%sError: !IsDouble()\n", KGRN);
                                 exit(1);
                               }
-                              // cout << KYEL << " " << i << KMAG << " ";
+
                               if(number_index %3 != 0){
-                                // printf("%s%d %s %s%s%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, dtos(itr7->GetDouble()).c_str(), KGRN);
+
                                 if((number_index % 3 == 1) && (i > 3)){
                                   my_coord += std::string(",");
                                 }
+
                                 if(number_index % 3 == 2){
                                   my_coord += std::string(" ");
                                 }
+
                                 my_coord += dtos(itr7->GetDouble());
+
                               }
                             }
                           }
@@ -881,3 +891,47 @@ int setup2(int argc, char ** argv){
   }
   return 0;
 }
+
+int parse_JSON(string fn){
+  cout << KYEL << "parse(" << KMAG << fn << KYEL << ")" << endl;
+  ifstream in(fn.c_str());
+  if (!in.is_open()){
+    printf("error\n"); exit(1);
+  }
+  string line;
+
+  getline(in, line);
+  cout << KGRN << "\t" << line << KNRM << endl;
+  int nclass = 0;
+  int di = -1;
+  while(getline(in, line)){
+    di ++;
+    vector<vec3d> my_points;
+    vector<string> a(split(line.c_str(),','));
+    //FEATURE_NAME, FEATURE_ID, N_POINTS, POINTS..
+    string feature_name(a[0]);
+    int feature_id = atoi(a[1].c_str());
+    int n_points = atoi(a[2].c_str());
+    int i, ci;
+    ci = 3;
+    for(i=0; i<n_points; i++){
+      float x = atof((a[ci++]).c_str());
+      float y = atof((a[ci++]).c_str());
+      my_points.push_back(vec3d(x,y,0.));
+    }
+    within_class_index.push_back(di);
+    my_vectors.push_back(my_points);
+    my_names.push_back(feature_name);
+    my_id.push_back(feature_id);
+    my_class.push_back(next_class);
+    nclass++;
+  }
+  int i;
+  for(i=0; i<nclass; i++){
+    n_my_class.push_back(nclass);
+  }
+  next_class ++;
+  return nclass; // number of points in this file (associate a class with each file)
+}
+
+
