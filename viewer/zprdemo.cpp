@@ -175,7 +175,8 @@ void drawAxes(void){
   int picki = -1;
   if(myPickNames.size() == 1){
     picki =* myPickNames.begin();
-    cout << picki << "," << my_names[picki] << ",myclass= " << my_class[picki] << "n_my_class" << n_my_class[picki] << endl;
+    cout << picki << "," << my_names[picki] << ",myclass= " << my_class[picki]
+    << "n_my_class" << n_my_class[picki] << endl;
     cout << "within_class_index" << within_class_index[picki] << endl;
   }
   int i;
@@ -548,7 +549,6 @@ int parse(string fn){
 
 int parse_JSON(string fn);
 
-
 void loadJSON(vector<string> & ORC_PRIMRY, vector<string> & PROT_NAME, vector<string> & COORDS){
 
 }
@@ -568,20 +568,20 @@ int main(int argc, char *argv[]){
   cur_fire_ind = -1;
   cur_park_ind = -1;
 
-  FILE * fff = fopen("ind.txt", "wb");
-  FILE * ggg = fopen("mat.txt", "ab");
-  if(!ggg){
-    cout << "Error: could not open file mat.dat" <<endl;
-  }
+  //FILE * fff = fopen("ind.txt", "wb");
+  //FILE * ggg = fopen("mat.txt", "ab");
+  //if(!ggg){
+    // cout << "Error: could not open file mat.dat" <<endl;
+  //}
   my_vectors.clear();
   int nc0 = parse(string("firec.dat"));
-  int nc1 = parse(string("parks.dat"));
+  int nc1 = parse_JSON(string("TA_PEP_SVW_polygon.json"));
   n_fire = nc0;
   n_park = nc1;
   cout << KGRN << "number of park shp entries " << KRED << nc1 << endl;
   cout << KGRN << "number of fire centre shp entries " << KRED << nc0 << endl << KNRM;
-  fclose(fff);
-  fclose(ggg);
+  //fclose(fff);
+  //fclose(ggg);
 
   /* load from JSON */
   vector<string> ORC_PRIMRY; /* primary ORC */
@@ -676,19 +676,17 @@ void setup(){
   long int mk = 9954;
   long int nb = sizeof(std::string *) * (mk + 1);
   //std::string * orc_to_name
-  orc_to_name = (std::string *)(void *)malloc(nb);
-  memset(orc_to_name, '\0', nb);
+  //orc_to_name = (std::string *)(void *)malloc(nb);
+  //memset(orc_to_name, '\0', nb);
 }
 
 
-
-int setup2(int argc, char ** argv){
+int parse_JSON(string fn){
   bool DEBUG = false;
   vector<string> ORC_PRIMRY; /* primary ORC */
   vector<string> PROT_NAME; /* park name */
   vector<string> COORDS; /* GIS coordinate string (WKT format) */
 
-  std::string fn("TA_PEP_SVW_polygon.json");
   long int fs = getFileSize(fn);
   char * fd = (char *)(void *)malloc(fs);
   memset(fd, '\0', fs);
@@ -725,7 +723,13 @@ int setup2(int argc, char ** argv){
   assert(document.IsObject());
 
   static const char* kTypeNames[] = {
-    "Null", "False", "True", "Object", "Array", "String", "Number"
+    "Null",
+    "False",
+    "True",
+    "Object",
+    "Array",
+    "String",
+    "Number"
   };
 
   /* for all doc members */
@@ -746,6 +750,12 @@ int setup2(int argc, char ** argv){
       for(Value::ConstValueIterator itr2 = a.Begin();
       itr2 != a.End();
       ++itr2){
+
+        /* THIS IS THE LOOP FOR ITERATING OVER FEATURES...
+
+        E.G., need an array for points declared here..
+        */
+        vector<vec3d> my_points; // from test.cpp
 
         /* temporary: only show first 2 parks */
         if(c>1){
@@ -883,8 +893,11 @@ int setup2(int argc, char ** argv){
       }
     }
   }
-  if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() != COORDS.size()){
-    printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
+  if(ORC_PRIMRY.size() != PROT_NAME.size() ||
+  ORC_PRIMRY.size() != COORDS.size() ||
+  PROT_NAME.size() != COORDS.size()){
+    printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n",
+    ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
   }
   else{
     printf("done\n");
@@ -892,7 +905,8 @@ int setup2(int argc, char ** argv){
   return 0;
 }
 
-int parse_JSON(string fn){
+int v(std:: string fn){
+
   cout << KYEL << "parse(" << KMAG << fn << KYEL << ")" << endl;
   ifstream in(fn.c_str());
   if (!in.is_open()){
@@ -903,9 +917,10 @@ int parse_JSON(string fn){
   getline(in, line);
   cout << KGRN << "\t" << line << KNRM << endl;
   int nclass = 0;
-  int di = -1;
+  int di = -1; //feature index...
   while(getline(in, line)){
     di ++;
+    // array of points for each feature...
     vector<vec3d> my_points;
     vector<string> a(split(line.c_str(),','));
     //FEATURE_NAME, FEATURE_ID, N_POINTS, POINTS..
@@ -933,5 +948,3 @@ int parse_JSON(string fn){
   next_class ++;
   return nclass; // number of points in this file (associate a class with each file)
 }
-
-
