@@ -173,7 +173,7 @@ void drawAxes(void){
   glColor3f(r,g,b);
   glPointSize(1.);
   int picki = -1;
-  if(myPickNames.size() == 1){<F3>
+  if(myPickNames.size() == 1){
     picki =* myPickNames.begin();
     cout << picki << "," << my_names[picki] << ",myclass= " << my_class[picki] << "n_my_class" << n_my_class[picki] << endl;
     cout << "within_class_index" << within_class_index[picki] << endl;
