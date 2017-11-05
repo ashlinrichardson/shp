@@ -1,6 +1,15 @@
 #include"ansicolor.h"
 #include <iostream>
 #include <deque>
+#include<fstream>
+#include<sstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
+
+#include"ansicolor.h"
+#include"rapidjson/document.h"
+
 #include <boost/assign.hpp>
 #include <boost/version.hpp>
 #include <boost/geometry.hpp>
@@ -18,7 +27,6 @@ http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/a
 http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
 http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
 */
-#define STR_MAX 10000
 #include "hsv.h"
 #include "newzpr.h"
 #include "pthread.h"
@@ -26,9 +34,9 @@ http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/a
 #include "time.h"
 #include "vec3d.h"
 #define MYFONT GLUT_BITMAP_HELVETICA_12
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
+
+using namespace std;
+using namespace rapidjson;
 
 // point data from shape files
 vector< vector<vec3d> > my_vectors;
@@ -56,9 +64,34 @@ int fullscreen;
 clock_t start_time;
 clock_t stop_time;
 #define SECONDS_PAUSE 0.4
+
+#define STR_MAX 10000
 char console_string[STR_MAX];
+
 int console_position;
 int renderflag;
+
+/*convert double to string*/
+string dtos(double i){
+  std::string number("");
+  std::stringstream strstream;
+  strstream.precision(12);
+  strstream << i;
+  strstream >> number;
+  return number;
+}
+
+long int getFileSize(std::string fn){
+  ifstream i;
+  i.open(fn.c_str(), ios::binary);
+  if(!(i.is_open())){
+    printf("Error: was unable to open file: %s\n", (fn.c_str()));
+    return -1;
+  }
+  i.seekg(0, ios::end);
+  long int len = i.tellg();
+  return(len);
+}
 
 void _pick(GLint name){
   if(myPickNames.size() < 1){
@@ -74,7 +107,7 @@ void _pick(GLint name){
     cout << KYEL << "\t" << my_names[my_ind] << KMAG << "--> " << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << ",";
 
     if(my_class[my_ind] == 1){
-      cout << endl << "\t\t" <<  my_names[my_ind] << " my_id:" << my_id[my_ind] << endl;
+      cout << endl << "\t\t" << my_names[my_ind] << " my_id:" << my_id[my_ind] << endl;
     }
     cout << endl;
   }
@@ -121,7 +154,6 @@ void drawText(){
   glPopMatrix();
   resetPerspectiveProjection();
 }
-
 
 /* convert float to string.. from gift meta4::gift */
 string ftos( float i){
@@ -510,16 +542,20 @@ int parse(string fn){
   return nclass; // number of points in this file (associate a class with each file)
 }
 
+void loadJSON(vector<string> & ORC_PRIMRY, vector<string> & PROT_NAME, vector<string> & COORDS){
+
+}
+
 int main(int argc, char *argv[]){
   orc_to_name = NULL;
 
   setup();
   cout << KYEL << "BOOST INFO"<<endl;
-  cout << KGRN << "\tBOOST_VERSION       " << KMAG << BOOST_VERSION << endl;
-  cout << KGRN << "\tBOOST_PATCH_LEVEL   " << KMAG << BOOST_VERSION % 100 << endl;
+  cout << KGRN << "\tBOOST_VERSION " << KMAG << BOOST_VERSION << endl;
+  cout << KGRN << "\tBOOST_PATCH_LEVEL " << KMAG << BOOST_VERSION % 100 << endl;
   cout << KGRN << "\tBOOST_MINOR_VERSION " << KMAG << BOOST_VERSION / 100 << endl;
   cout << KGRN << "\tBOOST_MAJOR_VERSION " << KMAG << BOOST_VERSION / 100000 << endl;
-  cout << KGRN << "\tBOOST_LIB_VERSION   " << KMAG << BOOST_LIB_VERSION << KNRM << endl;
+  cout << KGRN << "\tBOOST_LIB_VERSION " << KMAG << BOOST_LIB_VERSION << KNRM << endl;
 
   max_f = 0.;
   cur_fire_ind = -1;
@@ -535,10 +571,16 @@ int main(int argc, char *argv[]){
   int nc1 = parse(string("parks.dat"));
   n_fire = nc0;
   n_park = nc1;
-  cout << KGRN << "number of park shp entries        " << KRED << nc1 << endl;
+  cout << KGRN << "number of park shp entries " << KRED << nc1 << endl;
   cout << KGRN << "number of fire centre shp entries " << KRED << nc0 << endl << KNRM;
   fclose(fff);
   fclose(ggg);
+
+  /* load from JSON */
+  vector<string> ORC_PRIMRY; /* primary ORC */
+  vector<string> PROT_NAME; /* park name */
+  vector<string> COORDS; /* GIS coordinate string (WKT format) */
+  loadJSON(ORC_PRIMRY, PROT_NAME, COORDS);
 
   if(true){
     int i;
