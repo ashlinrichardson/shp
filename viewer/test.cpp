@@ -215,22 +215,35 @@ int main(int argc, char ** argv){
                             ++itr7){
                               i++;
 
-                              ++number_index;
+                              
                               itr7->GetType();
                               if(!itr7->IsDouble()){
-                                printf("%sError: !IsDouble()\n", KGRN);
-                                exit(1);
+                                //printf("%sError: !IsDouble()\n", KGRN);
+                                for(Value::ConstValueIterator itr8 = itr7->Begin();
+                                  itr8 != itr7->End();
+                                  ++itr8){
+                                    itr8->GetType();
+                                    if(!itr8->IsDouble()){
+                                      printf("%sError: !IsDouble()\n", KGRN);
+                                      exit(1);
+                                    }else{
+                                      ++number_index;
+                                    }
+                                }
                               }
-                              // cout << KYEL << " " << i << KMAG << " ";
-                              if(number_index %3 != 0){
-                                // printf("%s%d %s %s%s%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, dtos(itr7->GetDouble()).c_str(), KGRN);
-                                if((number_index % 3 == 1) && (i > 3)){
-                                  my_coord += std::string(",");
+                              else{
+                                ++number_index;
+                                // cout << KYEL << " " << i << KMAG << " ";
+                                if(number_index %3 != 0){
+                                  // printf("%s%d %s %s%s%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, dtos(itr7->GetDouble()).c_str(), KGRN);
+                                  if((number_index % 3 == 1) && (i > 3)){
+                                    my_coord += std::string(",");
+                                  }
+                                  if(number_index % 3 == 2){
+                                    my_coord += std::string(" ");
+                                  }
+                                  my_coord += dtos(itr7->GetDouble());
                                 }
-                                if(number_index % 3 == 2){
-                                  my_coord += std::string(" ");
-                                }
-                                my_coord += dtos(itr7->GetDouble());
                               }
                             }
                           }
@@ -251,6 +264,7 @@ int main(int argc, char ** argv){
       }
     }
   }
+  printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
   if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() != COORDS.size()){
     printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
   }
