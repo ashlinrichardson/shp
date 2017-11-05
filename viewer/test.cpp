@@ -53,7 +53,6 @@ long int getFileSize(std::string fn){
 
 int main(int argc, char ** argv){
   bool DEBUG = false;
-
   vector<string> ORC_PRIMRY; /* primary ORC */
   vector<string> PROT_NAME; /* park name */
   vector<string> COORDS; /* GIS coordinate string (WKT format) */
@@ -76,7 +75,7 @@ int main(int argc, char ** argv){
       f2 -= 1;
     }
   }
-  if(DEBUG)  cout << fs << endl << f2 << endl;
+  if(DEBUG) cout << fs << endl << f2 << endl;
 
   char * fd2 = (char *)(void *)malloc(f2);
   memset(fd2, '\0', f2);
@@ -119,9 +118,10 @@ int main(int argc, char ** argv){
 
         /* temporary: only show first 2 parks */
         if(c>1){
-          if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() !=  COORDS.size()){
+          if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() != COORDS.size()){
             printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
-          }else{
+          }
+          else{
             printf("done\n");
           }
           // printf("done\nlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
@@ -135,7 +135,7 @@ int main(int argc, char ** argv){
 
         /* feature(poly) counter */
         if(DEBUG){
-           printf("feature(%ld) %s\n", (long int)c, itr2->IsObject()?"true":"false");
+          printf("feature(%ld) %s\n", (long int)c, itr2->IsObject()?"true":"false");
         }
         c++;
         itr2->MemberBegin();
@@ -145,7 +145,7 @@ int main(int argc, char ** argv){
         itr3 != itr2->MemberEnd();
         ++itr3){
 
-          if(DEBUG)  printf("\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr3->name.GetString(),
+          if(DEBUG) printf("\t%s%s%s%s (%s%s%s)\n", KGRN, KRED, itr3->name.GetString(),
           KGRN, KYEL, kTypeNames[itr3->value.GetType()], KGRN);
           /* Type of member geometry: Object */
 
@@ -177,7 +177,6 @@ int main(int argc, char ** argv){
             }
             if(!strncmp("geometry\0", itr3->name.GetString(), 8)){
 
-
               for(Value::ConstMemberIterator itr4 = itr3->value.MemberBegin();
               itr4 != itr3->value.MemberEnd();
               ++itr4){
@@ -193,7 +192,6 @@ int main(int argc, char ** argv){
                   /* assert(itr->IsArray()); */
                   if(!strncmp("Array\0", kTypeNames[itr4->value.GetType()], 5)){
 
-                    
                     /* iterate the coordinate array */
                     for (Value::ConstValueIterator itr5 = itr4->value.Begin();
                     itr5 != itr4->value.End();
@@ -223,7 +221,7 @@ int main(int argc, char ** argv){
                                 printf("%sError: !IsDouble()\n", KGRN);
                                 exit(1);
                               }
-                              // cout << KYEL << " " << i  << KMAG << " ";
+                              // cout << KYEL << " " << i << KMAG << " ";
                               if(number_index %3 != 0){
                                 // printf("%s%d %s %s%s%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, dtos(itr7->GetDouble()).c_str(), KGRN);
                                 if((number_index % 3 == 1) && (i > 3)){
@@ -242,8 +240,10 @@ int main(int argc, char ** argv){
                   }
                 }
               }
-            }//geometry
-          } //object
+            }
+            //geometry
+          }
+          //object
         }
         my_coord += std::string("))");
         if(DEBUG) cout << KMAG << "\t\t" << my_coord << KGRN << endl;
@@ -251,9 +251,10 @@ int main(int argc, char ** argv){
       }
     }
   }
-  if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() !=  COORDS.size()){
+  if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() != COORDS.size()){
     printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
-  }else{
+  }
+  else{
     printf("done\n");
   }
   return 0;
