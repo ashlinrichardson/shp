@@ -40,12 +40,12 @@ using namespace rapidjson;
 
 // point data from shape files
 vector< vector<vec3d> > my_vectors;
-vector< string > my_names;
-vector<int> my_id;
-vector<int> my_class;
-vector<int> n_my_class;
-vector<int> within_class_index;
-vector<int> urx;
+vector< std::string > my_names;
+vector< std::string > my_id;
+vector< int > my_class;
+vector< int > n_my_class;
+vector< int > within_class_index;
+vector< int > urx;
 
 vector<vec3d> max_p;
 double max_f;
@@ -523,7 +523,7 @@ int parse(string fn){
     vector<string> a(split(line.c_str(),','));
     //FEATURE_NAME, FEATURE_ID, N_POINTS, POINTS..
     string feature_name(a[0]);
-    int feature_id = atoi(a[1].c_str());
+    string feature_id(a[1].c_str());
     int n_points = atoi(a[2].c_str());
     int i, ci;
     ci = 3;
@@ -535,7 +535,7 @@ int parse(string fn){
     within_class_index.push_back(di);
     my_vectors.push_back(my_points);
     my_names.push_back(feature_name);
-    my_id.push_back(feature_id);
+    my_id.push_back(feature_id.c_str());
     my_class.push_back(next_class);
     nclass++;
   }
@@ -682,6 +682,8 @@ void setup(){
 
 
 int parse_JSON(string fn){
+  long int nclass = 0; // number of features in this class
+
   bool DEBUG = false;
   vector<string> ORC_PRIMRY; /* primary ORC */
   vector<string> PROT_NAME; /* park name */
@@ -756,10 +758,15 @@ int parse_JSON(string fn){
         E.G., need an array for points declared here..
         */
         vector<vec3d> my_points; // from test.cpp
-
+        std::string feature_name("");
+        std::string feature_id("");    
+        double x, y;
+        
         /* temporary: only show first 2 parks */
-        if(c>1){
-          if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() != COORDS.size()){
+        if(c > 1){
+          if(ORC_PRIMRY.size() != PROT_NAME.size() ||
+             ORC_PRIMRY.size() != COORDS.size() ||
+             PROT_NAME.size() != COORDS.size()){
             printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
           }
           else{
@@ -778,7 +785,7 @@ int parse_JSON(string fn){
         if(DEBUG){
           printf("feature(%ld) %s\n", (long int)c, itr2->IsObject()?"true":"false");
         }
-        c++;
+        
         itr2->MemberBegin();
 
         /* for all the members in iter2 */
@@ -806,11 +813,13 @@ int parse_JSON(string fn){
 
                 if(!strncmp("ORC_PRIMRY\0", itr4->name.GetString(), 10)){
                   if(DEBUG) printf("\t\t\tORC_PRIMRY=%s\n", itr4->value.GetString());
+                  feature_id = itr4->value.GetString();
                   ORC_PRIMRY.push_back(itr4->value.GetString());
                 }
 
                 if(!strncmp("PROT_NAME\0", itr4->name.GetString(), 9)){
                   if(DEBUG) printf("\t\t\tPROT_NAME=%s\n", itr4->value.GetString());
+                  feature_name = itr4->value.GetString();
                   PROT_NAME.push_back(itr4->value.GetString());
                 }
               }
@@ -867,7 +876,13 @@ int parse_JSON(string fn){
                                   my_coord += std::string(",");
                                 }
 
+                                if(number_index % 3 == 1){
+                                  x = itr7->GetDouble();
+                                }
+
                                 if(number_index % 3 == 2){
+                                  y = itr7->GetDouble();
+                                  my_points.push_back(vec3d(x, y, 0.));
                                   my_coord += std::string(" ");
                                 }
 
@@ -890,9 +905,26 @@ int parse_JSON(string fn){
         my_coord += std::string("))");
         if(DEBUG) cout << KMAG << "\t\t" << my_coord << KGRN << endl;
         COORDS.push_back(my_coord);
+
+        /* end of feature-- save data */
+        within_class_index.push_back(c++);
+        my_vectors.push_back(my_points);
+        my_names.push_back(feature_name);
+        my_id.push_back(feature_id);
+        my_class.push_back(next_class);
+        nclass++;
       }
+      
     }
   }
+
+  long int ii = 0;
+  for(ii = 0; ii < nclass; i++){
+    n_my_class.push_back(nclass);
+  }
+  next_class++;
+
+
   if(ORC_PRIMRY.size() != PROT_NAME.size() ||
   ORC_PRIMRY.size() != COORDS.size() ||
   PROT_NAME.size() != COORDS.size()){
@@ -902,8 +934,9 @@ int parse_JSON(string fn){
   else{
     printf("done\n");
   }
-  return 0;
+  return nclass;
 }
+
 
 int v(std:: string fn){
 
@@ -925,7 +958,7 @@ int v(std:: string fn){
     vector<string> a(split(line.c_str(),','));
     //FEATURE_NAME, FEATURE_ID, N_POINTS, POINTS..
     string feature_name(a[0]);
-    int feature_id = atoi(a[1].c_str());
+    string feature_id(a[1].c_str());
     int n_points = atoi(a[2].c_str());
     int i, ci;
     ci = 3;
