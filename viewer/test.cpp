@@ -228,6 +228,17 @@ int main(int argc, char ** argv){
                                       exit(1);
                                     }else{
                                       ++number_index;
+                                if(number_index %3 != 0){
+                                  // printf("%s%d %s %s%s%s ", KGRN, i++, kTypeNames[itr7->GetType()], KMAG, dtos(itr7->GetDouble()).c_str(), KGRN);
+                                  if((number_index % 3 == 1) && (i > 3)){
+                                    my_coord += std::string(",");
+                                  }
+                                  if(number_index % 3 == 2){
+                                    my_coord += std::string(" ");
+                                  }
+                                  my_coord += dtos(itr8->GetDouble());
+                                }
+
                                     }
                                 }
                               }
@@ -264,7 +275,7 @@ int main(int argc, char ** argv){
       }
     }
   }
-  printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
+  printf("∂\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
   if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() != COORDS.size()){
     printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
   }
