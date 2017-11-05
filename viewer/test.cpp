@@ -117,7 +117,7 @@ int main(int argc, char ** argv){
       ++itr2){
 
         /* temporary: only show first 2 parks */
-        if(c>1){
+        if(false && c>1){
           if(ORC_PRIMRY.size() != PROT_NAME.size() || ORC_PRIMRY.size() != COORDS.size() || PROT_NAME.size() != COORDS.size()){
             printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
           }

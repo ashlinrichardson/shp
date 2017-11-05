@@ -549,10 +549,6 @@ int parse(string fn){
 
 int parse_JSON(string fn);
 
-void loadJSON(vector<string> & ORC_PRIMRY, vector<string> & PROT_NAME, vector<string> & COORDS){
-
-}
-
 int main(int argc, char *argv[]){
   orc_to_name = NULL;
 
@@ -582,12 +578,6 @@ int main(int argc, char *argv[]){
   cout << KGRN << "number of fire centre shp entries " << KRED << nc0 << endl << KNRM;
   //fclose(fff);
   //fclose(ggg);
-
-  /* load from JSON */
-  vector<string> ORC_PRIMRY; /* primary ORC */
-  vector<string> PROT_NAME; /* park name */
-  vector<string> COORDS; /* GIS coordinate string (WKT format) */
-  loadJSON(ORC_PRIMRY, PROT_NAME, COORDS);
 
   if(true){
     int i;
@@ -682,6 +672,8 @@ void setup(){
 
 
 int parse_JSON(string fn){
+  cout << KYEL << "parse(" << KMAG << fn << KYEL << ") (JSON)" << endl;
+
   long int nclass = 0; // number of features in this class
 
   bool DEBUG = false;
@@ -763,7 +755,7 @@ int parse_JSON(string fn){
         double x, y;
         
         /* temporary: only show first 2 parks */
-        if(c > 1){
+        if(false && c > 1){
           if(ORC_PRIMRY.size() != PROT_NAME.size() ||
              ORC_PRIMRY.size() != COORDS.size() ||
              PROT_NAME.size() != COORDS.size()){
@@ -867,6 +859,7 @@ int parse_JSON(string fn){
                               itr7->GetType();
                               if(!itr7->IsDouble()){
                                 printf("%sError: !IsDouble()\n", KGRN);
+                                printf("\t\t%s%s%s\n", KRED, kTypeNames[itr7->GetType()], KGRN); 
                                 exit(1);
                               }
 
@@ -932,7 +925,7 @@ int parse_JSON(string fn){
     ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
   }
   else{
-    printf("done\n");
+    printf("%sdone\n", KGRN);
   }
   return nclass;
 }
