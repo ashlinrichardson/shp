@@ -290,7 +290,7 @@ void drawAxes(void){
 
     wkt_f+= "))";
 
-    if(false && wkt_f.length() < 999){
+    if(wkt_f.length() < 9999){
       cout << wkt_f << endl;
     }
 
@@ -325,7 +325,8 @@ void drawAxes(void){
     glVertex3f(0., (c + d) / 2. + 1., 0);
     glEnd();
 
-    polygon p_poly; a = b = c = d = 0.;
+    polygon p_poly;
+    a = b = c = d = 0.;
     int j = cur_park_ind + n_fire; // the object index: remember, everything's lumped together in one array (fire centres, first)
     long int clen = my_vectors[j].size();
     if(false) cout << "clen "<<clen<<endl;
@@ -350,7 +351,7 @@ void drawAxes(void){
       }
       if(k < 10){
         printf("\t%e %e\n", x.x, x.y);
-        if(k==0){
+        if(k == 0){
           a = b = x.x;
           c = d = x.y;
         }
@@ -361,8 +362,11 @@ void drawAxes(void){
       if(x.y > d) d = x.y;
     }
     wkt_p+= "))";
-    if(wkt_p.length() < 999){
+    if(wkt_p.length() < 9999){
+      printf("%shere%s\n", KRED, KGRN);
       cout << wkt_p << endl;
+      printf("%safter%s\n", KRED, KGRN);
+
     }
 
     if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
