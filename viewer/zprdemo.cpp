@@ -1,15 +1,13 @@
-#include"ansicolor.h"
+#include "ansicolor.h"
 #include <iostream>
 #include <deque>
-#include<fstream>
-#include<sstream>
+#include <fstream>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
-
-#include"ansicolor.h"
-#include"rapidjson/document.h"
-
+#include "ansicolor.h"
+#include "rapidjson/document.h"
 #include <boost/assign.hpp>
 #include <boost/version.hpp>
 #include <boost/geometry.hpp>
@@ -22,11 +20,9 @@
 
 BOOST_GEOMETRY_REGISTER_BOOST_TUPLE_CS(cs::cartesian)
 
-/*
-http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/append.html
+/* http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/append.html
 http://www.boost.org/doc/libs/1_47_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
-http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html
-*/
+http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection/intersection_3.html */
 #include "hsv.h"
 #include "newzpr.h"
 #include "pthread.h"
@@ -49,13 +45,11 @@ vector< int > urx;
 
 vector<vec3d> max_p;
 double max_f;
-
 int next_class;
-
 int cur_fire_ind, cur_park_ind;
 int n_fire, n_park;
 
-std::string * orc_to_name;
+// std::string * orc_to_name;
 
 /* Draw axes */
 #define STARTX 500
@@ -218,7 +212,7 @@ void drawAxes(void){
       glColor3f(r, g, b);
     }
     glPushName(i);
-    cout << "\tpushName "<< i << endl;
+    // cout << "\tpushName "<< i << endl;
     glBegin(GL_POLYGON);
     for(it = j->begin(); it != j->end(); it += 1){
       if(true){
@@ -319,7 +313,7 @@ void drawAxes(void){
         wkt_p += ftos(x.y);
       }
       if(k<10){
-        if(false) printf("%e %e\n", x.x, x.y);
+        printf("%e %e\n", x.x, x.y);
         if(k==0){
           a = b = x.x;
           c = d = x.y;
@@ -428,7 +422,7 @@ void special(int key, int x, int y){
         cur_park_ind = 0;
       }
       cout << KGRN << "park(" << KRED << cur_park_ind << KGRN << ")"
-           << KMAG << "PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
+           << KMAG << " PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
            << endl;
     }
     break;
@@ -444,7 +438,7 @@ void special(int key, int x, int y){
         cur_park_ind = 0;
       }
       cout << KGRN << "park(" << KRED << cur_park_ind << KGRN << ")"
-           << KMAG << "PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
+           << KMAG << " PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
            << endl;
     }
     break;
@@ -597,9 +591,7 @@ int parse(string fn){
 int parse_JSON(string fn);
 
 int main(int argc, char *argv[]){
-  orc_to_name = NULL;
 
-  setup();
   cout << KYEL << "BOOST INFO"<<endl;
   cout << KGRN << "\tBOOST_VERSION " << KMAG << BOOST_VERSION << endl;
   cout << KGRN << "\tBOOST_PATCH_LEVEL " << KMAG << BOOST_VERSION % 100 << endl;
@@ -611,11 +603,6 @@ int main(int argc, char *argv[]){
   cur_fire_ind = -1;
   cur_park_ind = -1;
 
-  //FILE * fff = fopen("ind.txt", "wb");
-  //FILE * ggg = fopen("mat.txt", "ab");
-  //if(!ggg){
-    // cout << "Error: could not open file mat.dat" <<endl;
-  //}
   my_vectors.clear();
   int nc0 = parse(string("firec.dat"));
   int nc1 = parse_JSON(string("TA_PEP_SVW_polygon.json"));
@@ -623,8 +610,6 @@ int main(int argc, char *argv[]){
   n_park = nc1;
   cout << KGRN << "number of park shp entries " << KRED << nc1 << endl;
   cout << KGRN << "number of fire centre shp entries " << KRED << nc0 << endl << KNRM;
-  //fclose(fff);
-  //fclose(ggg);
 
   if(true){
     int i;
@@ -636,10 +621,10 @@ int main(int argc, char *argv[]){
       vector<vec3d>::iterator it;
       for(it = j->begin(); it != j->end(); it++){
         float x = (*it).x; float y = (*it).y;
-        if(x > maxx) maxx=x;
-        if(x < minx) minx=x;
-        if(y > maxy) maxy=y;
-        if(y < miny) miny=y;
+        if(x > maxx) maxx = x;
+        if(x < minx) minx = x;
+        if(y > maxy) maxy = y;
+        if(y < miny) miny = y;
       }
     }
 
@@ -695,7 +680,7 @@ int main(int argc, char *argv[]){
   glutDisplayFunc(display);
   glutKeyboardFunc(keyboard);
   glutSpecialFunc(special);
-  // glutKeyboardUpFunc(keyboardup);
+  /* glutKeyboardUpFunc(keyboardup); */
   glutIdleFunc(idle);
   glScalef(0.25,0.25,0.25);
 
@@ -706,15 +691,6 @@ int main(int argc, char *argv[]){
   /* Enter GLUT event loop */
   glutMainLoop();
   return 0;
-}
-
-void setup(){
-
-  long int mk = 9954;
-  long int nb = sizeof(std::string *) * (mk + 1);
-  //std::string * orc_to_name
-  //orc_to_name = (std::string *)(void *)malloc(nb);
-  //memset(orc_to_name, '\0', nb);
 }
 
 int parse_JSON(string fn){
