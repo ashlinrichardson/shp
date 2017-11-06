@@ -78,13 +78,12 @@ string dtos(double i){
 long int getFileSize(std::string fn){
   ifstream i;
   i.open(fn.c_str(), ios::binary);
-  if(!(i.is_open())){
+  if(!i.is_open()){
     printf("Error: was unable to open file: %s\n", (fn.c_str()));
     return -1;
   }
   i.seekg(0, ios::end);
-  long int len = i.tellg();
-  return(len);
+  return i.tellg(); // len
 }
 
 void _pick(GLint name){
@@ -98,10 +97,12 @@ void _pick(GLint name){
     if(my_class[my_ind] ==1){
       my_ind -= n_fire;
     }
-    cout << KYEL << "\t" << my_names[my_ind] << KMAG << "--> " << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << ",";
+    cout << KYEL << "\t" << my_names[my_ind] << KMAG << "--> "
+         << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << ",";
 
     if(my_class[my_ind] == 1){
-      cout << endl << "\t\t" << my_names[my_ind] << " my_id:" << my_id[my_ind] << endl;
+      cout << endl << "\t\t" << my_names[my_ind]
+           << " my_id:" << my_id[my_ind] << endl;
     }
     cout << endl;
   }
@@ -113,15 +114,14 @@ void _pick(GLint name){
 void renderBitmapString(float x, float y, void *font, char *string){
   char *c;
   glRasterPos2f(x,y);
-  for (c=string; *c != '\0'; c++){
+  for(c = string; *c != '\0'; c++){
     glutBitmapCharacter(font, *c);
   }
 }
 
 //http://www.codeproject.com/Articles/80923/The-OpenGL-and-GLUT-A-Powerful-Graphics-Library-an
-void setOrthographicProjection() {
-  int h = WINDOWY;
-  int w = WINDOWX;
+void setOrthographicProjection(){
+  int h = WINDOWY, w = WINDOWX;
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
@@ -131,7 +131,7 @@ void setOrthographicProjection() {
   glMatrixMode(GL_MODELVIEW);
 }
 
-void resetPerspectiveProjection() {
+void resetPerspectiveProjection(){
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
@@ -144,14 +144,16 @@ void drawText(){
   glLoadIdentity();
   int lightingState = glIsEnabled(GL_LIGHTING);
   glDisable(GL_LIGHTING);
-  renderBitmapString(3,WINDOWY-3,(void *)MYFONT,console_string);
-  if(lightingState) glEnable(GL_LIGHTING);
+  renderBitmapString(3, WINDOWY - 3, (void *)MYFONT, console_string);
+  if(lightingState){
+    glEnable(GL_LIGHTING);
+  }
   glPopMatrix();
   resetPerspectiveProjection();
 }
 
 /* convert float to string.. from gift meta4::gift */
-string ftos( float i){
+string ftos(float i){
   std::string number("");
   std::stringstream strstream;
   strstream << i;
@@ -159,16 +161,16 @@ string ftos( float i){
   return number;
 }
 
-float a1, a2, a3;
+float a1, a2, a3; // what for?
 
 void drawAxes(void){
-  cout << "drawAxes" << endl;
+
+  int picki = -1;
+  float r = 0., g = 1., b = 1.;
+
   glPushMatrix();
-  float r, g, b;
-  r =0.; g = b = 1.;
   glColor3f(r,g,b);
   glPointSize(1.);
-  int picki = -1;
 
   if(myPickNames.size() == 1){
     picki =* myPickNames.begin();
@@ -177,10 +179,9 @@ void drawAxes(void){
     cout << "within_class_index" << within_class_index[picki] << endl;
   }
 
-  int i;
-  int ci = 0;
-  int n_labels = my_vectors.size();
-  for(i=0; i< n_labels; i++){
+  int i = 0, ci = 0, n_labels = my_vectors.size();
+
+  for(i = 0; i < n_labels; i++){
 
     /* fire centre class */
     if(my_class[i] == 0){
@@ -205,20 +206,21 @@ void drawAxes(void){
     vector<vec3d> * j = &my_vectors[i];
     vector<vec3d>::iterator it;
     ci = 0;
+
     if(picki == i){
       glColor3f(1. - r, 1. - g, 1. - b);
     }
     else{
       glColor3f(r, g, b);
     }
+
     glPushName(i);
-    // cout << "\tpushName "<< i << endl;
     glBegin(GL_POLYGON);
     for(it = j->begin(); it != j->end(); it += 1){
       if(true){
         if(picki == i && ci == 0){
-          zprReferencePoint[0] =(*it).x;
-          zprReferencePoint[1] =(*it).y;
+          zprReferencePoint[0] = (*it).x;
+          zprReferencePoint[1] = (*it).y;
         }
         glVertex3f((*it).x, (*it).y, (*it).z);
       }
@@ -229,16 +231,17 @@ void drawAxes(void){
   }
 
   if(cur_fire_ind >= 0 && cur_fire_ind < n_fire && cur_park_ind >= 0 && cur_park_ind < n_park){
-    int k;
+    int k = 0, i = cur_fire_ind;
 
-    using boost::assign::tuple_list_of;
     using boost::make_tuple;
     using boost::geometry::append;
+    using boost::assign::tuple_list_of;
     typedef boost::geometry::model::polygon<boost::geometry::model::d2::point_xy<double> > polygon;
+    polygon f_poly;
 
-    polygon f_poly; float a, b, c, d; a=b=c=d=0.;
-    int i = cur_fire_ind;
-    long int slen = my_vectors[i].size(); long int sskip = slen / 256;
+    float a = 0., b = 0., c = 0., d = 0.;
+    long int slen = my_vectors[i].size(), sskip = slen / 256;
+
     vector<vec3d> * v = &my_vectors[i];
     if(false) printf("sskip %ld\n", sskip);
     string wkt_f("POLYGON((");
@@ -247,15 +250,13 @@ void drawAxes(void){
       vec3d x(v->at(k));
 
       if(k % sskip == 0){
-        add_s +=1;
-        if(k>0){
+        add_s += 1;
+        if(k > 0){
           wkt_f += ",";
         }
         wkt_f += ftos(x.x);
         wkt_f += " ";
         wkt_f += ftos(x.y);
-        //append(f_poly, make_tuple(x.x, x.y));
-        //append wktstring command
       }
       if(k<10){
         if(false) printf("%e %e\n", x.x, x.y);
@@ -400,16 +401,14 @@ vector<string> split(const char *str, char c = ' '){
 
     result.push_back(string(begin, str));
   }
-  while (0 != *str++);
+  while(0 != *str++);
   return result;
 }
 
-void setup();
-
-/* Keyboard functions */
 void special(int key, int x, int y){
-  switch(key){
+/* Keyboard function */
 
+  switch(key){
 
     case GLUT_KEY_UP:{
       if(cur_park_ind >= 0){
@@ -443,8 +442,6 @@ void special(int key, int x, int y){
     }
     break;
 
-
-
     case GLUT_KEY_LEFT:{
       if(cur_fire_ind >=0){
         cur_fire_ind --;
@@ -475,11 +472,12 @@ void special(int key, int x, int y){
   display();
 }
 
-/* Keyboard functions */
 void keyboard(unsigned char key, int x, int y){
-  switch(key){
+/* Keyboard function */
 
+  switch(key){
     case 8 :
+
     case 127:
     if(console_position>0){
       console_position --;
@@ -489,15 +487,15 @@ void keyboard(unsigned char key, int x, int y){
     break;
 
     // Enter
-    case 13 :{
-      printf( "%d Pressed RETURN\n",(char)key);
-
+    case 13: {
+      printf("%d Pressed RETURN\n", (char)key);
       string mys(&console_string[0]);
-
       vector<string> words(split(mys.c_str()));
-      if(words.size()==2){
+
+      if(words.size() == 2){
         cout << "good "<<endl;
-        if(words[0][0]=='f'){
+
+        if(words[0][0] == 'f'){
           int iii = atoi(words[1].c_str());
           if(iii >=0 && iii < n_fire){
             cur_fire_ind = iii;
@@ -506,34 +504,34 @@ void keyboard(unsigned char key, int x, int y){
             cur_fire_ind = -1;
           }
         }
-        if(words[0][0]=='p'){
-          int iii=atoi(words[1].c_str());
-          if(iii>=0 && iii< n_park){
+
+        if(words[0][0] == 'p'){
+          int iii = atoi(words[1].c_str());
+          if(iii >= 0 && iii < n_park){
             cur_park_ind = iii;
           }
           else{
             cur_park_ind = -1;
           }
         }
-        cout <<"cur_fire_ind " << cur_fire_ind<< " cur_park_ind " << cur_park_ind <<endl;
+        cout << "cur_fire_ind " << cur_fire_ind << " cur_park_ind " << cur_park_ind << endl;
       }
-
-      console_string[0]='\0';
-      console_position=0;
+      console_string[0] = '\0';
+      console_position = 0;
       display();
     }
     break;
 
     // Escape
-    case 27 :
-    quitme();
-    exit(0);
+    case 27 : {
+      quitme();
+      exit(0);
+    }
     break;
 
     default:
-    //printf( "Pressed key %c AKA %d at position %d % d\n",(char)key, key, x, y);
     console_string[console_position++] = (char)key;
-    console_string[console_position]='\0';
+    console_string[console_position] = '\0';
     display();
     break;
   }
@@ -547,31 +545,32 @@ void idle(){
 }
 
 int parse(string fn){
+
   cout << KYEL << "parse(" << KMAG << fn << KYEL << ")" << endl;
   ifstream in(fn.c_str());
+
   if (!in.is_open()){
     printf("error\n"); exit(1);
   }
   string line;
-
   getline(in, line);
+
   cout << KGRN << "\t" << line << KNRM << endl;
-  int nclass = 0;
-  int di = -1;
+
+  int nclass = 0, di = -1;
+  
   while(getline(in, line)){
     di ++;
     vector<vec3d> my_points;
     vector<string> a(split(line.c_str(),','));
-    //FEATURE_NAME, FEATURE_ID, N_POINTS, POINTS..
     string feature_name(a[0]);
     string feature_id(a[1].c_str());
     int n_points = atoi(a[2].c_str());
-    int i, ci;
-    ci = 3;
-    for(i=0; i<n_points; i++){
+    int i = 0, ci = 3;
+    for(i = 0; i < n_points; i++){
       float x = atof((a[ci++]).c_str());
       float y = atof((a[ci++]).c_str());
-      my_points.push_back(vec3d(x,y,0.));
+      my_points.push_back(vec3d(x, y, 0.));
     }
     within_class_index.push_back(di);
     my_vectors.push_back(my_points);
@@ -581,10 +580,10 @@ int parse(string fn){
     nclass++;
   }
   int i;
-  for(i=0; i<nclass; i++){
+  for(i = 0; i < nclass; i++){
     n_my_class.push_back(nclass);
   }
-  next_class ++;
+  next_class++;
   return nclass; // number of points in this file (associate a class with each file)
 }
 
@@ -592,7 +591,7 @@ int parse_JSON(string fn);
 
 int main(int argc, char *argv[]){
 
-  cout << KYEL << "BOOST INFO"<<endl;
+  cout << KYEL << "BOOST INFO" << endl;
   cout << KGRN << "\tBOOST_VERSION " << KMAG << BOOST_VERSION << endl;
   cout << KGRN << "\tBOOST_PATCH_LEVEL " << KMAG << BOOST_VERSION % 100 << endl;
   cout << KGRN << "\tBOOST_MINOR_VERSION " << KMAG << BOOST_VERSION / 100 << endl;
@@ -614,9 +613,8 @@ int main(int argc, char *argv[]){
   if(true){
     int i;
     next_class = 0;
-    float minx, maxx, miny, maxy;
-    minx = maxx = miny = maxy = 0.;
-    for(i=0; i< my_vectors.size(); i++){
+    float minx = 0., maxx = 0., miny = 0., maxy = 0.;
+    for(i = 0; i < my_vectors.size(); i++){
       vector<vec3d> * j = &my_vectors[i];
       vector<vec3d>::iterator it;
       for(it = j->begin(); it != j->end(); it++){
@@ -628,20 +626,20 @@ int main(int argc, char *argv[]){
       }
     }
 
-    for(i=0; i< my_vectors.size(); i++){
+    for(i = 0; i < my_vectors.size(); i++){
       vector<vec3d> * j = &my_vectors[i];
       vector<vec3d>::iterator it;
-      for(it=j->begin(); it!=j->end(); it++){
+      for(it = j->begin(); it != j->end(); it++){
         (*it).x -= minx; (*it).x /= (maxx - minx);
         (*it).y -= miny; (*it).y /= (maxy - miny);
       }
     }
 
-    float xa =0.; float ya=0.; float c = 0.;
-    for(i=0; i< my_vectors.size(); i++){
+    float xa = 0., ya = 0., c = 0.;
+    for(i = 0; i < my_vectors.size(); i++){
       vector<vec3d> * j = &my_vectors[i];
       vector<vec3d>::iterator it;
-      for(it=j->begin(); it!=j->end(); it++){
+      for(it = j->begin(); it != j->end(); it++){
         xa += (*it).x;
         ya += (*it).y;
         c += 1.;
@@ -651,10 +649,10 @@ int main(int argc, char *argv[]){
     xa /= (c);
     ya /= (c);
 
-    for(i=0; i< my_vectors.size(); i++){
+    for(i = 0; i < my_vectors.size(); i++){
       vector<vec3d> * j = &my_vectors[i];
       vector<vec3d>::iterator it;
-      for(it=j->begin(); it!=j->end(); it++){
+      for(it = j->begin(); it != j->end(); it++){
         (*it).x -= xa;
         (*it).y -= ya;
         (*it).x *= 5.;
@@ -667,7 +665,7 @@ int main(int argc, char *argv[]){
   renderflag = false;
   a1 = a2 = a3 = 1;
   console_position = 0;
-  fullscreen=0;
+  fullscreen = 0;
 
   /* Initialise olLUT and create a window */
   glutInit(&argc, argv);
@@ -680,6 +678,7 @@ int main(int argc, char *argv[]){
   glutDisplayFunc(display);
   glutKeyboardFunc(keyboard);
   glutSpecialFunc(special);
+
   /* glutKeyboardUpFunc(keyboardup); */
   glutIdleFunc(idle);
   glScalef(0.25,0.25,0.25);
@@ -779,6 +778,8 @@ int parse_JSON(string fn){
         double x, y;
 
         /* temporary: only show first 2 parks */
+        if(c > 1) break;
+
         if(false && c > 1){
           if(ORC_PRIMRY.size() != PROT_NAME.size() ||
           ORC_PRIMRY.size() != COORDS.size() ||
@@ -788,7 +789,6 @@ int parse_JSON(string fn){
           else{
             printf("done\n");
           }
-          // printf("done\nlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
           exit(1);
         }
 
@@ -997,29 +997,34 @@ int v(std:: string fn){
 
   cout << KYEL << "parse(" << KMAG << fn << KYEL << ")" << endl;
   ifstream in(fn.c_str());
+
   if (!in.is_open()){
     printf("error\n"); exit(1);
   }
-  string line;
 
+  string line;
   getline(in, line);
+
   cout << KGRN << "\t" << line << KNRM << endl;
-  int nclass = 0;
-  int di = -1; //feature index...
+
+  int nclass = 0, di = -1; // di -- feature index
+
   while(getline(in, line)){
     di ++;
+
     // array of points for each feature...
     vector<vec3d> my_points;
     vector<string> a(split(line.c_str(),','));
+
     //FEATURE_NAME, FEATURE_ID, N_POINTS, POINTS..
     string feature_name(a[0]);
     string feature_id(a[1].c_str());
+
     int n_points = atoi(a[2].c_str());
     int i, ci;
     ci = 3;
     for(i=0; i<n_points; i++){
-      float x = atof((a[ci++]).c_str());
-      float y = atof((a[ci++]).c_str());
+      float x = atof((a[ci++]).c_str()), y = atof((a[ci++]).c_str());
       my_points.push_back(vec3d(x,y,0.));
     }
     within_class_index.push_back(di);
@@ -1030,7 +1035,7 @@ int v(std:: string fn){
     nclass++;
   }
   int i;
-  for(i=0; i<nclass; i++){
+  for(i = 0; i < nclass; i++){
     n_my_class.push_back(nclass);
   }
   next_class ++;
