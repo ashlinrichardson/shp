@@ -859,7 +859,7 @@ int parse_JSON(string fn){
         double x, y;
 
         /* temporary: only show first 2 parks */
-        if(c > 1) break;
+        if(c > 0) break;
 
         if(false && c > 1){
           if(ORC_PRIMRY.size() != PROT_NAME.size() ||

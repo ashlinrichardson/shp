@@ -1,6 +1,6 @@
 OBJS	=	newzpr.o	zprdemo.o
 CC	=	g++
-DEBUG	=	-g
+DEBUG	= # -g
 CFLAGS	=	-c	-w	$(DEBUG)	-I/opt/local/include/	-I../boost_1_65_1/
 LFLAGS	=	$(DEBUG)	-lm	-framework	Cocoa	-framework	GLUT	-framework	OpenGL
 zpr:	$(OBJS)
