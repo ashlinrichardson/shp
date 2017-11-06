@@ -97,9 +97,9 @@ void _pick(GLint name){
   if(myPickNames.size() < 1){
     return;
   }
-  cout << "PickSet:" << endl;
+  cout << "------------------------\n\tPickSet:" << endl;
   std::set<GLint>::iterator it;
-  for(it=myPickNames.begin(); it!=myPickNames.end(); it++){
+  for(it = myPickNames.begin(); it != myPickNames.end(); it++){
     int my_ind = *it;
     if(my_class[my_ind] ==1){
       my_ind -= n_fire;
@@ -112,6 +112,7 @@ void _pick(GLint name){
     cout << endl;
   }
   cout << KNRM << endl;
+  cout <<"------------------------"<<endl;
   fflush(stdout);
 }
 
@@ -167,22 +168,27 @@ string ftos( float i){
 float a1, a2, a3;
 
 void drawAxes(void){
+  cout << "drawAxes" << endl;
   glPushMatrix();
   float r, g, b;
   r =0.; g = b = 1.;
   glColor3f(r,g,b);
   glPointSize(1.);
   int picki = -1;
+
   if(myPickNames.size() == 1){
     picki =* myPickNames.begin();
     cout << picki << "," << my_names[picki] << ",myclass= " << my_class[picki]
     << "n_my_class" << n_my_class[picki] << endl;
     cout << "within_class_index" << within_class_index[picki] << endl;
   }
+
   int i;
-  int ci=0;
+  int ci = 0;
   int n_labels = my_vectors.size();
   for(i=0; i< n_labels; i++){
+
+    /* fire centre class */
     if(my_class[i] == 0){
       if(cur_fire_ind >= 0 && cur_fire_ind < n_fire){
         if(cur_fire_ind != within_class_index[i]){
@@ -190,6 +196,8 @@ void drawAxes(void){
         }
       }
     }
+
+    /* parks class */
     if(my_class[i] == 1){
       if(cur_park_ind >= 0 && cur_park_ind < n_park){
         if(cur_park_ind != within_class_index[i]){
@@ -197,20 +205,22 @@ void drawAxes(void){
         }
       }
     }
-    float myf = ((float)((within_class_index[i]+1))) / ((float) n_my_class[i]);
-    hsv2rgb(&r, &g, &b, 360. * myf, my_class[i]==1?1.:0.5, my_class[i]==1?1.:0.15);
+
+    float myf = ((float)((within_class_index[i] + 1))) / ((float)n_my_class[i]);
+    hsv2rgb(&r, &g, &b, 360. * myf, my_class[i] == 1 ? 1. : 0.5, my_class[i] == 1 ? 1. : 0.15);
     vector<vec3d> * j = &my_vectors[i];
     vector<vec3d>::iterator it;
     ci = 0;
-    if(picki==i){
-      glColor3f(1.-r, 1.-g, 1.-b);
+    if(picki == i){
+      glColor3f(1. - r, 1. - g, 1. - b);
     }
     else{
-      glColor3f(r,g,b);
+      glColor3f(r, g, b);
     }
     glPushName(i);
+    cout << "\tpushName "<< i << endl;
     glBegin(GL_POLYGON);
-    for(it=j->begin(); it!=j->end(); it+=1){
+    for(it = j->begin(); it != j->end(); it += 1){
       if(true){
         if(picki == i && ci == 0){
           zprReferencePoint[0] =(*it).x;
@@ -236,7 +246,7 @@ void drawAxes(void){
     int i = cur_fire_ind;
     long int slen = my_vectors[i].size(); long int sskip = slen / 256;
     vector<vec3d> * v = &my_vectors[i];
-    printf("sskip %ld\n", sskip);
+    if(false) printf("sskip %ld\n", sskip);
     string wkt_f("POLYGON((");
     int add_s = 0;
     for(k=0; k< slen; k++){
@@ -254,7 +264,7 @@ void drawAxes(void){
         //append wktstring command
       }
       if(k<10){
-        printf("%e %e\n", x.x, x.y);
+        if(false) printf("%e %e\n", x.x, x.y);
         if(k==0){
           a = b = x.x;
           c = d = x.y;
@@ -266,17 +276,17 @@ void drawAxes(void){
       if(x.y > d) d = x.y;
     }
     wkt_f+= "))";
-    if(wkt_f.length() < 999){
+    if(false && wkt_f.length() < 999){
       cout << wkt_f << endl;
     }
 
-    printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
+    if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
     KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
 
     boost::geometry::read_wkt(wkt_f, f_poly);
-    printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+    if(false) printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
     boost::geometry::correct(f_poly);
-    printf("%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+    if(false) printf("%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
     //add first point to end?
 
     glColor3f(1., 0., 0.);
@@ -290,10 +300,10 @@ void drawAxes(void){
     polygon p_poly; a = b = c = d = 0.;
     int j = cur_park_ind + n_fire; // the object index: remember, everything's lumped together in one array (fire centres, first)
     long int clen = my_vectors[j].size();
-    cout << "clen "<<clen<<endl;
+    if(false) cout << "clen "<<clen<<endl;
     long int cskip = clen / 256;
     v = &my_vectors[j];
-    printf("cskip %ld\n", cskip);
+    if(false) printf("cskip %ld\n", cskip);
     string wkt_p("POLYGON((");
     int add_c = 0;
     for(k=0; k< clen; k++){
@@ -309,7 +319,7 @@ void drawAxes(void){
         wkt_p += ftos(x.y);
       }
       if(k<10){
-        printf("%e %e\n", x.x, x.y);
+        if(false) printf("%e %e\n", x.x, x.y);
         if(k==0){
           a = b = x.x;
           c = d = x.y;
@@ -325,13 +335,13 @@ void drawAxes(void){
       cout << wkt_p << endl;
     }
 
-    printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
+    if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
     KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
 
     boost::geometry::read_wkt(wkt_p, p_poly);
-    printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+    if(false)printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
     boost::geometry::correct(p_poly);
-    printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+    if(false) printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
     //add first point to the end?
 
     glColor3f(0., 0., 1.);
@@ -344,13 +354,13 @@ void drawAxes(void){
 
     std::deque<polygon> p_result;
 
-    printf("%sintersection%s()%s\n", KYEL, KBLU, KNRM);
+    if(false) printf("%sintersection%s()%s\n", KYEL, KBLU, KNRM);
     boost::geometry::intersection(f_poly, p_poly, p_result);
 
-    printf("%sintersection%s(%ld)%s\n", KYEL, KBLU, p_result.size(), KNRM);
+    if(false) printf("%sintersection%s(%ld)%s\n", KYEL, KBLU, p_result.size(), KNRM);
     std::deque<polygon>::iterator it;
 
-    printf("%sarea%s()%s\n", KYEL, KBLU, KNRM);
+    if(false) printf("%sarea%s()%s\n", KYEL, KBLU, KNRM);
 
     double my_area = 0.;
     int ci = 0;
@@ -406,7 +416,24 @@ void setup();
 void special(int key, int x, int y){
   switch(key){
 
+
     case GLUT_KEY_UP:{
+      if(cur_park_ind >= 0){
+        cur_park_ind ++;
+        if(cur_park_ind >= n_park){
+          cur_park_ind = 0;
+        }
+      }
+      else{
+        cur_park_ind = 0;
+      }
+      cout << KGRN << "park(" << KRED << cur_park_ind << KGRN << ")"
+           << KMAG << "PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
+           << endl;
+    }
+    break;
+
+    case GLUT_KEY_DOWN:{
       if(cur_park_ind >= 0){
         cur_park_ind --;
         if(cur_park_ind < 0){
@@ -416,22 +443,12 @@ void special(int key, int x, int y){
       else{
         cur_park_ind = 0;
       }
-      cout << KRED << "PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire] << endl;
+      cout << KGRN << "park(" << KRED << cur_park_ind << KGRN << ")"
+           << KMAG << "PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
+           << endl;
     }
     break;
 
-    case GLUT_KEY_DOWN:{
-      if(cur_park_ind >= 0){
-        cur_park_ind ++;
-        if(cur_park_ind >= n_park){
-          cur_park_ind = 0;
-        }
-      }
-      else{
-      }
-      cout << KRED << "PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire] << endl;
-    }
-    break;
 
 
     case GLUT_KEY_LEFT:{
