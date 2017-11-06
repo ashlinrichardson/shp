@@ -87,9 +87,8 @@ long int getFileSize(std::string fn){
 }
 
 void poly_info(int my_ind){
-    cout << "\t" << KYEL << "(" << KMAG << my_ind << KYEL << ")" << KGRN << "--> " << KYEL << "\t" << my_names[my_ind] << KGRN << endl;
+  cout << "\t" << KYEL << "(" << KMAG << my_ind << KYEL << ")" << KGRN << "--> " << KYEL << "\t" << my_names[my_ind] << KGRN << endl;
 }
-
 
 void _pick(GLint name){
   if(myPickNames.size() < 1){
@@ -162,23 +161,26 @@ float a1, a2, a3; // what for?
 void drawAxes(void){
   cout << KMAG << "drawAxes()" << KGRN << "----------------------------------------" << endl;
   /* draw crosshairs on origin for sanity */
-  glColor3f(1, 0, 0);
-  glBegin(GL_LINES);
-  glVertex3f(0, 0, 0);
-  glVertex3f(1, 0, 0);
-  glEnd();
+  if(false){
 
-  glColor3f(0, 1, 0);
-  glBegin(GL_LINES);
-  glVertex3f(0, 0, 0);
-  glVertex3f(0, 1, 0);
-  glEnd();
+    glColor3f(1, 0, 0);
+    glBegin(GL_LINES);
+    glVertex3f(0, 0, 0);
+    glVertex3f(1, 0, 0);
+    glEnd();
 
-  glColor3f(0, 0, 1);
-  glBegin(GL_LINES);
-  glVertex3f(0, 0, 0);
-  glVertex3f(0, 0, 1);
-  glEnd();
+    glColor3f(0, 1, 0);
+    glBegin(GL_LINES);
+    glVertex3f(0, 0, 0);
+    glVertex3f(0, 1, 0);
+    glEnd();
+
+    glColor3f(0, 0, 1);
+    glBegin(GL_LINES);
+    glVertex3f(0, 0, 0);
+    glVertex3f(0, 0, 1);
+    glEnd();
+  }
 
   int picki = -1;
   float r = 0., g = 1., b = 1.;
@@ -319,13 +321,13 @@ void drawAxes(void){
     glVertex3f(a, c, 0); glVertex3f(a, d, 0);
     glEnd();
 
-    glColor3f(1, 0, 1);
+    glColor3f(.7, .0, .0);
     glBegin(GL_LINES);
     glVertex3f( (a + b) / 2. + 1., (c + d) / 2., 0);
     glVertex3f( (a + b) / 2. - 1., (c + d) / 2., 0);
     glEnd();
 
-    glColor3f(0, 1, 0);
+    glColor3f(.7, .0, .0);
     glBegin(GL_LINES);
     glVertex3f( (a + b) / 2., (c + d) / 2. + 1., 0);
     glVertex3f( (a + b) / 2., (c + d) / 2. - 1., 0);
@@ -338,14 +340,14 @@ void drawAxes(void){
     long int cskip = (clen >= skip_frac)?(clen / 256):1;
 
     v = &my_vectors[j];
-    
+
     string wkt_p("POLYGON((");
     int add_c = 0;
 
     poly_info(j);
-    printf("\tclen  %ld\n", clen);
+    printf("\tclen %ld\n", clen);
     printf("\tcskip %ld\n", cskip);
-    
+
     for(k=0; k< clen; k++){
       vec3d x(v->at(k));
 
@@ -380,10 +382,10 @@ void drawAxes(void){
     }
 
     printf("\t%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
-           KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
+    KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
 
     boost::geometry::read_wkt(wkt_p, p_poly);
-    
+
     printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
 
     boost::geometry::correct(p_poly);
@@ -399,13 +401,13 @@ void drawAxes(void){
     glVertex3f(a, c, 0); glVertex3f(a, d, 0);
     glEnd();
 
-    glColor3f(1, 0, 1);
+    glColor3f(0, .7, 0.);
     glBegin(GL_LINES);
     glVertex3f( (a + b) / 2. + 1., (c + d) / 2., 0);
     glVertex3f( (a + b) / 2. - 1., (c + d) / 2., 0);
     glEnd();
 
-    glColor3f(0, 1, 0);
+    glColor3f(0, .7, 0.);
     glBegin(GL_LINES);
     glVertex3f( (a + b) / 2., (c + d) / 2. + 1., 0);
     glVertex3f( (a + b) / 2., (c + d) / 2. - 1., 0);
@@ -472,7 +474,7 @@ vector<string> split(const char *str, char c = ' '){
 }
 
 void special(int key, int x, int y){
-/* Keyboard function */
+  /* Keyboard function */
 
   switch(key){
 
@@ -487,8 +489,8 @@ void special(int key, int x, int y){
         cur_park_ind = 0;
       }
       cout << KGRN << "park(" << KRED << cur_park_ind << KGRN << ")"
-           << KMAG << " PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
-           << endl;
+      << KMAG << " PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
+      << endl;
     }
     break;
 
@@ -503,8 +505,8 @@ void special(int key, int x, int y){
         cur_park_ind = 0;
       }
       cout << KGRN << "park(" << KRED << cur_park_ind << KGRN << ")"
-           << KMAG << " PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
-           << endl;
+      << KMAG << " PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire]
+      << endl;
     }
     break;
 
@@ -535,7 +537,7 @@ void special(int key, int x, int y){
     break;
     default: break;
   }
-  
+
   cout << KRED << "Current Selection: " << KGRN << endl;
   if(cur_fire_ind >= 0){
     poly_info(cur_fire_ind);
@@ -544,12 +546,11 @@ void special(int key, int x, int y){
     poly_info(cur_park_ind + n_fire);
   }
 
-
   display();
 }
 
 void keyboard(unsigned char key, int x, int y){
-/* Keyboard function */
+  /* Keyboard function */
 
   switch(key){
     case 8 :
@@ -636,7 +637,7 @@ int parse(string fn){
   cout << KGRN << "\t" << line << KNRM << endl;
 
   int nclass = 0, i = 0, di = -1;
-  
+
   while(getline(in, line)){
 
     di ++;
@@ -843,7 +844,6 @@ int parse_JSON(string fn){
     if(!strncmp("Array\0", kTypeNames[itr->value.GetType()], 5)){
 
       const Value& a = itr->value;
-      
 
       /* for all members in a */
       for(Value::ConstValueIterator itr2 = a.Begin();
@@ -919,7 +919,7 @@ int parse_JSON(string fn){
                   if(DEBUG) printf("\t\t\tPROT_NAME=%s\n", itr4->value.GetString());
                   feature_name = itr4->value.GetString();
                   PROT_NAME.push_back(itr4->value.GetString());
-                  cout << KYEL << "PROT_NAME " << KGRN << feature_name << endl; 
+                  cout << KYEL << "PROT_NAME " << KGRN << feature_name << endl;
                 }
               }
 
