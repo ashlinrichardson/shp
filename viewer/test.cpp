@@ -197,8 +197,6 @@ int main(int argc, char ** argv){
                     itr5 != itr4->value.End();
                     ++itr5){
                       itr5->GetType();
-                      //i++;
-                      //printf("x %ld %s\n", i-1, kTypeNames[itr5->GetType()]);
 
                       if(!strncmp("Array\0", kTypeNames[itr5->GetType()], 5)){
 

@@ -670,8 +670,9 @@ void setup(){
   //memset(orc_to_name, '\0', nb);
 }
 
-
 int parse_JSON(string fn){
+  long int c = 0;
+
   cout << KYEL << "parse(" << KMAG << fn << KYEL << ") (JSON)" << endl;
 
   long int nclass = 0; // number of features in this class
@@ -738,7 +739,7 @@ int parse_JSON(string fn){
     if(!strncmp("Array\0", kTypeNames[itr->value.GetType()], 5)){
 
       const Value& a = itr->value;
-      int c = 0;
+      
 
       /* for all members in a */
       for(Value::ConstValueIterator itr2 = a.Begin();
@@ -751,14 +752,14 @@ int parse_JSON(string fn){
         */
         vector<vec3d> my_points; // from test.cpp
         std::string feature_name("");
-        std::string feature_id("");    
+        std::string feature_id("");
         double x, y;
-        
+
         /* temporary: only show first 2 parks */
         if(false && c > 1){
           if(ORC_PRIMRY.size() != PROT_NAME.size() ||
-             ORC_PRIMRY.size() != COORDS.size() ||
-             PROT_NAME.size() != COORDS.size()){
+          ORC_PRIMRY.size() != COORDS.size() ||
+          PROT_NAME.size() != COORDS.size()){
             printf("error:\n\tlen(1)=%ld len(2)=%ld len(3)=%ld\n", ORC_PRIMRY.size(), PROT_NAME.size(), COORDS.size());
           }
           else{
@@ -777,7 +778,7 @@ int parse_JSON(string fn){
         if(DEBUG){
           printf("feature(%ld) %s\n", (long int)c, itr2->IsObject()?"true":"false");
         }
-        
+
         itr2->MemberBegin();
 
         /* for all the members in iter2 */
@@ -813,6 +814,7 @@ int parse_JSON(string fn){
                   if(DEBUG) printf("\t\t\tPROT_NAME=%s\n", itr4->value.GetString());
                   feature_name = itr4->value.GetString();
                   PROT_NAME.push_back(itr4->value.GetString());
+                  cout << KYEL << "PROT_NAME " << KGRN << feature_name << endl; 
                 }
               }
 
@@ -855,32 +857,68 @@ int parse_JSON(string fn){
                             ++itr7){
                               i++;
 
-                              ++number_index;
                               itr7->GetType();
                               if(!itr7->IsDouble()){
-                                printf("%sError: !IsDouble()\n", KGRN);
-                                printf("\t\t%s%s%s\n", KRED, kTypeNames[itr7->GetType()], KGRN); 
-                                exit(1);
+                                for(Value::ConstValueIterator itr8 = itr7->Begin();
+                                itr8 != itr7->End();
+                                ++itr8){
+                                  itr8->GetType();
+                                  if(!itr8->IsDouble()){
+                                    printf("%sError: !IsDouble()\n", KGRN);
+                                    exit(1);
+                                  }
+                                  else{
+
+                                    ++number_index;
+
+                                    if(number_index %3 != 0){
+
+                                      if((number_index % 3 == 1) && (i > 3)){
+                                        my_coord += std::string(",");
+                                      }
+
+                                      // extra
+                                      if(number_index % 3 == 1){
+                                        x = itr8->GetDouble();
+                                      }
+
+                                      if(number_index % 3 == 2){
+                                        y = itr8->GetDouble();
+                                        my_points.push_back(vec3d(x, y, 0.));
+                                        my_coord += std::string(" ");
+                                      }
+
+                                      my_coord += dtos(itr8->GetDouble());
+                                    }
+                                  }
+                                }
                               }
+                              else{
 
-                              if(number_index %3 != 0){
+                                ++number_index;
 
-                                if((number_index % 3 == 1) && (i > 3)){
-                                  my_coord += std::string(",");
+                                if(number_index %3 != 0){
+
+                                  //same
+                                  if((number_index % 3 == 1) && (i > 3)){
+                                    my_coord += std::string(",");
+                                  }
+
+                                  // extra
+                                  if(number_index % 3 == 1){
+                                    x = itr7->GetDouble();
+                                  }
+
+                                  //different
+                                  if(number_index % 3 == 2){
+                                    y = itr7->GetDouble();
+                                    my_points.push_back(vec3d(x, y, 0.));
+                                    my_coord += std::string(" ");
+                                  }
+
+                                  //same
+                                  my_coord += dtos(itr7->GetDouble());
                                 }
-
-                                if(number_index % 3 == 1){
-                                  x = itr7->GetDouble();
-                                }
-
-                                if(number_index % 3 == 2){
-                                  y = itr7->GetDouble();
-                                  my_points.push_back(vec3d(x, y, 0.));
-                                  my_coord += std::string(" ");
-                                }
-
-                                my_coord += dtos(itr7->GetDouble());
-
                               }
                             }
                           }
@@ -895,19 +933,21 @@ int parse_JSON(string fn){
           }
           //object
         }
+
         my_coord += std::string("))");
         if(DEBUG) cout << KMAG << "\t\t" << my_coord << KGRN << endl;
         COORDS.push_back(my_coord);
 
         /* end of feature-- save data */
+        cout << "class " << c << endl;
         within_class_index.push_back(c++);
         my_vectors.push_back(my_points);
         my_names.push_back(feature_name);
         my_id.push_back(feature_id);
         my_class.push_back(next_class);
         nclass++;
+
       }
-      
     }
   }
 
@@ -915,8 +955,6 @@ int parse_JSON(string fn){
   for(ii = 0; ii < nclass; i++){
     n_my_class.push_back(nclass);
   }
-  next_class++;
-
 
   if(ORC_PRIMRY.size() != PROT_NAME.size() ||
   ORC_PRIMRY.size() != COORDS.size() ||
@@ -927,9 +965,12 @@ int parse_JSON(string fn){
   else{
     printf("%sdone\n", KGRN);
   }
+
+  // go to next class
+  next_class++;
+
   return nclass;
 }
-
 
 int v(std:: string fn){
 
