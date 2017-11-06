@@ -183,7 +183,7 @@ void drawAxes(void){
   int picki = -1;
   float r = 0., g = 1., b = 1.;
 
-  glPushMatrix();
+  //glPushMatrix();
   glColor3f(r,g,b);
   glPointSize(1.);
 
@@ -255,14 +255,20 @@ void drawAxes(void){
     polygon f_poly;
 
     float a = 0., b = 0., c = 0., d = 0.;
-    long int slen = my_vectors[i].size(), sskip = slen / 256;
+
+    long int skip_frac = 256;
+    long int slen = my_vectors[i].size(), sskip = slen / skip_frac;
+    if(slen < skip_frac){
+      sskip = 1;
+    }
 
     vector<vec3d> * v = &my_vectors[i];
-    if(false) printf("sskip %ld\n", sskip);
     string wkt_f("POLYGON((");
     int add_s = 0;
 
     poly_info(i);
+    printf("\tsskip %ld\n", sskip);
+
     for(k=0; k< slen; k++){
       vec3d x(v->at(k));
 
@@ -291,7 +297,7 @@ void drawAxes(void){
     wkt_f+= "))";
 
     if(wkt_f.length() < 9999){
-      cout << wkt_f << endl;
+      //cout << wkt_f << endl;
     }
 
     if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
@@ -315,28 +321,31 @@ void drawAxes(void){
 
     glColor3f(1, 0, 1);
     glBegin(GL_LINES);
-    glVertex3f( (a + b) / 2. - 1., 0., 0);
-    glVertex3f( (a + b) / 2. + 1., 0., 0);
+    glVertex3f( (a + b) / 2. + 1., (c + d) / 2., 0);
+    glVertex3f( (a + b) / 2. - 1., (c + d) / 2., 0);
     glEnd();
 
     glColor3f(0, 1, 0);
     glBegin(GL_LINES);
-    glVertex3f(0., (c + d) / 2. - 1., 0);
-    glVertex3f(0., (c + d) / 2. + 1., 0);
+    glVertex3f( (a + b) / 2., (c + d) / 2. + 1., 0);
+    glVertex3f( (a + b) / 2., (c + d) / 2. - 1., 0);
     glEnd();
 
     polygon p_poly;
     a = b = c = d = 0.;
     int j = cur_park_ind + n_fire; // the object index: remember, everything's lumped together in one array (fire centres, first)
     long int clen = my_vectors[j].size();
-    if(false) cout << "clen "<<clen<<endl;
-    long int cskip = clen / 256;
+    long int cskip = (clen >= skip_frac)?(clen / 256):1;
+
     v = &my_vectors[j];
-    if(false) printf("cskip %ld\n", cskip);
+    
     string wkt_p("POLYGON((");
     int add_c = 0;
 
     poly_info(j);
+    printf("\tclen  %ld\n", clen);
+    printf("\tcskip %ld\n", cskip);
+    
     for(k=0; k< clen; k++){
       vec3d x(v->at(k));
 
@@ -345,6 +354,7 @@ void drawAxes(void){
         if(k > 0){
           wkt_p += ",";
         }
+        cout << "\tx.x= " << x.x << endl;
         wkt_p += ftos(x.x);
         wkt_p += " ";
         wkt_p += ftos(x.y);
@@ -363,21 +373,22 @@ void drawAxes(void){
     }
     wkt_p+= "))";
     if(wkt_p.length() < 9999){
-      printf("%shere%s\n", KRED, KGRN);
-      cout << wkt_p << endl;
-      printf("%safter%s\n", KRED, KGRN);
+      //printf("%shere%s\n", KRED, KGRN);
+      //cout << wkt_p << endl;
+      //printf("%safter%s\n", KRED, KGRN);
 
     }
 
-    if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
+    printf("\t%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
+           KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
 
     boost::geometry::read_wkt(wkt_p, p_poly);
-
-    if(false)printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+    
+    printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
 
     boost::geometry::correct(p_poly);
 
-    if(false) printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+    printf("\t%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
     //add first point to the end?
 
     glColor3f(0., 0., 1.);
@@ -388,19 +399,17 @@ void drawAxes(void){
     glVertex3f(a, c, 0); glVertex3f(a, d, 0);
     glEnd();
 
-    glColor3f(1, 0, 0);
+    glColor3f(1, 0, 1);
     glBegin(GL_LINES);
-    glVertex3f( (a + b) / 2. - 1., 0., 0);
-    glVertex3f( (a + b) / 2. + 1., 0., 0);
+    glVertex3f( (a + b) / 2. + 1., (c + d) / 2., 0);
+    glVertex3f( (a + b) / 2. - 1., (c + d) / 2., 0);
     glEnd();
 
-    glColor3f(0, 0, 1);
+    glColor3f(0, 1, 0);
     glBegin(GL_LINES);
-    glVertex3f(0., (c + d) / 2. - 1., 0);
-    glVertex3f(0., (c + d) / 2. + 1., 0);
+    glVertex3f( (a + b) / 2., (c + d) / 2. + 1., 0);
+    glVertex3f( (a + b) / 2., (c + d) / 2. - 1., 0);
     glEnd();
-
- 
 
     std::deque<polygon> p_result;
 
@@ -427,7 +436,7 @@ void drawAxes(void){
     my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000001?"NO INTERSECTION":"").c_str(), KNRM);
   }
 
-  glPopMatrix();
+  //glPopMatrix();
 
   cout << KGRN << "---------------------------drawAxes()" << endl;
 }
