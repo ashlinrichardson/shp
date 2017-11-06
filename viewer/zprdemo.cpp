@@ -266,7 +266,7 @@ void drawAxes(void){
 
     vector<vec3d> * v = &my_vectors[i];
     string wkt_f("POLYGON((");
-    int add_s = 0;
+    long int add_s = 0;
 
     poly_info(i);
     printf("\tsskip %ld\n", sskip);
@@ -342,7 +342,7 @@ void drawAxes(void){
     v = &my_vectors[j];
 
     string wkt_p("POLYGON((");
-    int add_c = 0;
+    long int add_c = 0;
 
     poly_info(j);
     printf("\tclen %ld\n", clen);
@@ -356,7 +356,7 @@ void drawAxes(void){
         if(k > 0){
           wkt_p += ",";
         }
-        cout << "\tx.x= " << x.x << endl;
+        //cout << "\tx.x= " << x.x << endl;
         wkt_p += ftos(x.x);
         wkt_p += " ";
         wkt_p += ftos(x.y);
@@ -381,8 +381,7 @@ void drawAxes(void){
 
     }
 
-    printf("\t%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
-    KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
+    printf("\t%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
 
     boost::geometry::read_wkt(wkt_p, p_poly);
 
