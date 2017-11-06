@@ -950,9 +950,8 @@ int parse_JSON(string fn){
       }
     }
   }
-
   long int ii = 0;
-  for(ii = 0; ii < nclass; i++){
+  for(ii = 0; ii < nclass; ii++){
     n_my_class.push_back(nclass);
   }
 
@@ -965,7 +964,6 @@ int parse_JSON(string fn){
   else{
     printf("%sdone\n", KGRN);
   }
-
   // go to next class
   next_class++;
 
