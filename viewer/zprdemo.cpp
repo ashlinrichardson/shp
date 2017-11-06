@@ -284,7 +284,7 @@ void drawAxes(void){
         wkt_f += ftos(x.y);
       }
       if(k < 10){
-        printf("\t%e %e\n", x.x, x.y);
+        printf("\t\t%e %e\n", x.x, x.y);
         if(k == 0){
           a = b = x.x;
           c = d = x.y;
@@ -362,7 +362,7 @@ void drawAxes(void){
         wkt_p += ftos(x.y);
       }
       if(k < 10){
-        printf("\t%e %e\n", x.x, x.y);
+        printf("\t\t%e %e\n", x.x, x.y);
         if(k == 0){
           a = b = x.x;
           c = d = x.y;
@@ -1074,51 +1074,3 @@ int parse_JSON(string fn){
   return nclass;
 }
 
-int v(std:: string fn){
-
-  cout << KYEL << "parse(" << KMAG << fn << KYEL << ")" << endl;
-  ifstream in(fn.c_str());
-
-  if (!in.is_open()){
-    printf("error\n"); exit(1);
-  }
-
-  string line;
-  getline(in, line);
-
-  cout << KGRN << "\t" << line << KNRM << endl;
-
-  int nclass = 0, di = -1; // di -- feature index
-
-  while(getline(in, line)){
-    di ++;
-
-    // array of points for each feature...
-    vector<vec3d> my_points;
-    vector<string> a(split(line.c_str(),','));
-
-    //FEATURE_NAME, FEATURE_ID, N_POINTS, POINTS..
-    string feature_name(a[0]);
-    string feature_id(a[1].c_str());
-
-    int n_points = atoi(a[2].c_str());
-    int i, ci;
-    ci = 3;
-    for(i=0; i<n_points; i++){
-      float x = atof((a[ci++]).c_str()), y = atof((a[ci++]).c_str());
-      my_points.push_back(vec3d(x,y,0.));
-    }
-    within_class_index.push_back(di);
-    my_vectors.push_back(my_points);
-    my_names.push_back(feature_name);
-    my_id.push_back(feature_id);
-    my_class.push_back(next_class);
-    nclass++;
-  }
-  int i;
-  for(i = 0; i < nclass; i++){
-    n_my_class.push_back(nclass);
-  }
-  next_class ++;
-  return nclass; // number of points in this file (associate a class with each file)
-}
