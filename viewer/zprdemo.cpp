@@ -289,7 +289,9 @@ void drawAxes(void){
 
     polygon p_poly; a = b = c = d = 0.;
     int j = cur_park_ind + n_fire; // the object index: remember, everything's lumped together in one array (fire centres, first)
-    long int clen = my_vectors[j].size(); long int cskip = clen / 256;
+    long int clen = my_vectors[j].size();
+    cout << "clen "<<clen<<endl;
+    long int cskip = clen / 256;
     v = &my_vectors[j];
     printf("cskip %ld\n", cskip);
     string wkt_p("POLYGON((");
@@ -403,6 +405,35 @@ void setup();
 /* Keyboard functions */
 void special(int key, int x, int y){
   switch(key){
+
+    case GLUT_KEY_UP:{
+      if(cur_park_ind >= 0){
+        cur_park_ind --;
+        if(cur_park_ind < 0){
+          cur_park_ind = n_park - 1;
+        }
+      }
+      else{
+        cur_park_ind = 0;
+      }
+      cout << KRED << "PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire] << endl;
+    }
+    break;
+
+    case GLUT_KEY_DOWN:{
+      if(cur_park_ind >= 0){
+        cur_park_ind ++;
+        if(cur_park_ind >= n_park){
+          cur_park_ind = 0;
+        }
+      }
+      else{
+      }
+      cout << KRED << "PROT_NAME " << KGRN << my_names[cur_park_ind + n_fire] << endl;
+    }
+    break;
+
+
     case GLUT_KEY_LEFT:{
       if(cur_fire_ind >=0){
         cur_fire_ind --;
@@ -414,8 +445,8 @@ void special(int key, int x, int y){
         cur_fire_ind = 0;
       }
     }
-
     break;
+
     case GLUT_KEY_RIGHT:{
       if(cur_fire_ind >=0){
         cur_fire_ind ++;
@@ -431,7 +462,6 @@ void special(int key, int x, int y){
     default: break;
   }
   display();
-
 }
 
 /* Keyboard functions */
