@@ -87,8 +87,7 @@ long int getFileSize(std::string fn){
 }
 
 void poly_info(int my_ind){
-    cout << KYEL << "\t" << my_names[my_ind] << KMAG << "--> "
-         << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << endl;
+    cout << "\t" << KYEL << "(" << KMAG << my_ind << KYEL << ")" << KGRN << "--> " << KYEL << "\t" << my_names[my_ind] << KGRN << endl;
 }
 
 
@@ -161,7 +160,7 @@ string ftos(float i){
 float a1, a2, a3; // what for?
 
 void drawAxes(void){
-
+  cout << KMAG << "drawAxes()" << KGRN << "----------------------------------------" << endl;
   /* draw crosshairs on origin for sanity */
   glColor3f(1, 0, 0);
   glBegin(GL_LINES);
@@ -262,6 +261,8 @@ void drawAxes(void){
     if(false) printf("sskip %ld\n", sskip);
     string wkt_f("POLYGON((");
     int add_s = 0;
+
+    poly_info(i);
     for(k=0; k< slen; k++){
       vec3d x(v->at(k));
 
@@ -275,7 +276,7 @@ void drawAxes(void){
         wkt_f += ftos(x.y);
       }
       if(k < 10){
-        printf("%e %e\n", x.x, x.y);
+        printf("\t%e %e\n", x.x, x.y);
         if(k == 0){
           a = b = x.x;
           c = d = x.y;
@@ -333,20 +334,22 @@ void drawAxes(void){
     if(false) printf("cskip %ld\n", cskip);
     string wkt_p("POLYGON((");
     int add_c = 0;
+
+    poly_info(j);
     for(k=0; k< clen; k++){
       vec3d x(v->at(k));
 
       if(k % cskip == 0){
         add_c += 1;
-        if(k>0){
+        if(k > 0){
           wkt_p += ",";
         }
         wkt_p += ftos(x.x);
         wkt_p += " ";
         wkt_p += ftos(x.y);
       }
-      if(k<10){
-        printf("%e %e\n", x.x, x.y);
+      if(k < 10){
+        printf("\t%e %e\n", x.x, x.y);
         if(k==0){
           a = b = x.x;
           c = d = x.y;
@@ -421,6 +424,8 @@ void drawAxes(void){
   }
 
   glPopMatrix();
+
+  cout << KGRN << "---------------------------drawAxes()" << endl;
 }
 
 /* Callback function for drawing */
