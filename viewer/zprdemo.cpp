@@ -165,6 +165,25 @@ float a1, a2, a3; // what for?
 
 void drawAxes(void){
 
+  /* draw crosshairs on origin for sanity */
+  glColor3f(1, 0, 0);
+  glBegin(GL_LINES);
+  glVertex3f(0, 0, 0);
+  glVertex3f(1, 0, 0);
+  glEnd();
+
+  glColor3f(0, 1, 0);
+  glBegin(GL_LINES);
+  glVertex3f(0, 0, 0);
+  glVertex3f(0, 1, 0);
+  glEnd();
+
+  glColor3f(0, 0, 1);
+  glBegin(GL_LINES);
+  glVertex3f(0, 0, 0);
+  glVertex3f(0, 0, 1);
+  glEnd();
+
   int picki = -1;
   float r = 0., g = 1., b = 1.;
 
@@ -173,7 +192,7 @@ void drawAxes(void){
   glPointSize(1.);
 
   if(myPickNames.size() == 1){
-    picki =* myPickNames.begin();
+    picki = *myPickNames.begin();
     cout << picki << "," << my_names[picki] << ",myclass= " << my_class[picki]
     << "n_my_class" << n_my_class[picki] << endl;
     cout << "within_class_index" << within_class_index[picki] << endl;
@@ -270,26 +289,42 @@ void drawAxes(void){
       if(x.y < c) c = x.y;
       if(x.y > d) d = x.y;
     }
+
     wkt_f+= "))";
+
     if(false && wkt_f.length() < 999){
       cout << wkt_f << endl;
     }
 
-    if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
-    KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
+    if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
 
     boost::geometry::read_wkt(wkt_f, f_poly);
+
     if(false) printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+
     boost::geometry::correct(f_poly);
+
     if(false) printf("%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
     //add first point to end?
 
     glColor3f(1., 0., 0.);
     glBegin(GL_LINES);
-    glVertex3f(a,d,0); glVertex3f(b,d,0);
-    glVertex3f(b,d,0); glVertex3f(b,c,0);
-    glVertex3f(b,c,0); glVertex3f(a,c,0);
-    glVertex3f(a,c,0); glVertex3f(a,d,0);
+    glVertex3f(a, d, 0); glVertex3f(b, d, 0);
+    glVertex3f(b, d, 0); glVertex3f(b, c, 0);
+    glVertex3f(b, c, 0); glVertex3f(a, c, 0);
+    glVertex3f(a, c, 0); glVertex3f(a, d, 0);
+    glEnd();
+
+    glColor3f(1, 0, 1);
+    glBegin(GL_LINES);
+    glVertex3f( (a + b) / 2. - 1., 0., 0);
+    glVertex3f( (a + b) / 2. + 1., 0., 0);
+    glEnd();
+
+    glColor3f(0, 1, 0);
+    glBegin(GL_LINES);
+    glVertex3f(0., (c + d) / 2. - 1., 0);
+    glVertex3f(0., (c + d) / 2. + 1., 0);
     glEnd();
 
     polygon p_poly; a = b = c = d = 0.;
@@ -330,22 +365,38 @@ void drawAxes(void){
       cout << wkt_p << endl;
     }
 
-    if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n",
-    KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
+    if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
 
     boost::geometry::read_wkt(wkt_p, p_poly);
+
     if(false)printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+
     boost::geometry::correct(p_poly);
+
     if(false) printf("%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
     //add first point to the end?
 
     glColor3f(0., 0., 1.);
     glBegin(GL_LINES);
-    glVertex3f(a,d,0); glVertex3f(b,d,0);
-    glVertex3f(b,d,0); glVertex3f(b,c,0);
-    glVertex3f(b,c,0); glVertex3f(a,c,0);
-    glVertex3f(a,c,0); glVertex3f(a,d,0);
+    glVertex3f(a, d, 0); glVertex3f(b, d, 0);
+    glVertex3f(b, d, 0); glVertex3f(b, c, 0);
+    glVertex3f(b, c, 0); glVertex3f(a, c, 0);
+    glVertex3f(a, c, 0); glVertex3f(a, d, 0);
     glEnd();
+
+    glColor3f(1, 0, 0);
+    glBegin(GL_LINES);
+    glVertex3f( (a + b) / 2. - 1., 0., 0);
+    glVertex3f( (a + b) / 2. + 1., 0., 0);
+    glEnd();
+
+    glColor3f(0, 0, 1);
+    glBegin(GL_LINES);
+    glVertex3f(0., (c + d) / 2. - 1., 0);
+    glVertex3f(0., (c + d) / 2. + 1., 0);
+    glEnd();
+
+ 
 
     std::deque<polygon> p_result;
 
@@ -479,9 +530,9 @@ void keyboard(unsigned char key, int x, int y){
     case 8 :
 
     case 127:
-    if(console_position>0){
+    if(console_position > 0){
       console_position --;
-      console_string[console_position]='\0';
+      console_string[console_position] = '\0';
       display();
     }
     break;
@@ -493,7 +544,6 @@ void keyboard(unsigned char key, int x, int y){
       vector<string> words(split(mys.c_str()));
 
       if(words.size() == 2){
-        cout << "good "<<endl;
 
         if(words[0][0] == 'f'){
           int iii = atoi(words[1].c_str());
@@ -515,6 +565,9 @@ void keyboard(unsigned char key, int x, int y){
           }
         }
         cout << "cur_fire_ind " << cur_fire_ind << " cur_park_ind " << cur_park_ind << endl;
+      }
+      else{
+        cout << "command not formed" << endl;
       }
       console_string[0] = '\0';
       console_position = 0;
@@ -557,21 +610,24 @@ int parse(string fn){
 
   cout << KGRN << "\t" << line << KNRM << endl;
 
-  int nclass = 0, di = -1;
+  int nclass = 0, i = 0, di = -1;
   
   while(getline(in, line)){
+
     di ++;
     vector<vec3d> my_points;
-    vector<string> a(split(line.c_str(),','));
+    vector<string> a(split(line.c_str(), ','));
     string feature_name(a[0]);
     string feature_id(a[1].c_str());
     int n_points = atoi(a[2].c_str());
     int i = 0, ci = 3;
+
     for(i = 0; i < n_points; i++){
       float x = atof((a[ci++]).c_str());
       float y = atof((a[ci++]).c_str());
       my_points.push_back(vec3d(x, y, 0.));
     }
+
     within_class_index.push_back(di);
     my_vectors.push_back(my_points);
     my_names.push_back(feature_name);
@@ -579,17 +635,18 @@ int parse(string fn){
     my_class.push_back(next_class);
     nclass++;
   }
-  int i;
+
   for(i = 0; i < nclass; i++){
     n_my_class.push_back(nclass);
   }
+
   next_class++;
   return nclass; // number of points in this file (associate a class with each file)
 }
 
 int parse_JSON(string fn);
 
-int main(int argc, char *argv[]){
+int main(int argc, char ** argv){
 
   cout << KYEL << "BOOST INFO" << endl;
   cout << KGRN << "\tBOOST_VERSION " << KMAG << BOOST_VERSION << endl;
@@ -599,8 +656,7 @@ int main(int argc, char *argv[]){
   cout << KGRN << "\tBOOST_LIB_VERSION " << KMAG << BOOST_LIB_VERSION << KNRM << endl;
 
   max_f = 0.;
-  cur_fire_ind = -1;
-  cur_park_ind = -1;
+  cur_fire_ind = cur_park_ind = -1;
 
   my_vectors.clear();
   int nc0 = parse(string("firec.dat"));
@@ -611,9 +667,11 @@ int main(int argc, char *argv[]){
   cout << KGRN << "number of fire centre shp entries " << KRED << nc0 << endl << KNRM;
 
   if(true){
+
     int i;
     next_class = 0;
     float minx = 0., maxx = 0., miny = 0., maxy = 0.;
+
     for(i = 0; i < my_vectors.size(); i++){
       vector<vec3d> * j = &my_vectors[i];
       vector<vec3d>::iterator it;
@@ -636,6 +694,7 @@ int main(int argc, char *argv[]){
     }
 
     float xa = 0., ya = 0., c = 0.;
+
     for(i = 0; i < my_vectors.size(); i++){
       vector<vec3d> * j = &my_vectors[i];
       vector<vec3d>::iterator it;
@@ -645,7 +704,6 @@ int main(int argc, char *argv[]){
         c += 1.;
       }
     }
-
     xa /= (c);
     ya /= (c);
 
@@ -664,8 +722,7 @@ int main(int argc, char *argv[]){
   pick = _pick;
   renderflag = false;
   a1 = a2 = a3 = 1;
-  console_position = 0;
-  fullscreen = 0;
+  console_position = fullscreen = 0;
 
   /* Initialise olLUT and create a window */
   glutInit(&argc, argv);
@@ -681,7 +738,7 @@ int main(int argc, char *argv[]){
 
   /* glutKeyboardUpFunc(keyboardup); */
   glutIdleFunc(idle);
-  glScalef(0.25,0.25,0.25);
+  glScalef(0.25, 0.25, 0.25);
 
   /* Configure ZPR module */
   zprSelectionFunc(drawAxes); /* Selection mode draw function */
