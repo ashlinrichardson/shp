@@ -302,15 +302,15 @@ void drawAxes(void){
       //cout << wkt_f << endl;
     }
 
-    if(false) printf("%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
+    printf("\t%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
 
     boost::geometry::read_wkt(wkt_f, f_poly);
 
-    if(false) printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+    printf("\t%scorrect%s()%s\n", KYEL, KBLU, KNRM);
 
     boost::geometry::correct(f_poly);
 
-    if(false) printf("%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+    printf("\t%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
     //add first point to end?
 
     glColor3f(1., 0., 0.);
@@ -385,7 +385,7 @@ void drawAxes(void){
 
     boost::geometry::read_wkt(wkt_p, p_poly);
 
-    printf("%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+    printf("\t%scorrect%s()%s\n", KYEL, KBLU, KNRM);
 
     boost::geometry::correct(p_poly);
 
