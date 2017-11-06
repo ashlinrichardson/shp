@@ -86,6 +86,12 @@ long int getFileSize(std::string fn){
   return i.tellg(); // len
 }
 
+void poly_info(int my_ind){
+    cout << KYEL << "\t" << my_names[my_ind] << KMAG << "--> "
+         << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << endl;
+}
+
+
 void _pick(GLint name){
   if(myPickNames.size() < 1){
     return;
@@ -94,17 +100,8 @@ void _pick(GLint name){
   std::set<GLint>::iterator it;
   for(it = myPickNames.begin(); it != myPickNames.end(); it++){
     int my_ind = *it;
-    if(my_class[my_ind] ==1){
-      my_ind -= n_fire;
-    }
-    cout << KYEL << "\t" << my_names[my_ind] << KMAG << "--> "
-         << KYEL << "(" << KGRN << my_ind << KYEL << ")" << KGRN << ",";
+    poly_info(my_ind);
 
-    if(my_class[my_ind] == 1){
-      cout << endl << "\t\t" << my_names[my_ind]
-           << " my_id:" << my_id[my_ind] << endl;
-    }
-    cout << endl;
   }
   cout << KNRM << endl;
   cout <<"------------------------"<<endl;
@@ -138,7 +135,7 @@ void resetPerspectiveProjection(){
 }
 
 void drawText(){
-  glColor3f(0.0f,1.0f,0.0f);
+  glColor3f(0.0f, 1.0f, 0.0f);
   setOrthographicProjection();
   glPushMatrix();
   glLoadIdentity();
@@ -277,9 +274,9 @@ void drawAxes(void){
         wkt_f += " ";
         wkt_f += ftos(x.y);
       }
-      if(k<10){
-        if(false) printf("%e %e\n", x.x, x.y);
-        if(k==0){
+      if(k < 10){
+        printf("%e %e\n", x.x, x.y);
+        if(k == 0){
           a = b = x.x;
           c = d = x.y;
         }
@@ -494,7 +491,7 @@ void special(int key, int x, int y){
     break;
 
     case GLUT_KEY_LEFT:{
-      if(cur_fire_ind >=0){
+      if(cur_fire_ind >= 0){
         cur_fire_ind --;
         if(cur_fire_ind < 0){
           cur_fire_ind = n_fire - 1;
@@ -520,6 +517,16 @@ void special(int key, int x, int y){
     break;
     default: break;
   }
+  
+  cout << KRED << "Current Selection: " << KGRN << endl;
+  if(cur_fire_ind >= 0){
+    poly_info(cur_fire_ind);
+  }
+  if(cur_park_ind >= 0){
+    poly_info(cur_park_ind + n_fire);
+  }
+
+
   display();
 }
 
