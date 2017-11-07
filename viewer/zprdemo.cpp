@@ -326,6 +326,16 @@ void drawAxes(void){
       if(x.y > d) d = x.y;
     }
 
+    bool add_first_point = false;
+    if(add_first_point){
+      vec3d xx(v->at(0));
+      wkt_f += ",";
+      wkt_f += ftos(xx.x);
+      wkt_f += " ";
+      wkt_f += ftos(xx.y);
+    }
+
+
     wkt_f+= "))";
 
     if(wkt_f.length() < 9999){
@@ -407,6 +417,15 @@ void drawAxes(void){
       if(x.y < c) c = x.y;
       if(x.y > d) d = x.y;
     }
+
+    if(add_first_point){
+      vec3d xx(v->at(0));
+      wkt_p += ",";
+      wkt_p += ftos(xx.x);
+      wkt_p += " ";
+      wkt_p += ftos(xx.y);
+    }
+
     wkt_p+= "))";
     if(wkt_p.length() < 9999){
       //printf("%shere%s\n", KRED, KGRN);
@@ -897,7 +916,7 @@ int parse_JSON(string fn){
         double x, y;
 
         /* temporary: only show first 2 parks */
-        if(c > 2) break;
+        if(c > 0) break;
 
         if(false && c > 1){
           if(ORC_PRIMRY.size() != PROT_NAME.size() ||
