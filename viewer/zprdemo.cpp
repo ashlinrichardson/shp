@@ -156,9 +156,39 @@ string ftos(float i){
   return number;
 }
 
+void swap(float & a, float & b){
+  float tmp = b;
+  b = a;
+  a = tmp;
+}
+
+
+double rect_overlap(/* first rectangle */ double & x11, double & x21, double & y11, double & y21,
+                  /*second rectangle*/ double & x12, double & x22, double & y12, double & y22){
+
+  /* normalize the first rectangle: x1 < x2, y1 < y2 */
+  if(x11 > x21) swap(x11, x21);
+  if(y11 > y21) swap(y11, y21);
+
+  /* normalize the second rectangle: x1 < x2, y1 < y2 */
+  if(x12 > x22) swap(x12, x22);
+  if(y12 > y22) swap(y12, y22);
+
+  double x1 = max(x11, x12), y1 = max(y11, y12), x2 = min(x21, x22), y2 = min(y21, y22);
+  
+  /* check for degenerate result */
+  bool intrsct = !(x1 >= x2 || y1 >= y2);
+
+  return intrsct? (x2 - x1)*(y2 - y1) : 0.;   
+
+}
+
+
 float a1, a2, a3; // what for?
 
 void drawAxes(void){
+  float a0, b0, c0, d0;
+
   cout << KMAG << "drawAxes()" << KGRN << "----------------------------------------" << endl;
   /* draw crosshairs on origin for sanity */
   if(false){
@@ -312,6 +342,10 @@ void drawAxes(void){
 
     printf("\t%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
     //add first point to end?
+    a0 = a;
+    b0 = b;
+    c0 = c;
+    d0 = d;
 
     glColor3f(1., 0., 0.);
     glBegin(GL_LINES);
@@ -435,6 +469,10 @@ void drawAxes(void){
     // calculate area of intersection (of e.g., fire centre poly, and park poly)
     printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n\t%s%s%s\n",
     my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000001?"NO INTERSECTION":"").c_str(), KNRM);
+
+    double ra = rect_overlap(a0, b0, c0, d0, a, b, c, d);
+    printf("%s%s%s\n", ((ra > 0.)?KMAG:KRED), ((ra > 0.)?"RECTANGLE INTERSECT":"NO RECT INTERSECT"), KGRN);
+
   }
 
   //glPopMatrix();
@@ -859,7 +897,7 @@ int parse_JSON(string fn){
         double x, y;
 
         /* temporary: only show first 2 parks */
-        if(c > 0) break;
+        if(c > 2) break;
 
         if(false && c > 1){
           if(ORC_PRIMRY.size() != PROT_NAME.size() ||
