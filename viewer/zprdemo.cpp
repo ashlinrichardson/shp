@@ -163,8 +163,8 @@ void swap(float & a, float & b){
 }
 
 
-double rect_overlap(/* first rectangle */ double & x11, double & x21, double & y11, double & y21,
-                  /*second rectangle*/ double & x12, double & x22, double & y12, double & y22){
+float rect_overlap(/* first rectangle */ float & x11, float & x21, float & y11, float & y21,
+                  /*second rectangle*/ float & x12, float & x22, float & y12, float & y22){
 
   /* normalize the first rectangle: x1 < x2, y1 < y2 */
   if(x11 > x21) swap(x11, x21);
@@ -174,7 +174,7 @@ double rect_overlap(/* first rectangle */ double & x11, double & x21, double & y
   if(x12 > x22) swap(x12, x22);
   if(y12 > y22) swap(y12, y22);
 
-  double x1 = max(x11, x12), y1 = max(y11, y12), x2 = min(x21, x22), y2 = min(y21, y22);
+  float x1 = max(x11, x12), y1 = max(y11, y12), x2 = min(x21, x22), y2 = min(y21, y22);
   
   /* check for degenerate result */
   bool intrsct = !(x1 >= x2 || y1 >= y2);
@@ -470,7 +470,7 @@ void drawAxes(void){
     printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n\t%s%s%s\n",
     my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000001?"NO INTERSECTION":"").c_str(), KNRM);
 
-    double ra = rect_overlap(a0, b0, c0, d0, a, b, c, d);
+    float ra = rect_overlap(a0, b0, c0, d0, a, b, c, d);
     printf("%s%s%s\n", ((ra > 0.)?KMAG:KRED), ((ra > 0.)?"RECTANGLE INTERSECT":"NO RECT INTERSECT"), KGRN);
 
   }
