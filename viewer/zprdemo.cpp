@@ -189,7 +189,7 @@ float a1, a2, a3; // what for?
 void drawAxes(void){
   float a0, b0, c0, d0;
 
-  cout << KMAG << "drawAxes()" << KGRN << "----------------------------------------" << endl;
+  // cout << KMAG << "drawAxes()" << KGRN << "----------------------------------------" << endl;
   /* draw crosshairs on origin for sanity */
   if(false){
 
@@ -299,7 +299,7 @@ void drawAxes(void){
     long int add_s = 0;
 
     poly_info(i);
-    printf("\tsskip %ld\n", sskip);
+    // printf("\tsskip %ld\n", sskip);
 
     for(k=0; k< slen; k++){
       vec3d x(v->at(k));
@@ -314,7 +314,7 @@ void drawAxes(void){
         wkt_f += ftos(x.y);
       }
       if(k < 10){
-        printf("\t\t%e %e\n", x.x, x.y);
+        // printf("\t\t%e %e\n", x.x, x.y);
         if(k == 0){
           a = b = x.x;
           c = d = x.y;
@@ -342,15 +342,15 @@ void drawAxes(void){
       //cout << wkt_f << endl;
     }
 
-    printf("\t%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
+    //printf("\t%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_s, KRED, KNRM, slen);
 
     boost::geometry::read_wkt(wkt_f, f_poly);
 
-    printf("\t%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+    //printf("\t%scorrect%s()%s\n", KYEL, KBLU, KNRM);
 
     boost::geometry::correct(f_poly);
 
-    printf("\t%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+    printf("\t\t%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
     //add first point to end?
     a0 = a;
     b0 = b;
@@ -389,8 +389,8 @@ void drawAxes(void){
     long int add_c = 0;
 
     poly_info(j);
-    printf("\tclen %ld\n", clen);
-    printf("\tcskip %ld\n", cskip);
+    //printf("\tclen %ld\n", clen);
+    //printf("\tcskip %ld\n", cskip);
 
     for(k=0; k< clen; k++){
       vec3d x(v->at(k));
@@ -406,7 +406,7 @@ void drawAxes(void){
         wkt_p += ftos(x.y);
       }
       if(k < 10){
-        printf("\t\t%e %e\n", x.x, x.y);
+        // printf("\t\t%e %e\n", x.x, x.y);
         if(k == 0){
           a = b = x.x;
           c = d = x.y;
@@ -434,15 +434,15 @@ void drawAxes(void){
 
     }
 
-    printf("\t%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
+    //printf("\t%sread_wkt%s()%s n%s=%s(%s%ld%s)%s from %ld\n", KYEL, KBLU, KGRN, KYEL, KRED, KMAG, add_c, KRED, KNRM, clen);
 
     boost::geometry::read_wkt(wkt_p, p_poly);
 
-    printf("\t%scorrect%s()%s\n", KYEL, KBLU, KNRM);
+    //printf("\t%scorrect%s()%s\n", KYEL, KBLU, KNRM);
 
     boost::geometry::correct(p_poly);
 
-    printf("\t%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+    printf("\t\t%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
     //add first point to the end?
 
     glColor3f(0., 0., 1.);
@@ -486,7 +486,7 @@ void drawAxes(void){
     }
 
     // calculate area of intersection (of e.g., fire centre poly, and park poly)
-    printf("Area of intersection (%e) nbits (%d) i(%d) j(%d)\n\t%s%s%s\n",
+    printf("\nArea of intersection (%e) nbits (%d) i(%d) j(%d)\n%s%s%s\n",
     my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000001?"NO INTERSECTION":"").c_str(), KNRM);
 
     float ra = rect_overlap(a0, b0, c0, d0, a, b, c, d);
@@ -496,7 +496,7 @@ void drawAxes(void){
 
   //glPopMatrix();
 
-  cout << KGRN << "---------------------------drawAxes()" << endl;
+  //cout << KGRN << "---------------------------drawAxes()" << endl;
 }
 
 /* Callback function for drawing */
@@ -594,14 +594,15 @@ void special(int key, int x, int y){
     default: break;
   }
 
-  cout << KRED << "Current Selection: " << KGRN << endl;
-  if(cur_fire_ind >= 0){
-    poly_info(cur_fire_ind);
-  }
-  if(cur_park_ind >= 0){
-    poly_info(cur_park_ind + n_fire);
-  }
-
+  /* 
+    cout << KRED << "Current Selection: " << KGRN << endl;
+    if(cur_fire_ind >= 0){
+      poly_info(cur_fire_ind);
+    }
+    if(cur_park_ind >= 0){
+      poly_info(cur_park_ind + n_fire);
+    }
+  */
   display();
 }
 
@@ -916,7 +917,7 @@ int parse_JSON(string fn){
         double x, y;
 
         /* temporary: only show first 2 parks */
-        if(c > 0) break;
+        if(c > 5) break;
 
         if(false && c > 1){
           if(ORC_PRIMRY.size() != PROT_NAME.size() ||
