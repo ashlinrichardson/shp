@@ -1,4 +1,6 @@
 ## [viewer/](https://github.com/ashlinrichardson/shp/tree/master/viewer): OpenGL / Glut shp viewer and Intersection Program
+
+## instructions
 cd viewer
 
 rm run.exe; make; ./run.exe
