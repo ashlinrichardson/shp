@@ -47,6 +47,7 @@ vector<vec3d> max_p;
 double max_f;
 int next_class;
 int cur_fire_ind, cur_park_ind;
+int cur_fire_ind_last, cur_park_ind_last;
 int n_fire, n_park;
 
 // std::string * orc_to_name;
@@ -278,6 +279,14 @@ void drawAxes(void){
   }
 
   if(cur_fire_ind >= 0 && cur_fire_ind < n_fire && cur_park_ind >= 0 && cur_park_ind < n_park){
+    if(cur_park_ind_last == cur_park_ind && cur_fire_ind_last == cur_fire_ind){
+      // pass;
+    }
+    else{
+
+    cur_park_ind_last = cur_park_ind;
+    cur_fire_ind_last = cur_fire_ind;
+
     int k = 0, i = cur_fire_ind;
 
     using boost::make_tuple;
@@ -497,10 +506,10 @@ void drawAxes(void){
     printf("%s%s%s\n", ((ra > 0.)?KMAG:KRED), ((ra > 0.)?"RECTANGLE INTERSECT":"NO RECT INTERSECT"), KGRN);
 
   }
+  }
 
-  //glPopMatrix();
-
-  //cout << KGRN << "---------------------------drawAxes()" << endl;
+    cur_park_ind_last = cur_park_ind;
+    cur_fire_ind_last = cur_fire_ind;
 }
 
 /* Callback function for drawing */
@@ -743,7 +752,7 @@ int main(int argc, char ** argv){
   cout << KGRN << "\tBOOST_LIB_VERSION " << KMAG << BOOST_LIB_VERSION << KNRM << endl;
 
   max_f = 0.;
-  cur_fire_ind = cur_park_ind = -1;
+  cur_fire_ind = cur_park_ind = cur_fire_ind_last = cur_park_ind_last = -1;
 
   my_vectors.clear();
   int nc0 = parse(string("firec.dat"));
