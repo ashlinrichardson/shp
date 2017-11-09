@@ -16,6 +16,6 @@ ogr2ogr -f GeoJSON TA_PEP_SVW_polygon.json TA_PEP_SVW_polygon.shp -lco RFC7946=Y
 ## [viewer/](https://github.com/ashlinrichardson/shp/tree/master/viewer): OpenGL / Glut shp viewer
 cd viewer
 
-rm zpr.exe; ./compile; ./zpr.exe
+rm run.exe; make; ./run.exe
 
 ![alt text](https://github.com/ashlinrichardson/shp/blob/master/viewer/parks.png)
