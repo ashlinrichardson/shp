@@ -8,6 +8,7 @@ E.g., if one set of polygons is jurisdictional boundaries, the program will assi
 
 For the sample data, provincial parks are assigned to regional fire management areas
 
+Tested on MacOS 10.12.6 w./ Apple LLVM version 8.1.0 (clang-802.0.42)
 ## instructions
 cd viewer
 
