@@ -288,7 +288,7 @@ void drawAxes(void){
 
     float a = 0., b = 0., c = 0., d = 0.;
 
-    long int skip_frac = 256;
+    long int skip_frac = 65535;
     long int slen = my_vectors[i].size(), sskip = slen / skip_frac;
     if(slen < skip_frac){
       sskip = 1;
@@ -381,7 +381,8 @@ void drawAxes(void){
     a = b = c = d = 0.;
     int j = cur_park_ind + n_fire; // the object index: remember, everything's lumped together in one array (fire centres, first)
     long int clen = my_vectors[j].size();
-    long int cskip = (clen >= skip_frac)?(clen / 256):1;
+    long int skip_frac_p = skip_frac / 32;
+    long int cskip = (clen >= skip_frac_p)?(clen / skip_frac_p):1;
 
     v = &my_vectors[j];
 
