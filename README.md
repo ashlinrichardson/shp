@@ -1,6 +1,6 @@
 ## [viewer/](https://github.com/ashlinrichardson/shp/tree/master/viewer): OpenGL / Glut shp viewer and Intersection Program
 
-Interactive display for large numbers of polygons with large numbers (millions) of points
+Interactive display for large numbers of polygons with large numbers (millions) of points (zoom-pan interface with polygon selection)
 
 Includes function for intersecting one set of polygons against another
 
