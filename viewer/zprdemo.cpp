@@ -87,7 +87,7 @@ long int getFileSize(std::string fn){
 }
 
 void poly_info(int my_ind){
-  cout << "\t" << KYEL << "(" << KMAG << my_ind << KYEL << ")" << KGRN << "--> " << KYEL << "\t" << my_names[my_ind] << KGRN << endl;
+  cout << "\t" << KYEL << "(" << KMAG << my_ind << KYEL << ")" << KGRN << "--> " << KYEL << "\t" << my_names[my_ind] << KGRN;
 }
 
 void _pick(GLint name){
@@ -479,15 +479,18 @@ void drawAxes(void){
     int ci = 0;
 
     for(it = p_result.begin(); it != p_result.end(); it++){
-      printf("poly(i=%d)\n", ci++);
+      //printf("poly(i=%d)\n", ci);
+      ci ++;
       float f = (double)boost::geometry::area(*it);
       my_area += f;
       printf("\t%sarea_i%s(%f)%s\n", KYEL, KBLU, KNRM);
     }
 
     // calculate area of intersection (of e.g., fire centre poly, and park poly)
-    printf("\nArea of intersection (%e) nbits (%d) i(%d) j(%d)\n%s%s%s\n",
-    my_area, p_result.size(), i, j, KRED, std::string(my_area<0.000000000001?"NO INTERSECTION":"").c_str(), KNRM);
+    //printf("\nArea of intersection (%e) nbits (%d) i(%d) j(%d)\n%s%s%s\n",
+    //my_area, p_result.size(), i, j, KRED, std::string(my_area<0.0000000000001?"NO INTERSECTION":"").c_str(), KNRM);
+
+    printf("\nArea of intersection %s(%e)%s\n", KRED, my_area, KGRN);
 
     float ra = rect_overlap(a0, b0, c0, d0, a, b, c, d);
     printf("%s%s%s\n", ((ra > 0.)?KMAG:KRED), ((ra > 0.)?"RECTANGLE INTERSECT":"NO RECT INTERSECT"), KGRN);
