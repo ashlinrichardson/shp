@@ -533,8 +533,9 @@ vector<string> split(const char *str, char c = ' '){
   do{
     const char *begin = str;
 
-    while(*str != c && *str)
-    str++;
+    while(*str != c && *str){
+      str++;
+    }
 
     result.push_back(string(begin, str));
   }
@@ -546,6 +547,10 @@ void special(int key, int x, int y){
   /* Keyboard function */
 
   switch(key){
+    /*  Generate the membership "matrix" */
+    case GLUT_KEY_F1:
+      break;
+
 
     case GLUT_KEY_UP:{
       if(cur_park_ind >= 0){
@@ -930,7 +935,7 @@ int parse_JSON(string fn){
         double x, y;
 
         /* temporary: only show first 2 parks */
-        if(c > 5) break;
+        //if(c > 5) break;
 
         if(false && c > 1){
           if(ORC_PRIMRY.size() != PROT_NAME.size() ||
