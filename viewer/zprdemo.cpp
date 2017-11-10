@@ -50,6 +50,9 @@ int cur_fire_ind, cur_park_ind;
 int cur_fire_ind_last, cur_park_ind_last;
 int n_fire, n_park;
 
+double my_dist[6]; // this literal should not be there...
+double my_rect[6]; // literal should not be there..
+
 // std::string * orc_to_name;
 
 /* Draw axes */
@@ -188,6 +191,7 @@ float rect_overlap(/* first rectangle */ float & x11, float & x21, float & y11, 
 float a1, a2, a3; // what for?
 
 void drawAxes(void){
+  
   float a0, b0, c0, d0;
 
   // cout << KMAG << "drawAxes()" << KGRN << "----------------------------------------" << endl;
@@ -284,10 +288,14 @@ void drawAxes(void){
     }
     else{
 
+
+  try{
+
     cur_park_ind_last = cur_park_ind;
     cur_fire_ind_last = cur_fire_ind;
 
     int k = 0, i = cur_fire_ind;
+
 
     using boost::make_tuple;
     using boost::geometry::append;
@@ -298,7 +306,8 @@ void drawAxes(void){
     float a = 0., b = 0., c = 0., d = 0.;
 
     long int skip_frac = 65535;
-    long int slen = my_vectors[i].size(), sskip = slen / skip_frac;
+    long int slen = my_vectors[i].size();
+    long int sskip = slen / skip_frac;
     if(slen < skip_frac){
       sskip = 1;
     }
@@ -359,7 +368,7 @@ void drawAxes(void){
 
     boost::geometry::correct(f_poly);
 
-    printf("\t\t%sf_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
+    printf("\t\t%sf_poly %s(slen %ld sskip %ld) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, slen, sskip, a, b, c, d);
     //add first point to end?
     a0 = a;
     b0 = b;
@@ -390,7 +399,7 @@ void drawAxes(void){
     a = b = c = d = 0.;
     int j = cur_park_ind + n_fire; // the object index: remember, everything's lumped together in one array (fire centres, first)
     long int clen = my_vectors[j].size();
-    long int skip_frac_p = skip_frac / 32;
+    long int skip_frac_p = 4096; //skip_frac / 32;
     long int cskip = (clen >= skip_frac_p)?(clen / skip_frac_p):1;
 
     v = &my_vectors[j];
@@ -452,8 +461,7 @@ void drawAxes(void){
 
     boost::geometry::correct(p_poly);
 
-    printf("\t\t%sp_poly %si(%d) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, i, a, b, c, d);
-    //add first point to the end?
+    printf("\t\t%sp_poly %s(clen %ld cskip %ld) x(%f, %f) y(%f, %f)\n", KMAG, KNRM, clen, cskip, a, b, c, d);    //add first point to the end?
 
     glColor3f(0., 0., 1.);
     glBegin(GL_LINES);
@@ -478,7 +486,11 @@ void drawAxes(void){
     std::deque<polygon> p_result;
 
     if(false) printf("%sintersection%s()%s\n", KYEL, KBLU, KNRM);
-    boost::geometry::intersection(f_poly, p_poly, p_result);
+
+    try{
+      boost::geometry::intersection(f_poly, p_poly, p_result);
+    }catch(int e){
+    }
 
     if(false) printf("%sintersection%s(%ld)%s\n", KYEL, KBLU, p_result.size(), KNRM);
     std::deque<polygon>::iterator it;
@@ -493,7 +505,7 @@ void drawAxes(void){
       ci ++;
       float f = (double)boost::geometry::area(*it);
       my_area += f;
-      printf("\t%sarea_i%s(%f)%s\n", KYEL, KBLU, KNRM);
+      if(false) printf("\t%sarea_i%s(%f)%s\n", KYEL, KBLU, KNRM);
     }
 
     // calculate area of intersection (of e.g., fire centre poly, and park poly)
@@ -504,12 +516,24 @@ void drawAxes(void){
 
     float ra = rect_overlap(a0, b0, c0, d0, a, b, c, d);
     printf("%s%s%s\n", ((ra > 0.)?KMAG:KRED), ((ra > 0.)?"RECTANGLE INTERSECT":"NO RECT INTERSECT"), KGRN);
+  
+    // record the results in a global variable
+    my_dist[cur_fire_ind] = my_area;
+    my_rect[cur_fire_ind] = ra;
+  
+
+  }catch(boost::geometry::overlay_invalid_input_exception e){
+    // pass
+  }
+
+
 
   }
   }
 
     cur_park_ind_last = cur_park_ind;
     cur_fire_ind_last = cur_fire_ind;
+
 }
 
 /* Callback function for drawing */
@@ -548,7 +572,52 @@ void special(int key, int x, int y){
 
   switch(key){
     /*  Generate the membership "matrix" */
-    case GLUT_KEY_F1:
+    case GLUT_KEY_F1:{
+        printf("Iterating over parks..\n");
+        cur_park_ind = cur_fire_ind = 0;
+        int i, j, k;
+        for(j = 0; j < n_park; j++){
+          cur_park_ind = j;
+          for(k = 0; k < 6; k++){
+            // literal should not be there..
+            my_dist[k] = 0.;
+            my_rect[k] = 0;
+          }
+          for(i = 0; i < n_fire; i++){
+            printf("i %d j %d\n", i, j);
+            cur_fire_ind = i;
+            try{
+              display();
+            }catch(boost::geometry::overlay_invalid_input_exception e){
+              printf("exception *************\n");
+            }
+          }
+          FILE * f = fopen("result.txt", "ab");
+          if(!f){
+            printf("Error opening file for writing.\n");
+            exit(1);
+          }
+          fprintf(f, "%s,", (my_names[cur_park_ind + n_fire]).c_str());
+          for(k = 0; k < 6; k++){
+            if(my_dist[k]>0.){
+              fprintf(f, "%e,", my_dist[k]);
+            }else{
+              fprintf(f, ",");
+            }
+          }
+          for(k = 0; k < 6; k++){
+            if(my_rect[k] > 0.){
+              fprintf(f, "%e,", my_rect[k]);
+            }else{
+              fprintf(f, ",");
+            }
+          }
+          fprintf(f, "\n");
+          fclose(f);
+            // my_dist[k] = 0.;
+            // my_rect[k] = 0;  
+        }
+      }
       break;
 
 
