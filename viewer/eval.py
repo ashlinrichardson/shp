@@ -21,6 +21,8 @@ def maxi(a):
 
 ci = 0
 for l in lines:
+  if ci > 9:
+    sys.exit(1)
   ll = l.strip().split(",")
   if len(ll) != 14:
     print "error"
